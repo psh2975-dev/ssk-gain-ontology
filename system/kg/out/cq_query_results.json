@@ -1,0 +1,290 @@
+{
+ "graph": "pilot_kg_demo.ttl",
+ "triples": 7696,
+ "queries": {
+  "CQ4_restricts": {
+   "sparql": "ExportControl -restricts-> Product",
+   "rows": [
+    {
+     "control": "https://w3id.org/ssk-gain/kg/EC%3AJP%3A2019-07",
+     "scope": "individual export license (three materials, to Korea)",
+     "hsCode": "281111",
+     "product": "Hydrogen fluoride"
+    },
+    {
+     "control": "https://w3id.org/ssk-gain/kg/EC%3AJP%3A2019-07",
+     "scope": "individual export license (three materials, to Korea)",
+     "hsCode": "370790",
+     "product": "Photoresist"
+    },
+    {
+     "control": "https://w3id.org/ssk-gain/kg/EC%3AJP%3A2019-07",
+     "scope": "individual export license (three materials, to Korea)",
+     "hsCode": "391190",
+     "product": "Fluorinated polyimide"
+    }
+   ],
+   "n": 3,
+   "expected_n": 3,
+   "pass": true
+  },
+  "CQ2_disrupts": {
+   "sparql": "Event -disrupts(reified magnitude)-> TradeFlow, compared against 2018",
+   "rows": [
+    {
+     "event": "https://w3id.org/ssk-gain/kg/EV%3AJP-KR%3A2019-07",
+     "hsCode": "281111",
+     "magnitude_stored": -0.8231,
+     "value_2018_usd": 67866088.057,
+     "value_2020_usd": 12008343.892,
+     "change_recomputed": -0.8231,
+     "consistent": true
+    },
+    {
+     "event": "https://w3id.org/ssk-gain/kg/EV%3AJP-KR%3A2019-07",
+     "hsCode": "370790",
+     "magnitude_stored": 0.2752,
+     "value_2018_usd": 345252390.016,
+     "value_2020_usd": 440259409.42,
+     "change_recomputed": 0.2752,
+     "consistent": true
+    },
+    {
+     "event": "https://w3id.org/ssk-gain/kg/EV%3AJP-KR%3A2019-07",
+     "hsCode": "391190",
+     "magnitude_stored": -0.0051,
+     "value_2018_usd": 47112586.918,
+     "value_2020_usd": 46873815.484,
+     "change_recomputed": -0.0051,
+     "consistent": true
+    }
+   ],
+   "n": 3,
+   "expected_n": 3,
+   "pass": true
+  },
+  "CQ7_hhi": {
+   "sparql": "SUM((marketShare/100)^2) GROUP BY product, year; HHI aggregated directly from the graph",
+   "note": "hhi_stored_fullraw counts every origin in the source, including aggregate regions; the SPARQL aggregate counts only ISO-resolved origins, so the fourth-decimal difference is the excluded aggregates.",
+   "rows": [
+    {
+     "hsCode": "8541",
+     "year": "2022",
+     "n_origins_in_kg": 88,
+     "hhi_sparql": 0.2078,
+     "hhi_stored_fullraw": 0.2078,
+     "delta": 0.0,
+     "match_at_2dp": true
+    },
+    {
+     "hsCode": "8541",
+     "year": "2023",
+     "n_origins_in_kg": 93,
+     "hhi_sparql": 0.2192,
+     "hhi_stored_fullraw": 0.2192,
+     "delta": 0.0,
+     "match_at_2dp": true
+    },
+    {
+     "hsCode": "8542",
+     "year": "2022",
+     "n_origins_in_kg": 105,
+     "hhi_sparql": 0.2528,
+     "hhi_stored_fullraw": 0.2527,
+     "delta": 0.0001,
+     "match_at_2dp": true
+    },
+    {
+     "hsCode": "8542",
+     "year": "2023",
+     "n_origins_in_kg": 107,
+     "hhi_sparql": 0.2357,
+     "hhi_stored_fullraw": 0.2357,
+     "delta": 0.0,
+     "match_at_2dp": true
+    }
+   ],
+   "n": 4,
+   "expected_n": 4,
+   "pass": true
+  },
+  "CQ8_sanctioned_by_hq_country": {
+   "graph": "pilot_kg_deposit.ttl",
+   "sparql": "SanctionedEntity -headquarteredIn-> Country(isoAlpha3), aggregated by country of headquarters",
+   "note": "Covers only sanctioned entities whose headquarters resolve. The designation date and programme dimensions are not yet materialised and remain a stated limitation.",
+   "rows": [
+    {
+     "hq_country": "CHN",
+     "n_sanctioned_entities": 31
+    },
+    {
+     "hq_country": "RUS",
+     "n_sanctioned_entities": 4
+    },
+    {
+     "hq_country": "TUR",
+     "n_sanctioned_entities": 2
+    },
+    {
+     "hq_country": "JPN",
+     "n_sanctioned_entities": 2
+    },
+    {
+     "hq_country": "USA",
+     "n_sanctioned_entities": 1
+    },
+    {
+     "hq_country": "HKG",
+     "n_sanctioned_entities": 1
+    },
+    {
+     "hq_country": "LBN",
+     "n_sanctioned_entities": 1
+    },
+    {
+     "hq_country": "ESP",
+     "n_sanctioned_entities": 1
+    },
+    {
+     "hq_country": "SYR",
+     "n_sanctioned_entities": 1
+    },
+    {
+     "hq_country": "IND",
+     "n_sanctioned_entities": 1
+    },
+    {
+     "hq_country": "IRN",
+     "n_sanctioned_entities": 1
+    },
+    {
+     "hq_country": "GBR",
+     "n_sanctioned_entities": 1
+    },
+    {
+     "hq_country": "ARE",
+     "n_sanctioned_entities": 1
+    },
+    {
+     "hq_country": "MEX",
+     "n_sanctioned_entities": 1
+    },
+    {
+     "hq_country": "BLR",
+     "n_sanctioned_entities": 1
+    }
+   ],
+   "n": 15,
+   "entities_with_hq": 50,
+   "pass": true
+  },
+  "CQ1_sanction_program": {
+   "graph": "pilot_kg_deposit.ttl",
+   "sparql": "Sanction -listsEntity-> SanctionedEntity, aggregated by programme",
+   "note": "Answered by materialising the already collected programme field as Sanction nodes. The designation date is absent from the source and is therefore not included.",
+   "rows": [
+    {
+     "program": "SDGT",
+     "n_entities": 198
+    },
+    {
+     "program": "BALKANS",
+     "n_entities": 138
+    },
+    {
+     "program": "CUBA",
+     "n_entities": 60
+    },
+    {
+     "program": "SDNTK",
+     "n_entities": 54
+    },
+    {
+     "program": "SDNT",
+     "n_entities": 50
+    },
+    {
+     "program": "FTO",
+     "n_entities": 26
+    },
+    {
+     "program": "RUSSIA-EO14024",
+     "n_entities": 6
+    },
+    {
+     "program": "IRAN",
+     "n_entities": 5
+    },
+    {
+     "program": "IRAN-EO13902",
+     "n_entities": 4
+    },
+    {
+     "program": "GLOMAG",
+     "n_entities": 3
+    },
+    {
+     "program": "IFSR",
+     "n_entities": 3
+    },
+    {
+     "program": "ILLICIT-DRUGS-EO14059",
+     "n_entities": 2
+    },
+    {
+     "program": "CUBA-EO14404",
+     "n_entities": 1
+    },
+    {
+     "program": "IRAN-CON-ARMS-EO",
+     "n_entities": 1
+    },
+    {
+     "program": "IRAN-EO13876",
+     "n_entities": 1
+    },
+    {
+     "program": "IRGC",
+     "n_entities": 1
+    },
+    {
+     "program": "NPWMD",
+     "n_entities": 1
+    }
+   ],
+   "n": 17,
+   "pass": true
+  },
+  "CQ3_ownership_traversal": {
+   "graph": "pilot_kg_deposit.ttl",
+   "sparql": "Organization -owns-> Organization (subsidiary), aggregated by parent",
+   "note": "Materialised from GLEIF Level-2 (CC0): the ownership network of five semiconductor firms. The traversal answers, but no ownership chain reaches a sanctioned node, so exposure and circumvention are not demonstrated. Partial answer.",
+   "rows": [
+    {
+     "parent": "ASML",
+     "n_subsidiaries": 11
+    },
+    {
+     "parent": "Samsung Electronics",
+     "n_subsidiaries": 6
+    },
+    {
+     "parent": "INTEL CORPORATION",
+     "n_subsidiaries": 5
+    },
+    {
+     "parent": "SK hynix",
+     "n_subsidiaries": 3
+    },
+    {
+     "parent": "TSMC",
+     "n_subsidiaries": 2
+    }
+   ],
+   "n": 5,
+   "ownership_edges": 27,
+   "pass": true
+  }
+ },
+ "all_pass": true
+}

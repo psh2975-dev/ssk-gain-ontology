@@ -1,0 +1,5 @@
+# Versions actually used to produce the deposited artefacts.
+rdflib==7.6.0
+owlrl==7.6.2
+pyshacl==0.40.1
+pycountry==26.2.16

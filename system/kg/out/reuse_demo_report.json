@@ -1,0 +1,64 @@
+{
+ "artifact": "module documents (core/intl/gvc/bridge.ttl) + shapes.ttl",
+ "steps": {
+  "1_module_documents": {
+   "desc": "The released module documents and the owl:imports each declares",
+   "documents": {
+    "core": [],
+    "intl": [
+     "core"
+    ],
+    "gvc": [
+     "core"
+    ],
+    "bridge": [
+     "gvc",
+     "intl"
+    ]
+   },
+   "found": [
+    "bridge",
+    "core",
+    "gvc",
+    "intl"
+   ]
+  },
+  "2_standalone_module_reuse": {
+   "desc": "Starting from intl.ttl, load only what its imports declare, as a sanctions-domain consumer would",
+   "documents_loaded": [
+    "intl.ttl",
+    "core.ttl"
+   ],
+   "schema_triples": 610,
+   "intl_named_classes": [
+    "ExportControl",
+    "FinancialSanction",
+    "GeopoliticalEvent",
+    "InvestmentRestriction",
+    "OwnershipAssertion",
+    "OwnershipPath",
+    "Sanction",
+    "SanctionListing",
+    "SanctionedEntity",
+    "TechTransferBan",
+    "TradeMeasure"
+   ],
+   "supply_chain_module_pulled_in": false,
+   "reusable": true
+  },
+  "3_external_instance_validation": {
+   "desc": "Validate third-party instances against the partial schema under a non-vacuous SHACL configuration, then join on the canonical identifier",
+   "validated_graph": "consumer instances only (ontology supplied as ont_graph)",
+   "shacl_conforms": true,
+   "violations": 0,
+   "query_rows": [
+    {
+     "lei": "DEMOCONSUMER00000012",
+     "hq_iso": "KOR"
+    }
+   ],
+   "reuse_ok": true
+  }
+ },
+ "all_ok": true
+}

@@ -1,0 +1,356 @@
+@prefix core: <https://w3id.org/ssk-gain/ontology/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ssk: <https://w3id.org/ssk-gain/ontology/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+core:Component a owl:Class ;
+    rdfs:label "Component"@en,
+        "부품"@ko ;
+    rdfs:comment "Semiconductor components and memory (HS 8541, 8542). Subclass of Product."@en,
+        "반도체 부품·메모리 등 (HS 8541·8542). Product의 하위."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf core:Product .
+
+core:Equipment a owl:Class ;
+    rdfs:label "Equipment"@en,
+        "장비"@ko ;
+    rdfs:comment "Semiconductor manufacturing equipment (HS 8486). Subclass of Product."@en,
+        "반도체 제조장비 (HS 8486). Product의 하위."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf core:Product .
+
+core:Identifier a owl:Class ;
+    rdfs:label "Identifier"@en,
+        "식별자"@ko ;
+    rdfs:comment "Value object for standard identifiers such as LEI, ISO codes and HS codes."@en,
+        "LEI·ISO·HS 등 표준 식별자 값 객체."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf core:Entity .
+
+core:Location a owl:Class ;
+    rdfs:label "Location"@en,
+        "지점"@ko ;
+    rdfs:comment "Geographic location (facility, port, coordinates); basis for GIS spatial joins."@en,
+        "지리적 위치(시설·항만·좌표). GIS 공간조인 기반."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf core:Entity ;
+    owl:disjointWith core:Country,
+        core:Event,
+        core:Organization,
+        core:Policy,
+        core:Product .
+
+core:Material a owl:Class ;
+    rdfs:label "Material"@en,
+        "소재"@ko ;
+    rdfs:comment "Semiconductor materials (HS 2804, 2811, 3707). Subclass of Product."@en,
+        "반도체 소재 (HS 2804·2811·3707). Product의 하위."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf core:Product .
+
+core:alternateId a owl:DatatypeProperty ;
+    rdfs:label "alternateId"@en,
+        "별칭식별자"@ko ;
+    rdfs:comment "Secondary identifier that is not the canonical one. It preserves the source key from before a merge so that provenance remains traceable, and it is not used to decide identity."@en,
+        "정준 식별자가 아닌 보조 식별자. 병합 이전의 소스 키를 보존해 추적을 가능하게 하되, 동일성 판단에는 쓰지 않는다."@ko ;
+    rdfs:domain core:Entity ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:associatedWith a owl:ObjectProperty,
+        owl:SymmetricProperty ;
+    rdfs:label "associatedWith"@en,
+        "연관"@ko ;
+    rdfs:comment "Documented association between a geopolitical event and a policy (sanction, export control, trade measure). Symmetric; carries no causal claim. Example: linking a policy event with the sanction that accompanied it."@en,
+        "지정학 이벤트와 정책(제재·수출통제·무역조치)의 문서화된 연관. 무방향(대칭). 인과 불포함(인과 추정은 별도 분석의 몫). 예: 정책 이벤트와 그에 수반된 제재의 연결."@ko ;
+    rdfs:domain _:n0001 ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range _:n0001 .
+
+core:canonicalId a owl:DatatypeProperty ;
+    rdfs:label "canonicalId"@en,
+        "정규식별자"@ko ;
+    rdfs:comment "Canonical identifier of an entity (the generic slot for the canonical-identifier scheme)."@en,
+        "엔티티 정규 식별자(접점 명세 canonical_id 규칙의 일반 슬롯)."@ko ;
+    rdfs:domain core:Entity ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:collectedDate a owl:DatatypeProperty ;
+    rdfs:label "collectedDate"@en,
+        "수집일"@ko ;
+    rdfs:comment "Date the record was collected; reproducibility and lineage tag."@en,
+        "데이터 수집일. 재현성·계보 태그."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:date ;
+    rdfs:subPropertyOf prov:generatedAtTime .
+
+core:confidence a owl:DatatypeProperty ;
+    rdfs:label "confidence"@en,
+        "신뢰도"@ko ;
+    rdfs:comment "Confidence of the record or triple (0 to 1); values below 0.7 are dropped by convention."@en,
+        "추출 트리플 confidence(0~1). 0.7 미만 제거 기준."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:decimal .
+
+core:coverageEnd a owl:DatatypeProperty ;
+    rdfs:label "coverageEnd"@en,
+        "커버리지종료"@ko ;
+    rdfs:comment "End year of the source's intended collection window."@en,
+        "이 소스의 수집 대상 기간 종료 연도(2025)."@ko ;
+    rdfs:domain core:SourceCoverage ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:gYear .
+
+core:coverageStart a owl:DatatypeProperty ;
+    rdfs:label "coverageStart"@en,
+        "커버리지시작"@ko ;
+    rdfs:comment "Start year of the source's intended collection window, aligned with the study period design (2008 onwards)."@en,
+        "이 소스의 수집 대상 기간 시작 연도. 연구 기간 설계(2008~)와 정합."@ko ;
+    rdfs:domain core:SourceCoverage ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:gYear .
+
+core:declaresCoverage a owl:ObjectProperty ;
+    rdfs:label "declaresCoverage"@en,
+        "커버리지선언"@ko ;
+    rdfs:comment "Links a dataset or module to its per-source coverage declaration."@en,
+        "데이터셋/모듈이 소스별 커버리지 선언을 갖는다."@ko ;
+    rdfs:domain core:Entity ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range core:SourceCoverage .
+
+core:eccn a owl:DatatypeProperty ;
+    rdfs:label "eccn"@en,
+        "ECCN"@ko ;
+    rdfs:comment "Export Control Classification Number (ECCN); control-side fallback identifier for HS."@en,
+        "수출통제 분류번호(ECCN). HS의 통제 측 fallback 식별자."@ko ;
+    rdfs:domain core:Product ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:endYear a owl:DatatypeProperty ;
+    rdfs:label "endYear"@en,
+        "종료연도"@ko ;
+    rdfs:comment "End year of the relation."@en,
+        "관계 종료 연도."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:gYear .
+
+core:evidenceType a owl:DatatypeProperty ;
+    rdfs:label "evidenceType"@en,
+        "근거유형"@ko ;
+    rdfs:comment "Distinguishes observed from inferred evidence; uncertainty tag."@en,
+        "관측(observed) vs 추론(inferred) 구분, 불확실성 태그."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:hasTemporalScope a owl:ObjectProperty ;
+    rdfs:label "hasTemporalScope"@en,
+        "시간범위가짐"@ko ;
+    rdfs:comment "Links an entity or relation to its validity interval."@en,
+        "엔티티/관계의 유효 시간범위 연결."@ko ;
+    rdfs:domain core:Entity ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range core:TemporalScope .
+
+core:hsCode a owl:DatatypeProperty,
+        owl:FunctionalProperty,
+        owl:InverseFunctionalProperty ;
+    rdfs:label "hsCode"@en,
+        "HS코드"@ko ;
+    rdfs:comment "WCO HS code; canonical product identifier (six digits, HS10 where finer)."@en,
+        "WCO HS code. 품목 canonical_id(6자리), 정밀은 HS10."@ko ;
+    rdfs:domain core:Product ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:identifierStatus a owl:DatatypeProperty ;
+    rdfs:label "identifierStatus"@en,
+        "식별자상태"@ko ;
+    rdfs:comment "Warrant of the canonical identifier: authoritative for a standard register (LEI, ISO, HS), provisional for a curation key where no standard identifier exists."@en,
+        "정준 식별자의 근거. authoritative=표준 등록부(LEI·ISO·HS), provisional=큐레이션 키(표준 식별자 미보유)."@ko ;
+    rdfs:domain core:Entity ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:isoAlpha3 a owl:DatatypeProperty,
+        owl:FunctionalProperty,
+        owl:InverseFunctionalProperty ;
+    rdfs:label "isoAlpha3"@en,
+        "ISO3166-1 alpha-3"@ko ;
+    rdfs:comment "ISO 3166-1 alpha-3 country code (KOR, USA, CHN, JPN, NLD); canonical identifier."@en,
+        "국가 ISO 3166-1 alpha-3 코드(KOR·USA·CHN·JPN·NLD). canonical_id."@ko ;
+    rdfs:domain core:Country ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:label a owl:DatatypeProperty ;
+    rdfs:label "name"@en,
+        "명칭"@ko ;
+    rdfs:comment "Display name of the entity (including the source surface form)."@en,
+        "엔티티 표기명(추출 원문 표면형 포함)."@ko ;
+    rdfs:domain core:Entity ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:lei a owl:DatatypeProperty,
+        owl:FunctionalProperty,
+        owl:InverseFunctionalProperty ;
+    rdfs:label "lei"@en,
+        "LEI"@ko ;
+    rdfs:comment "GLEIF Legal Entity Identifier (ISO 17442, 20 characters); canonical firm identifier."@en,
+        "GLEIF Legal Entity Identifier (ISO 17442, 20자). 기업 canonical_id."@ko ;
+    rdfs:domain core:Organization ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:observedCount a owl:DatatypeProperty ;
+    rdfs:label "observedCount"@en,
+        "관측수"@ko ;
+    rdfs:comment "Number of records actually observed in the coverage window. Zero or few still means observed absence, not missingness."@en,
+        "커버리지 기간에 실제 관측된 레코드 수. 0 또는 소수여도 결측이 아닌 관측된 부재."@ko ;
+    rdfs:domain core:SourceCoverage ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:integer .
+
+core:source a owl:DatatypeProperty ;
+    rdfs:label "source"@en,
+        "출처"@ko ;
+    rdfs:comment "Data source name; provenance tag."@en,
+        "데이터 출처(소스명). provenance 태그."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf dcterms:source .
+
+core:startYear a owl:DatatypeProperty ;
+    rdfs:label "startYear"@en,
+        "시작연도"@ko ;
+    rdfs:comment "Start year of the relation (temporal vocabulary for supply, contracts and similar)."@en,
+        "관계 시작 연도(공급·계약 등 시간 어휘)."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:gYear .
+
+core:tier a owl:DatatypeProperty ;
+    rdfs:label "tier"@en,
+        "공식성등급"@ko ;
+    rdfs:comment "Officiality tier of the source (T1 to T4)."@en,
+        "공식성 4-Tier(T1~T4)."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:validFrom a owl:DatatypeProperty ;
+    rdfs:label "validFrom"@en,
+        "유효시작"@ko ;
+    rdfs:comment "Start of valid time; used for temporal alignment of all nodes and edges."@en,
+        "valid_time 시작일. 모든 노드/엣지 시점 정합에 사용."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:date .
+
+core:validTo a owl:DatatypeProperty ;
+    rdfs:label "validTo"@en,
+        "유효종료"@ko ;
+    rdfs:comment "End of valid time."@en,
+        "valid_time 종료일."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:date .
+
+core:wikidataQID a owl:DatatypeProperty ;
+    rdfs:label "wikidataQID"@en,
+        "Wikidata QID"@ko ;
+    rdfs:comment "Wikidata QID; fallback identifier for organisations without an LEI, and canonical identifier for spatial nodes."@en,
+        "Wikidata QID. LEI 미매칭 시 기업 fallback 식별자."@ko ;
+    rdfs:domain core:Entity ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:Policy a owl:Class ;
+    rdfs:label "Policy"@en,
+        "정책"@ko ;
+    rdfs:comment "Statute or measure of a government or international body; specialised by the international relations module."@en,
+        "정부·국제기구의 법령·조치. 국제관계 모듈이 세분."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf core:Entity ;
+    owl:disjointWith core:Country,
+        core:Event,
+        core:Organization,
+        core:Product .
+
+core:TemporalScope a owl:Class ;
+    rdfs:label "TemporalScope"@en,
+        "시간범위"@ko ;
+    rdfs:comment "Reification node expressing a validity interval (valid-time start and end)."@en,
+        "valid_time(시작·종료) 등 시간 유효구간을 표현하는 reification 노드."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf time:TemporalEntity,
+        core:Entity .
+
+core:Event a owl:Class ;
+    rdfs:label "Event"@en,
+        "사건"@ko ;
+    rdfs:comment "Occurrence with a time point or interval; specialised by the international relations module as GeopoliticalEvent."@en,
+        "시점·기간을 갖는 사건. 국제관계 모듈이 GeopoliticalEvent로 세분."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf core:Entity ;
+    owl:disjointWith core:Country,
+        core:Organization,
+        core:Product .
+
+core:Organization a owl:Class ;
+    rdfs:label "Organization"@en,
+        "조직"@ko ;
+    rdfs:comment "Legal person, firm or institution. The canonical identifier is the LEI (GLEIF, ISO 17442) where one exists; otherwise the pair of jurisdiction and registration number; failing both, a curation key marked as provisional through core:identifierStatus. A name is not an identity criterion."@en,
+        "법인·기업·기관. 정준 식별자는 LEI(GLEIF, ISO 17442)를 우선한다. LEI 미보유 법인은 관할과 등록번호의 결합을 쓰며, 둘 다 없으면 큐레이션 키를 잠정 식별자로 둔다(core:identifierStatus 로 표시). 이름은 동일성 기준이 아니다."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf org:Organization,
+        core:Entity ;
+    owl:disjointWith core:Country,
+        core:Product .
+
+core:SourceCoverage a owl:Class ;
+    rdfs:label "SourceCoverage"@en,
+        "소스커버리지"@ko ;
+    rdfs:comment "Reification node declaring a source's intended collection window and observation density. Sparsity inside the window means observed absence, not missingness."@en,
+        "한 데이터 소스의 수집 대상 기간과 관측 밀도를 선언하는 reification 노드. 수집 윈도 내 희박은 결측이 아니라 관측된 부재를 뜻한다."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf core:Entity .
+
+core:Country a owl:Class ;
+    rdfs:label "Country"@en,
+        "국가"@ko ;
+    rdfs:comment "Sovereign state. Canonical identifier: ISO 3166-1 alpha-3."@en,
+        "주권국가. canonical_id = ISO 3166-1 alpha-3."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf core:Entity ;
+    owl:disjointWith core:Product .
+
+core:Product a owl:Class ;
+    rdfs:label "Product"@en,
+        "품목"@ko ;
+    rdfs:comment "Product subject to trade or control. Canonical identifier: HS code (six digits), ECCN as fallback."@en,
+        "교역·통제 대상 품목. canonical_id = HS code(6자리), fallback ECCN."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf core:Entity .
+
+core:Entity a owl:Class ;
+    rdfs:label "Entity"@en,
+        "엔티티"@ko ;
+    rdfs:comment "Top-level class of every first-class individual in the knowledge graph."@en,
+        "KG의 모든 1급 개체의 최상위 클래스."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf owl:Thing,
+        prov:Entity .
+
+ssk:core a owl:Ontology ;
+    dcterms:created "2026-08-01"^^xsd:date ;
+    dcterms:title "SSK 온톨로지: core 모듈 (공유 상위·LEI·시공간)"@ko ;
+    owl:versionInfo "0.1.5" .
+
+_:n0001 a owl:Class ;
+    owl:unionOf [ ] .
+

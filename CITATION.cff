@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: If you use this resource, please cite it as below.
+title: "SSK-GAIN: A Cross-Domain Ontology and Entity Catalogue for Semiconductor Supply Chain Geopolitics"
+abstract: >-
+  An OWL 2 ontology in four modules (core, international relations, supply
+  chain, cross-domain bridge) with SHACL shapes, an instantiated and
+  machine-validated entity catalogue, and the validation toolkit that
+  reproduces every reported check.
+type: dataset
+version: 0.1.5
+license: CC-BY-4.0
+doi: 10.5281/zenodo.21715914
+repository-code: https://github.com/psh2975-dev/ssk-gain-ontology
+authors:
+  - family-names: Park
+    given-names: Sungho
+    affiliation: Dong-A University
+    orcid: https://orcid.org/0000-0001-5419-3774
+  - family-names: Lee
+    given-names: Kangbae
+    affiliation: Dong-A University
+    orcid: https://orcid.org/0000-0001-6384-4268
+keywords:
+  - cross-domain ontology
+  - competency questions
+  - ontology evaluation
+  - knowledge graph
+  - supply chain geopolitics
+  - SHACL validation

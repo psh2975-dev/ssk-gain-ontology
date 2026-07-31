@@ -1,0 +1,49 @@
+{
+ "date": "2026-07-09",
+ "graphs": {
+  "demo": {
+   "sanction_listings": 0,
+   "dropped_fields": [],
+   "dropped_field_count": 0,
+   "skipped_unresolved_countries": [],
+   "skipped_tradeflows": 0,
+   "skipped_edges": 0,
+   "identifier_authoritative": 156,
+   "identifier_provisional": 402,
+   "prov_linked_nodes": 560,
+   "prov_datasets": 5,
+   "prov_agents": 5,
+   "prov_unmapped_sources": [],
+   "conforms": true,
+   "violations": 0,
+   "triples": 7696
+  },
+  "deposit": {
+   "sanction_listings": 554,
+   "dropped_fields": [],
+   "dropped_field_count": 0,
+   "skipped_unresolved_countries": [
+    "country:SP"
+   ],
+   "skipped_tradeflows": 0,
+   "skipped_edges": 511,
+   "gleif_ownership_edges": 27,
+   "players_nodes": 25,
+   "players_edges": 33,
+   "players_lei_merged": 5,
+   "spatial_nodes": 22,
+   "baci_dependencies": 22,
+   "restricts_edges": 3,
+   "coverage_records": 4,
+   "identifier_authoritative": 1274,
+   "identifier_provisional": 20,
+   "prov_linked_nodes": 1326,
+   "prov_datasets": 14,
+   "prov_agents": 11,
+   "prov_unmapped_sources": [],
+   "conforms": true,
+   "violations": 0,
+   "triples": 16761
+  }
+ }
+}

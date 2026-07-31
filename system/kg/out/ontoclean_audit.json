@@ -1,0 +1,200 @@
+{
+ "counts": {
+  "named_classes": 31,
+  "rigid": 26,
+  "anti_rigid": 4,
+  "category": 1,
+  "own_identity": 17,
+  "dependent": 10,
+  "subsumption_violations": 0
+ },
+ "violations": [],
+ "declarations": {
+  "core:Component": {
+   "rigidity": "rigid",
+   "own_identity": false,
+   "dependent": false,
+   "identity_criterion": "inherited from Product"
+  },
+  "core:Country": {
+   "rigidity": "rigid",
+   "own_identity": true,
+   "dependent": false,
+   "identity_criterion": "ISO 3166-1 alpha-3"
+  },
+  "core:Entity": {
+   "rigidity": "category",
+   "own_identity": false,
+   "dependent": false,
+   "identity_criterion": "-"
+  },
+  "core:Equipment": {
+   "rigidity": "rigid",
+   "own_identity": false,
+   "dependent": false,
+   "identity_criterion": "inherited from Product"
+  },
+  "core:Event": {
+   "rigidity": "rigid",
+   "own_identity": true,
+   "dependent": false,
+   "identity_criterion": "spatiotemporal location"
+  },
+  "core:Identifier": {
+   "rigidity": "rigid",
+   "own_identity": true,
+   "dependent": true,
+   "identity_criterion": "scheme and value"
+  },
+  "core:Location": {
+   "rigidity": "rigid",
+   "own_identity": true,
+   "dependent": false,
+   "identity_criterion": "Wikidata QID"
+  },
+  "core:Material": {
+   "rigidity": "rigid",
+   "own_identity": false,
+   "dependent": false,
+   "identity_criterion": "inherited from Product"
+  },
+  "core:Organization": {
+   "rigidity": "rigid",
+   "own_identity": true,
+   "dependent": false,
+   "identity_criterion": "LEI; failing that, jurisdiction plus registration number"
+  },
+  "core:Policy": {
+   "rigidity": "rigid",
+   "own_identity": true,
+   "dependent": false,
+   "identity_criterion": "issuing authority, date and measure"
+  },
+  "core:Product": {
+   "rigidity": "rigid",
+   "own_identity": true,
+   "dependent": false,
+   "identity_criterion": "HS code"
+  },
+  "core:SourceCoverage": {
+   "rigidity": "rigid",
+   "own_identity": true,
+   "dependent": true,
+   "identity_criterion": "source and collection window"
+  },
+  "core:TemporalScope": {
+   "rigidity": "rigid",
+   "own_identity": true,
+   "dependent": true,
+   "identity_criterion": "start and end"
+  },
+  "gvc:Company": {
+   "rigidity": "anti-rigid",
+   "own_identity": false,
+   "dependent": false,
+   "identity_criterion": "inherited from Organization"
+  },
+  "gvc:Dependency": {
+   "rigidity": "rigid",
+   "own_identity": true,
+   "dependent": true,
+   "identity_criterion": "dependent actor, product and year"
+  },
+  "gvc:Input": {
+   "rigidity": "anti-rigid",
+   "own_identity": false,
+   "dependent": false,
+   "identity_criterion": "inherited from Product"
+  },
+  "gvc:PriceIndex": {
+   "rigidity": "rigid",
+   "own_identity": true,
+   "dependent": true,
+   "identity_criterion": "product and base period"
+  },
+  "gvc:RiskNode": {
+   "rigidity": "anti-rigid",
+   "own_identity": false,
+   "dependent": false,
+   "identity_criterion": "inherited from Organization or Product"
+  },
+  "gvc:SupplyEdge": {
+   "rigidity": "rigid",
+   "own_identity": true,
+   "dependent": true,
+   "identity_criterion": "supplier, customer and product"
+  },
+  "gvc:TradeFlow": {
+   "rigidity": "rigid",
+   "own_identity": true,
+   "dependent": true,
+   "identity_criterion": "origin, destination, product and year"
+  },
+  "intl:ExportControl": {
+   "rigidity": "rigid",
+   "own_identity": false,
+   "dependent": false,
+   "identity_criterion": "inherited from Policy"
+  },
+  "intl:FinancialSanction": {
+   "rigidity": "rigid",
+   "own_identity": false,
+   "dependent": false,
+   "identity_criterion": "inherited from Sanction"
+  },
+  "intl:GeopoliticalEvent": {
+   "rigidity": "rigid",
+   "own_identity": false,
+   "dependent": false,
+   "identity_criterion": "inherited from Event"
+  },
+  "intl:InvestmentRestriction": {
+   "rigidity": "rigid",
+   "own_identity": false,
+   "dependent": false,
+   "identity_criterion": "inherited from Sanction"
+  },
+  "intl:OwnershipAssertion": {
+   "rigidity": "rigid",
+   "own_identity": true,
+   "dependent": true,
+   "identity_criterion": "owner and owned organisation"
+  },
+  "intl:OwnershipPath": {
+   "rigidity": "rigid",
+   "own_identity": true,
+   "dependent": true,
+   "identity_criterion": "start, end and path"
+  },
+  "intl:Sanction": {
+   "rigidity": "rigid",
+   "own_identity": true,
+   "dependent": false,
+   "identity_criterion": "issuing authority and programme"
+  },
+  "intl:SanctionListing": {
+   "rigidity": "rigid",
+   "own_identity": true,
+   "dependent": true,
+   "identity_criterion": "issuing authority, programme and listed organisation"
+  },
+  "intl:SanctionedEntity": {
+   "rigidity": "anti-rigid",
+   "own_identity": false,
+   "dependent": false,
+   "identity_criterion": "inherited from Organization"
+  },
+  "intl:TechTransferBan": {
+   "rigidity": "rigid",
+   "own_identity": false,
+   "dependent": false,
+   "identity_criterion": "inherited from Sanction"
+  },
+  "intl:TradeMeasure": {
+   "rigidity": "rigid",
+   "own_identity": false,
+   "dependent": false,
+   "identity_criterion": "inherited from Policy"
+  }
+ }
+}

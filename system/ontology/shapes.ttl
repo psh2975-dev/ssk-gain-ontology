@@ -1,0 +1,526 @@
+@prefix bridge: <https://w3id.org/ssk-gain/ontology/bridge#> .
+@prefix core: <https://w3id.org/ssk-gain/ontology/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix gvc: <https://w3id.org/ssk-gain/ontology/gvc#> .
+@prefix intl: <https://w3id.org/ssk-gain/ontology/intl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix shapes: <https://w3id.org/ssk-gain/ontology/shapes#> .
+@prefix ssk: <https://w3id.org/ssk-gain/ontology/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ssk:shapes a owl:Ontology ;
+    dcterms:created "2026-08-01"^^xsd:date ;
+    dcterms:title "SSK 온톨로지 SHACL 제약(shapes)"@ko ;
+    owl:versionInfo "0.1.5" .
+
+shapes:AffectsShape a sh:NodeShape ;
+    rdfs:label "affects 제약"@ko ;
+    sh:property [ sh:message "Range of affects must be Company or SupplyEdge."@en,
+                "affects 의 range 는 Company 또는 SupplyEdge."@ko ;
+            sh:name "affects"@ko ;
+            sh:or ( [ sh:class gvc:Company ] [ sh:class gvc:SupplyEdge ] ) ;
+            sh:path bridge:affects ;
+            sh:severity sh:Violation ],
+        [ sh:datatype xsd:decimal ;
+            sh:maxCount 1 ;
+            sh:maxInclusive 1 ;
+            sh:message "riskScore must be 0 to 1."@en,
+                "riskScore 는 0~1."@ko ;
+            sh:minInclusive 0 ;
+            sh:name "위험점수"@ko ;
+            sh:path bridge:riskScore ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass intl:SanctionedEntity .
+
+shapes:CircumventsShape a sh:NodeShape ;
+    rdfs:label "circumvents 제약"@ko ;
+    sh:property [ sh:class intl:Sanction ;
+            sh:message "Range of circumvents must be Sanction; at least one."@en,
+                "circumvents 의 range 는 Sanction, 1개 이상."@ko ;
+            sh:minCount 1 ;
+            sh:name "circumvents"@ko ;
+            sh:path bridge:circumvents ;
+            sh:severity sh:Violation ],
+        [ sh:datatype xsd:integer ;
+            sh:maxInclusive 3 ;
+            sh:message "Circumvention path hops must be 1 to 3 (required)."@en,
+                "circumvents 소유경로 hop 은 1~3 (필수)."@ko ;
+            sh:minCount 1 ;
+            sh:minInclusive 1 ;
+            sh:name "경로길이"@ko ;
+            sh:path bridge:hops ;
+            sh:severity sh:Violation ],
+        [ sh:datatype xsd:decimal ;
+            sh:maxInclusive 1 ;
+            sh:message "Circumvention suspicion must be 0 to 1."@en,
+                "circumvents 의심도는 0~1."@ko ;
+            sh:minInclusive 0 ;
+            sh:name "의심도"@ko ;
+            sh:path bridge:suspicion ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass intl:OwnershipPath .
+
+shapes:CountryShape a sh:NodeShape ;
+    rdfs:label "국가 형태"@ko ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:message "A country must carry exactly one ISO 3166-1 alpha-3 code (three uppercase letters)."@en,
+                "국가는 ISO 3166-1 alpha-3(대문자 3자) 정확히 1개."@ko ;
+            sh:minCount 1 ;
+            sh:name "ISO3 코드"@ko ;
+            sh:path core:isoAlpha3 ;
+            sh:pattern "^[A-Z]{3}$" ;
+            sh:severity sh:Violation ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:message "A country's canonical identifier must be ISO 3166-1 alpha-3 (three uppercase letters)."@en,
+                "국가의 정준 식별자는 ISO 3166-1 alpha-3(대문자 3자)."@ko ;
+            sh:minCount 1 ;
+            sh:name "정준 식별자"@ko ;
+            sh:path core:canonicalId ;
+            sh:pattern "^[A-Z]{3}$" ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass core:Country .
+
+shapes:DependencyShape a sh:NodeShape ;
+    rdfs:label "의존관계 형태"@ko ;
+    sh:property [ sh:message "A dependency must have at least one dependent actor."@en,
+                "의존관계는 의존주체 1개 이상."@ko ;
+            sh:minCount 1 ;
+            sh:name "의존주체"@ko ;
+            sh:nodeKind sh:IRI ;
+            sh:path gvc:dependentActor ;
+            sh:severity sh:Violation ],
+        [ sh:datatype xsd:decimal ;
+            sh:maxCount 1 ;
+            sh:maxInclusive 1 ;
+            sh:message "HHI must be 0 to 1 (sum of squared shares)."@en,
+                "HHI 는 0~1 (점유율 제곱합)."@ko ;
+            sh:minInclusive 0 ;
+            sh:name "HHI"@ko ;
+            sh:path gvc:hhi ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass gvc:Dependency .
+
+shapes:DisruptsShape a sh:NodeShape ;
+    rdfs:label "disrupts 제약"@ko ;
+    sh:property [ sh:class gvc:TradeFlow ;
+            sh:message "Range of disrupts must be TradeFlow."@en,
+                "disrupts 의 range 는 TradeFlow."@ko ;
+            sh:name "disrupts"@ko ;
+            sh:path bridge:disrupts ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass intl:GeopoliticalEvent .
+
+shapes:ExportControlShape a sh:NodeShape ;
+    rdfs:label "수출통제 형태"@ko ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "통제범위"@ko ;
+            sh:path intl:controlScope ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass intl:ExportControl .
+
+shapes:ExposesShape a sh:NodeShape ;
+    rdfs:label "exposes 제약"@ko ;
+    sh:property [ sh:class gvc:RiskNode ;
+            sh:message "Range of exposes must be RiskNode."@en,
+                "exposes 의 range 는 RiskNode."@ko ;
+            sh:name "exposes"@ko ;
+            sh:path bridge:exposes ;
+            sh:severity sh:Violation ],
+        [ sh:datatype xsd:decimal ;
+            sh:message "Geopolitical risk must be non-negative."@en,
+                "지정학위험은 0 이상."@ko ;
+            sh:minInclusive 0 ;
+            sh:name "지정학위험"@ko ;
+            sh:path bridge:geoRisk ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass gvc:Dependency .
+
+shapes:GeopoliticalEventShape a sh:NodeShape ;
+    rdfs:label "지정학사건 형태"@ko ;
+    sh:property [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:message "A geopolitical event must carry exactly one event date."@en,
+                "지정학 사건은 사건일 정확히 1개."@ko ;
+            sh:minCount 1 ;
+            sh:name "사건일"@ko ;
+            sh:path intl:eventDate ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass intl:GeopoliticalEvent .
+
+shapes:IdentifierWarrantShape a sh:NodeShape ;
+    rdfs:label "식별자 근거 형태"@ko ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:in ( "authoritative" "provisional" ) ;
+            sh:maxCount 1 ;
+            sh:message "식별자 근거는 authoritative 또는 provisional 중 하나."@ko ;
+            sh:name "식별자상태"@ko ;
+            sh:path core:identifierStatus ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass core:Entity .
+
+shapes:LocationShape a sh:NodeShape ;
+    rdfs:label "공간노드 형태"@ko ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:message "A spatial node's QID must match Q followed by digits; at most one."@en,
+                "공간노드 QID 는 Q+숫자 형식 최대 1개."@ko ;
+            sh:name "Wikidata QID"@ko ;
+            sh:path core:wikidataQID ;
+            sh:pattern "^Q[0-9]+$" ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass core:Location .
+
+shapes:MarketShareShape a sh:NodeShape ;
+    rdfs:label "시장점유율 값범위"@ko ;
+    sh:property [ sh:datatype xsd:decimal ;
+            sh:maxInclusive 100 ;
+            sh:message "Market share must be 0 to 100."@en,
+                "시장점유율은 0~100."@ko ;
+            sh:minInclusive 0 ;
+            sh:name "시장점유율"@ko ;
+            sh:path gvc:marketShare ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass gvc:Company .
+
+shapes:OrganizationShape a sh:NodeShape ;
+    rdfs:label "조직 형태"@ko ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:message "LEI must follow ISO 17442 (20 alphanumeric characters); at most one."@en,
+                "LEI 는 ISO 17442 형식(20자 영숫자)이어야 하며 1개만 허용."@ko ;
+            sh:name "LEI"@ko ;
+            sh:path core:lei ;
+            sh:pattern "^[A-Z0-9]{18}[0-9]{2}$" ;
+            sh:severity sh:Violation ],
+        [ sh:class core:Country ;
+            sh:maxCount 1 ;
+            sh:message "headquarteredIn must point to a Country; at most one."@en,
+                "본사위치 range 는 Country, 최대 1개."@ko ;
+            sh:name "본사위치"@ko ;
+            sh:path intl:headquarteredIn ;
+            sh:severity sh:Violation ],
+        [ sh:class core:Country ;
+            sh:maxCount 1 ;
+            sh:message "incorporatedIn must point to a Country; at most one."@en,
+                "법인설립국 range 는 Country, 최대 1개."@ko ;
+            sh:name "법인설립국"@ko ;
+            sh:path intl:incorporatedIn ;
+            sh:severity sh:Violation ],
+        [ sh:datatype xsd:string ;
+            sh:message "An organisation should carry at least one name (recommended)."@en,
+                "조직은 명칭(name) 1개 이상 권고."@ko ;
+            sh:minCount 1 ;
+            sh:name "명칭"@ko ;
+            sh:path core:label ;
+            sh:severity sh:Warning ] ;
+    sh:targetClass core:Organization .
+
+shapes:OwnershipAssertionShape a sh:NodeShape ;
+    rdfs:label "소유관계진술 형태"@ko ;
+    sh:property [ sh:class core:Organization ;
+            sh:maxCount 1 ;
+            sh:message "소유관계진술의 소유자는 Organization 정확히 1개."@ko ;
+            sh:minCount 1 ;
+            sh:name "소유자"@ko ;
+            sh:path intl:owner ;
+            sh:severity sh:Violation ],
+        [ sh:class core:Organization ;
+            sh:maxCount 1 ;
+            sh:message "소유관계진술의 피소유조직은 Organization 정확히 1개."@ko ;
+            sh:minCount 1 ;
+            sh:name "피소유조직"@ko ;
+            sh:path intl:ownedOrganization ;
+            sh:severity sh:Violation ],
+        [ sh:datatype xsd:decimal ;
+            sh:maxCount 1 ;
+            sh:maxInclusive 100 ;
+            sh:message "지분율은 0~100, 최대 1개."@ko ;
+            sh:minInclusive 0 ;
+            sh:name "지분율"@ko ;
+            sh:path intl:ownershipPct ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass intl:OwnershipAssertion .
+
+shapes:OwnershipPathShape a sh:NodeShape ;
+    rdfs:label "소유경로 형태"@ko ;
+    sh:property [ sh:class intl:SanctionedEntity ;
+            sh:maxCount 1 ;
+            sh:message "An ownership path must start at exactly one SanctionedEntity."@en,
+                "소유경로 시작은 SanctionedEntity 정확히 1개."@ko ;
+            sh:minCount 1 ;
+            sh:name "경로시작"@ko ;
+            sh:path intl:pathStart ;
+            sh:severity sh:Violation ],
+        [ sh:class core:Organization ;
+            sh:maxCount 1 ;
+            sh:message "An ownership path must end at exactly one Organization."@en,
+                "소유경로 끝은 Organization 정확히 1개."@ko ;
+            sh:minCount 1 ;
+            sh:name "경로끝"@ko ;
+            sh:path intl:pathEnd ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass intl:OwnershipPath .
+
+shapes:PriceIndexShape a sh:NodeShape ;
+    rdfs:label "가격지수 형태"@ko ;
+    sh:property [ sh:class core:Product ;
+            sh:message "A price index must reference at least one product."@en,
+                "가격지수는 대상 품목 1개 이상."@ko ;
+            sh:minCount 1 ;
+            sh:name "가격대상"@ko ;
+            sh:path gvc:priceOf ;
+            sh:severity sh:Violation ],
+        [ sh:datatype xsd:decimal ;
+            sh:maxCount 1 ;
+            sh:name "지수값"@ko ;
+            sh:path gvc:indexValue ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass gvc:PriceIndex .
+
+shapes:ProductShape a sh:NodeShape ;
+    rdfs:label "품목 형태"@ko ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:message "HS code must be 4 (heading), 6 (subheading), 8 or 10 digits."@en,
+                "HS코드는 4(헤딩)·6(소호)·8·10자리 숫자."@ko ;
+            sh:name "HS코드"@ko ;
+            sh:path core:hsCode ;
+            sh:pattern "^([0-9]{4}|[0-9]{6}|[0-9]{8}|[0-9]{10})$" ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass core:Product .
+
+shapes:RestrictsShape a sh:NodeShape ;
+    rdfs:label "restricts 제약"@ko ;
+    sh:property [ sh:class core:Product ;
+            sh:message "Range of restricts must be Product."@en,
+                "restricts 의 range 는 Product."@ko ;
+            sh:name "restricts"@ko ;
+            sh:path bridge:restricts ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass intl:ExportControl .
+
+shapes:SameLeiConsistentHeadquarters a sh:NodeShape ;
+    rdfs:label "같은 LEI 본사 소재국 정합"@ko ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+            sh:message "Conflicts with another node carrying the same LEI on headquarteredIn. Suspect a misassigned identifier or a wrong merge."@en,
+                "같은 LEI 를 가진 다른 노드와 본사 소재국이 어긋난다. 식별자 오부여 또는 오병합을 의심할 것."@ko ;
+            sh:prefixes shapes:prefixes ;
+            sh:select "SELECT $this ?value WHERE { $this core:lei ?lei . $this <https://w3id.org/ssk-gain/ontology/intl#headquarteredIn> ?mine . ?other core:lei ?lei . ?other <https://w3id.org/ssk-gain/ontology/intl#headquarteredIn> ?value . FILTER (?other != $this && ?value != ?mine) }" ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass core:Organization .
+
+shapes:SameLeiConsistentIncorporation a sh:NodeShape ;
+    rdfs:label "같은 LEI 법인설립국 정합"@ko ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+            sh:message "Conflicts with another node carrying the same LEI on incorporatedIn. Suspect a misassigned identifier or a wrong merge."@en,
+                "같은 LEI 를 가진 다른 노드와 법인설립국이 어긋난다. 식별자 오부여 또는 오병합을 의심할 것."@ko ;
+            sh:prefixes shapes:prefixes ;
+            sh:select "SELECT $this ?value WHERE { $this core:lei ?lei . $this <https://w3id.org/ssk-gain/ontology/intl#incorporatedIn> ?mine . ?other core:lei ?lei . ?other <https://w3id.org/ssk-gain/ontology/intl#incorporatedIn> ?value . FILTER (?other != $this && ?value != ?mine) }" ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass core:Organization .
+
+shapes:SanctionIdShape a sh:NodeShape ;
+    rdfs:label "제재 식별 형태"@ko ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:message "제재 조치는 정준 식별자 정확히 1개."@ko ;
+            sh:minCount 1 ;
+            sh:name "정준 식별자"@ko ;
+            sh:path core:canonicalId ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass intl:Sanction .
+
+shapes:SanctionListingShape a sh:NodeShape ;
+    rdfs:label "제재등재사실 형태"@ko ;
+    sh:property [ sh:class core:Organization ;
+            sh:maxCount 1 ;
+            sh:message "등재 사실은 등재조직 정확히 1개."@ko ;
+            sh:minCount 1 ;
+            sh:name "등재조직"@ko ;
+            sh:path intl:listedOrganization ;
+            sh:severity sh:Violation ],
+        [ sh:class intl:Sanction ;
+            sh:message "등재 사실은 근거 제재 조치 1개 이상."@ko ;
+            sh:minCount 1 ;
+            sh:name "근거조치"@ko ;
+            sh:path intl:underSanction ;
+            sh:severity sh:Violation ],
+        [ sh:class core:Organization ;
+            sh:maxCount 1 ;
+            sh:message "발령기관은 Organization, 최대 1개."@ko ;
+            sh:name "발령기관"@ko ;
+            sh:path intl:listAuthority ;
+            sh:severity sh:Violation ],
+        [ sh:datatype xsd:string ;
+            sh:message "등재 사실은 출처 1개 이상 권고."@ko ;
+            sh:minCount 1 ;
+            sh:name "출처"@ko ;
+            sh:path core:source ;
+            sh:severity sh:Warning ] ;
+    sh:targetClass intl:SanctionListing .
+
+shapes:SanctionShape a sh:NodeShape ;
+    rdfs:label "제재 형태"@ko ;
+    sh:property [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:message "Sanction date must be xsd:date; at most one."@en,
+                "제재일은 xsd:date, 최대 1개."@ko ;
+            sh:name "제재일"@ko ;
+            sh:path intl:sanctionDate ;
+            sh:severity sh:Violation ],
+        [ sh:class intl:SanctionedEntity ;
+            sh:message "listsEntity must point to a SanctionedEntity."@en,
+                "제재 등재 대상은 SanctionedEntity."@ko ;
+            sh:name "제재등재"@ko ;
+            sh:path intl:listsEntity ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass intl:Sanction .
+
+shapes:SourceCoverageIdShape a sh:NodeShape ;
+    rdfs:label "커버리지 식별 형태"@ko ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:message "소스 커버리지는 정준 식별자 정확히 1개."@ko ;
+            sh:minCount 1 ;
+            sh:name "정준 식별자"@ko ;
+            sh:path core:canonicalId ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass core:SourceCoverage .
+
+shapes:SourceCoverageShape a sh:NodeShape ;
+    rdfs:label "소스 커버리지 형태"@ko ;
+    sh:property [ sh:maxCount 1 ;
+            sh:message "A coverage declaration must carry exactly one source name."@en,
+                "커버리지 선언은 소스명 1개 필수."@ko ;
+            sh:minCount 1 ;
+            sh:name "소스"@ko ;
+            sh:path core:source ;
+            sh:severity sh:Violation ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:message "Observed count must be one non-negative integer (zero still means observed absence)."@en,
+                "관측수는 0 이상 정수 1개 필수(0도 관측된 부재)."@ko ;
+            sh:minCount 1 ;
+            sh:minInclusive 0 ;
+            sh:name "관측수"@ko ;
+            sh:path core:observedCount ;
+            sh:severity sh:Violation ],
+        [ sh:datatype xsd:gYear ;
+            sh:maxCount 1 ;
+            sh:message "Coverage start must be at most one gYear (omitted for non-temporal sources)."@en,
+                "커버리지 시작은 gYear 최대 1개(무시간 소스는 생략 가능)."@ko ;
+            sh:name "커버리지시작"@ko ;
+            sh:path core:coverageStart ;
+            sh:severity sh:Violation ],
+        [ sh:datatype xsd:gYear ;
+            sh:maxCount 1 ;
+            sh:message "Coverage end must be at most one gYear."@en,
+                "커버리지 종료는 gYear 최대 1개."@ko ;
+            sh:name "커버리지종료"@ko ;
+            sh:path core:coverageEnd ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass core:SourceCoverage .
+
+shapes:SupplyEdgeShape a sh:NodeShape ;
+    rdfs:label "공급관계 형태"@ko ;
+    sh:property [ sh:class gvc:Company ;
+            sh:maxCount 1 ;
+            sh:message "A supply edge must have exactly one supplier (Company)."@en,
+                "공급관계는 공급자(Company) 정확히 1개."@ko ;
+            sh:minCount 1 ;
+            sh:name "공급자"@ko ;
+            sh:path gvc:supplier ;
+            sh:severity sh:Violation ],
+        [ sh:class gvc:Company ;
+            sh:maxCount 1 ;
+            sh:message "A supply edge must have exactly one customer (Company)."@en,
+                "공급관계는 수요자(Company) 정확히 1개."@ko ;
+            sh:minCount 1 ;
+            sh:name "수요자"@ko ;
+            sh:path gvc:customer ;
+            sh:severity sh:Violation ],
+        [ sh:class core:Product ;
+            sh:message "Range of suppliesProduct must be Product."@en,
+                "공급품목 range 는 Product."@ko ;
+            sh:name "공급품목"@ko ;
+            sh:path gvc:suppliesProduct ;
+            sh:severity sh:Violation ],
+        [ sh:datatype xsd:decimal ;
+            sh:maxCount 1 ;
+            sh:maxInclusive 1 ;
+            sh:message "Confidence must be 0 to 1."@en,
+                "신뢰도는 0~1."@ko ;
+            sh:minInclusive 0 ;
+            sh:name "신뢰도"@ko ;
+            sh:path core:confidence ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass gvc:SupplyEdge .
+
+shapes:TemporalScopeShape a sh:NodeShape ;
+    rdfs:label "시간범위 형태"@ko ;
+    sh:property [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:name "유효시작"@ko ;
+            sh:path core:validFrom ;
+            sh:severity sh:Violation ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:name "유효종료"@ko ;
+            sh:path core:validTo ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass core:TemporalScope .
+
+shapes:TradeFlowShape a sh:NodeShape ;
+    rdfs:label "무역흐름 형태"@ko ;
+    sh:property [ sh:class core:Country ;
+            sh:maxCount 1 ;
+            sh:message "A trade flow must have exactly one origin Country."@en,
+                "무역흐름 수출국은 Country 정확히 1개."@ko ;
+            sh:minCount 1 ;
+            sh:name "수출국"@ko ;
+            sh:path gvc:flowOrigin ;
+            sh:severity sh:Violation ],
+        [ sh:class core:Country ;
+            sh:maxCount 1 ;
+            sh:message "A trade flow must have exactly one destination Country."@en,
+                "무역흐름 수입국은 Country 정확히 1개."@ko ;
+            sh:minCount 1 ;
+            sh:name "수입국"@ko ;
+            sh:path gvc:flowDestination ;
+            sh:severity sh:Violation ],
+        [ sh:class core:Product ;
+            sh:message "A trade flow must reference at least one Product."@en,
+                "무역흐름은 품목(Product) 1개 이상."@ko ;
+            sh:minCount 1 ;
+            sh:name "무역품목"@ko ;
+            sh:path gvc:flowProduct ;
+            sh:severity sh:Violation ],
+        [ sh:datatype xsd:decimal ;
+            sh:maxCount 1 ;
+            sh:message "Trade value must be non-negative."@en,
+                "무역액은 0 이상."@ko ;
+            sh:minInclusive 0 ;
+            sh:name "무역액USD"@ko ;
+            sh:path gvc:tradeValueUSD ;
+            sh:severity sh:Violation ],
+        [ sh:datatype xsd:decimal ;
+            sh:maxCount 1 ;
+            sh:message "Trade quantity must be non-negative."@en,
+                "무역수량은 0 이상."@ko ;
+            sh:minInclusive 0 ;
+            sh:name "무역수량"@ko ;
+            sh:path gvc:tradeQuantity ;
+            sh:severity sh:Violation ] ;
+    sh:targetClass gvc:TradeFlow .
+
+shapes:prefixes a owl:Ontology ;
+    sh:declare [ sh:namespace "https://w3id.org/ssk-gain/ontology/intl#"^^xsd:anyURI ;
+            sh:prefix "intl" ],
+        [ sh:namespace "https://w3id.org/ssk-gain/ontology/core#"^^xsd:anyURI ;
+            sh:prefix "core" ] .
+

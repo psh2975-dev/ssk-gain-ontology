@@ -1,0 +1,43 @@
+This release is dual-licensed by path.
+
+CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/) applies to the
+ontology, the SHACL shapes, the materialised graphs and reports, and the
+documentation, that is:
+
+    system/ontology/*.ttl
+    system/kg/out/*
+    docs/*
+    README.md
+    CITATION.cff
+
+The MIT Licence below applies to the Python code, that is:
+
+    system/**/*.py
+    verify_all.py
+
+CITATION.cff carries a single license field, which records CC-BY-4.0 because
+the citable resource is the ontology; the code licence is the one stated here.
+
+Copyright (c) 2026 Sungho Park, Kangbae Lee
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Third-party source data retain their own licences: BACI (CEPII) under the
+Etalab Open Licence 2.0; GLEIF LEI and Level-2 data under CC0; Wikidata under
+CC0; OFAC lists as United States government works in the public domain.

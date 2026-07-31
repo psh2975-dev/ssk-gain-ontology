@@ -1,0 +1,132 @@
+@prefix bridge: <https://w3id.org/ssk-gain/ontology/bridge#> .
+@prefix core: <https://w3id.org/ssk-gain/ontology/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix gvc: <https://w3id.org/ssk-gain/ontology/gvc#> .
+@prefix intl: <https://w3id.org/ssk-gain/ontology/intl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ssk: <https://w3id.org/ssk-gain/ontology/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+bridge:affects a owl:ObjectProperty ;
+    rdfs:label "affects"@en,
+        "영향을줌"@ko ;
+    rdfs:comment "A sanctioned entity affects a supply chain actor or supply relation (at-risk marking). Rule of thumb: if a sanctioned entity is an endpoint of a supply relation, that relation is at risk."@en,
+        "제재대상이 공급사슬 행위자·공급관계에 영향을 미친다(위험 표시). 판정 규칙: 제재대상이 공급관계의 끝점이면 그 공급관계를 위험으로 본다."@ko ;
+    rdfs:domain intl:SanctionedEntity ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range [ a owl:Class ;
+            owl:unionOf [ ] ] ;
+    rdfs:subPropertyOf bridge:bridgeRelation .
+
+bridge:circumvents a owl:ObjectProperty ;
+    rdfs:label "circumvents"@en,
+        "우회함"@ko ;
+    rdfs:comment "An ownership path circumvents a sanction (suspicion). Rule of thumb: a sanctioned entity owning, within one to three hops, a non-sanctioned supplier of the target raises circumvention suspicion."@en,
+        "소유경로가 제재를 우회한다(의심). 판정 규칙: 제재대상이 1~3 홉 소유로 비제재 법인을 거쳐 타깃에 공급하면 우회 의심으로 본다."@ko ;
+    rdfs:domain intl:OwnershipPath ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range intl:Sanction ;
+    rdfs:subPropertyOf bridge:bridgeRelation .
+
+bridge:disrupts a owl:ObjectProperty ;
+    rdfs:label "disrupts"@en,
+        "교란함"@ko ;
+    rdfs:comment "A geopolitical event disrupts a trade flow. Rule of thumb: overlap between event countries and trading countries yields impact candidates, with a lag."@en,
+        "지정학 사건이 무역흐름을 교란한다. 판정 규칙: 사건 관련국과 교역국이 겹치면 영향 후보이며 시차를 적용한다."@ko ;
+    rdfs:domain intl:GeopoliticalEvent ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range gvc:TradeFlow ;
+    rdfs:subPropertyOf bridge:bridgeRelation .
+
+bridge:exposes a owl:ObjectProperty ;
+    rdfs:label "exposes"@en,
+        "노출시킴"@ko ;
+    rdfs:comment "A dependency exposes a risk node. Rule of thumb: single-source dependency combined with geopolitical risk implies risk exposure."@en,
+        "의존관계가 위험노드를 노출시킨다. 판정 규칙: 단일 공급원 의존과 지정학 위험이 겹치면 위험 노출로 본다."@ko ;
+    rdfs:domain gvc:Dependency ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range gvc:RiskNode ;
+    rdfs:subPropertyOf bridge:bridgeRelation .
+
+bridge:geoRisk a owl:DatatypeProperty ;
+    rdfs:label "geoRisk"@en,
+        "지정학위험"@ko ;
+    rdfs:comment "Geopolitical risk attribute of exposes (for example a GPR reading)."@en,
+        "exposes 의 지정학 위험(GPR 등)."@ko ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range xsd:decimal .
+
+bridge:hops a owl:DatatypeProperty ;
+    rdfs:label "hops"@en,
+        "경로길이"@ko ;
+    rdfs:comment "Number of ownership hops on the circumvention path (1 to 3)."@en,
+        "circumvents 의 소유경로 hop 수(1~3)."@ko ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range xsd:integer .
+
+bridge:lag a owl:DatatypeProperty ;
+    rdfs:label "lag"@en,
+        "시차"@ko ;
+    rdfs:comment "Lag of disrupts in months: measure at t, trade effect at t plus lag."@en,
+        "disrupts 의 시차(개월). 제재 t → 무역 t+lag."@ko ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range xsd:integer .
+
+bridge:magnitude a owl:DatatypeProperty ;
+    rdfs:label "magnitude"@en,
+        "영향크기"@ko ;
+    rdfs:comment "Magnitude attribute of disrupts (observed relative change)."@en,
+        "disrupts 의 영향 크기."@ko ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range xsd:decimal .
+
+bridge:restricts a owl:ObjectProperty ;
+    rdfs:label "restricts"@en,
+        "제한함"@ko ;
+    rdfs:comment "An export control restricts a product. Rule of thumb: overlap between the policy's HS scope and the product's HS code implies control."@en,
+        "수출통제가 품목을 제한한다. 판정 규칙: 정책의 HS 범위와 품목 HS 가 겹치면 통제 대상이다."@ko ;
+    rdfs:domain intl:ExportControl ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range core:Product ;
+    rdfs:subPropertyOf bridge:bridgeRelation .
+
+bridge:riskScore a owl:DatatypeProperty ;
+    rdfs:label "riskScore"@en,
+        "위험점수"@ko ;
+    rdfs:comment "Risk score attribute of affects (0 to 1)."@en,
+        "affects 의 위험 점수(0~1)."@ko ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range xsd:decimal .
+
+bridge:scope a owl:DatatypeProperty ;
+    rdfs:label "scope"@en,
+        "범위"@ko ;
+    rdfs:comment "Scope attribute of restricts (licensing scope)."@en,
+        "restricts 의 통제 범위."@ko ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range xsd:string .
+
+bridge:suspicion a owl:DatatypeProperty ;
+    rdfs:label "suspicion"@en,
+        "의심도"@ko ;
+    rdfs:comment "Circumvention suspicion attribute (0 to 1)."@en,
+        "circumvents 의 우회 의심도(0~1)."@ko ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range xsd:decimal .
+
+bridge:bridgeRelation a owl:ObjectProperty ;
+    rdfs:label "bridgeRelation"@en,
+        "교차관계"@ko ;
+    rdfs:comment "Common superproperty of the cross-domain relations between the international relations and supply chain domains."@en,
+        "국제관계↔GVC 교차도메인 관계의 공통 상위 속성."@ko ;
+    rdfs:isDefinedBy ssk:bridge .
+
+ssk:bridge a owl:Ontology ;
+    dcterms:title "SSK 온톨로지: bridge 모듈 (교차도메인 5관계)"@ko ;
+    rdfs:comment "The sole junction between the international relations domain and the supply chain domain: five cross-domain relations (affects, disrupts, restricts, circumvents, exposes), each with a constrained domain and range, and no named classes of its own."@en,
+        "국제관계 도메인과 공급사슬 도메인을 잇는 유일한 통로. 다섯 교차관계(affects·disrupts·restricts·circumvents·exposes)가 각각 제약된 정의역·치역을 가지며, 이 모듈은 명명 클래스를 두지 않는다."@ko ;
+    owl:imports ssk:gvc,
+        ssk:intl ;
+    owl:versionInfo "0.1.5" .
+

@@ -1,0 +1,1117 @@
+@prefix bridge: <https://w3id.org/ssk-gain/ontology/bridge#> .
+@prefix core: <https://w3id.org/ssk-gain/ontology/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix gvc: <https://w3id.org/ssk-gain/ontology/gvc#> .
+@prefix intl: <https://w3id.org/ssk-gain/ontology/intl#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ssk: <https://w3id.org/ssk-gain/ontology/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://w3id.org/ssk-gain/ontology> a owl:Ontology ;
+    dcterms:contributor "이강배 (Lee Kangbae), 동아대학교 경영정보학과 (교신저자)" ;
+    dcterms:created "2026-08-01"^^xsd:date ;
+    dcterms:creator "박성호 (Park Sungho), 동아대학교 경영정보학과 (주저자)" ;
+    dcterms:identifier "NRF-2024S1A3A2A07046144" ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:publisher "글로컬인공지능네트워크연구소(GAIN), 동아대학교" ;
+    dcterms:rights "Ontology, shapes and curated data: CC-BY-4.0. Scripts: MIT. Third-party source data retain their own licences; records under non-redistributable terms are excluded from the deposit."@en ;
+    dcterms:title "SSK Semiconductor Supply Chain Crisis-Response Shared Ontology"@en,
+        "SSK 반도체 공급사슬 위기대응 단일 공유 온톨로지"@ko ;
+    rdfs:comment "Acknowledgement: this work was supported by the Ministry of Education of the Republic of Korea and the National Research Foundation of Korea (NRF-2024S1A3A2A07046144)."@en,
+        "Acknowledgment: This work was supported by the Ministry of Education of the Republic of Korea and the National Research Foundation of Korea (NRF-2024S1A3A2A07046144)."@en,
+        "Single shared ontology combining the four modules (core, intl, gvc, bridge) by owl:imports rather than building the domains separately, because the bridge relations and LEI joins require a common vocabulary. This file is the merged export of all four modules; each module also ships as its own document."@en,
+        "단일 공유 온톨로지. core+intl+gvc+bridge 4모듈을 owl:imports 로 결합. 도메인 분리 구축 아님. Bridge 관계와 LEI 조인이 공통 어휘를 요구하기 때문이다. 이 파일은 4모듈 트리플을 하나로 합친 export 본이다."@ko,
+        "사사: 이 저작물은 2024년 대한민국 교육부와 한국연구재단의 지원을 받아 수행된 연구임(NRF-2024S1A3A2A07046144)."@ko ;
+    owl:imports ssk:bridge,
+        ssk:core,
+        ssk:gvc,
+        ssk:intl ;
+    owl:versionInfo "0.1.5" .
+
+bridge:affects a owl:ObjectProperty ;
+    rdfs:label "affects"@en,
+        "영향을줌"@ko ;
+    rdfs:comment "A sanctioned entity affects a supply chain actor or supply relation (at-risk marking). Rule of thumb: if a sanctioned entity is an endpoint of a supply relation, that relation is at risk."@en,
+        "제재대상이 공급사슬 행위자·공급관계에 영향을 미친다(위험 표시). 판정 규칙: 제재대상이 공급관계의 끝점이면 그 공급관계를 위험으로 본다."@ko ;
+    rdfs:domain intl:SanctionedEntity ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range [ a owl:Class ;
+            owl:unionOf ( gvc:Company gvc:SupplyEdge ) ] ;
+    rdfs:subPropertyOf bridge:bridgeRelation .
+
+bridge:circumvents a owl:ObjectProperty ;
+    rdfs:label "circumvents"@en,
+        "우회함"@ko ;
+    rdfs:comment "An ownership path circumvents a sanction (suspicion). Rule of thumb: a sanctioned entity owning, within one to three hops, a non-sanctioned supplier of the target raises circumvention suspicion."@en,
+        "소유경로가 제재를 우회한다(의심). 판정 규칙: 제재대상이 1~3 홉 소유로 비제재 법인을 거쳐 타깃에 공급하면 우회 의심으로 본다."@ko ;
+    rdfs:domain intl:OwnershipPath ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range intl:Sanction ;
+    rdfs:subPropertyOf bridge:bridgeRelation .
+
+bridge:disrupts a owl:ObjectProperty ;
+    rdfs:label "disrupts"@en,
+        "교란함"@ko ;
+    rdfs:comment "A geopolitical event disrupts a trade flow. Rule of thumb: overlap between event countries and trading countries yields impact candidates, with a lag."@en,
+        "지정학 사건이 무역흐름을 교란한다. 판정 규칙: 사건 관련국과 교역국이 겹치면 영향 후보이며 시차를 적용한다."@ko ;
+    rdfs:domain intl:GeopoliticalEvent ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range gvc:TradeFlow ;
+    rdfs:subPropertyOf bridge:bridgeRelation .
+
+bridge:exposes a owl:ObjectProperty ;
+    rdfs:label "exposes"@en,
+        "노출시킴"@ko ;
+    rdfs:comment "A dependency exposes a risk node. Rule of thumb: single-source dependency combined with geopolitical risk implies risk exposure."@en,
+        "의존관계가 위험노드를 노출시킨다. 판정 규칙: 단일 공급원 의존과 지정학 위험이 겹치면 위험 노출로 본다."@ko ;
+    rdfs:domain gvc:Dependency ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range gvc:RiskNode ;
+    rdfs:subPropertyOf bridge:bridgeRelation .
+
+bridge:geoRisk a owl:DatatypeProperty ;
+    rdfs:label "geoRisk"@en,
+        "지정학위험"@ko ;
+    rdfs:comment "Geopolitical risk attribute of exposes (for example a GPR reading)."@en,
+        "exposes 의 지정학 위험(GPR 등)."@ko ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range xsd:decimal .
+
+bridge:hops a owl:DatatypeProperty ;
+    rdfs:label "hops"@en,
+        "경로길이"@ko ;
+    rdfs:comment "Number of ownership hops on the circumvention path (1 to 3)."@en,
+        "circumvents 의 소유경로 hop 수(1~3)."@ko ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range xsd:integer .
+
+bridge:lag a owl:DatatypeProperty ;
+    rdfs:label "lag"@en,
+        "시차"@ko ;
+    rdfs:comment "Lag of disrupts in months: measure at t, trade effect at t plus lag."@en,
+        "disrupts 의 시차(개월). 제재 t → 무역 t+lag."@ko ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range xsd:integer .
+
+bridge:magnitude a owl:DatatypeProperty ;
+    rdfs:label "magnitude"@en,
+        "영향크기"@ko ;
+    rdfs:comment "Magnitude attribute of disrupts (observed relative change)."@en,
+        "disrupts 의 영향 크기."@ko ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range xsd:decimal .
+
+bridge:restricts a owl:ObjectProperty ;
+    rdfs:label "restricts"@en,
+        "제한함"@ko ;
+    rdfs:comment "An export control restricts a product. Rule of thumb: overlap between the policy's HS scope and the product's HS code implies control."@en,
+        "수출통제가 품목을 제한한다. 판정 규칙: 정책의 HS 범위와 품목 HS 가 겹치면 통제 대상이다."@ko ;
+    rdfs:domain intl:ExportControl ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range core:Product ;
+    rdfs:subPropertyOf bridge:bridgeRelation .
+
+bridge:riskScore a owl:DatatypeProperty ;
+    rdfs:label "riskScore"@en,
+        "위험점수"@ko ;
+    rdfs:comment "Risk score attribute of affects (0 to 1)."@en,
+        "affects 의 위험 점수(0~1)."@ko ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range xsd:decimal .
+
+bridge:scope a owl:DatatypeProperty ;
+    rdfs:label "scope"@en,
+        "범위"@ko ;
+    rdfs:comment "Scope attribute of restricts (licensing scope)."@en,
+        "restricts 의 통제 범위."@ko ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range xsd:string .
+
+bridge:suspicion a owl:DatatypeProperty ;
+    rdfs:label "suspicion"@en,
+        "의심도"@ko ;
+    rdfs:comment "Circumvention suspicion attribute (0 to 1)."@en,
+        "circumvents 의 우회 의심도(0~1)."@ko ;
+    rdfs:isDefinedBy ssk:bridge ;
+    rdfs:range xsd:decimal .
+
+core:Component a owl:Class ;
+    rdfs:label "Component"@en,
+        "부품"@ko ;
+    rdfs:comment "Semiconductor components and memory (HS 8541, 8542). Subclass of Product."@en,
+        "반도체 부품·메모리 등 (HS 8541·8542). Product의 하위."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf core:Product .
+
+core:Equipment a owl:Class ;
+    rdfs:label "Equipment"@en,
+        "장비"@ko ;
+    rdfs:comment "Semiconductor manufacturing equipment (HS 8486). Subclass of Product."@en,
+        "반도체 제조장비 (HS 8486). Product의 하위."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf core:Product .
+
+core:Identifier a owl:Class ;
+    rdfs:label "Identifier"@en,
+        "식별자"@ko ;
+    rdfs:comment "Value object for standard identifiers such as LEI, ISO codes and HS codes."@en,
+        "LEI·ISO·HS 등 표준 식별자 값 객체."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf core:Entity .
+
+core:Material a owl:Class ;
+    rdfs:label "Material"@en,
+        "소재"@ko ;
+    rdfs:comment "Semiconductor materials (HS 2804, 2811, 3707). Subclass of Product."@en,
+        "반도체 소재 (HS 2804·2811·3707). Product의 하위."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf core:Product .
+
+core:alternateId a owl:DatatypeProperty ;
+    rdfs:label "alternateId"@en,
+        "별칭식별자"@ko ;
+    rdfs:comment "Secondary identifier that is not the canonical one. It preserves the source key from before a merge so that provenance remains traceable, and it is not used to decide identity."@en,
+        "정준 식별자가 아닌 보조 식별자. 병합 이전의 소스 키를 보존해 추적을 가능하게 하되, 동일성 판단에는 쓰지 않는다."@ko ;
+    rdfs:domain core:Entity ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:associatedWith a owl:ObjectProperty,
+        owl:SymmetricProperty ;
+    rdfs:label "associatedWith"@en,
+        "연관"@ko ;
+    rdfs:comment "Documented association between a geopolitical event and a policy (sanction, export control, trade measure). Symmetric; carries no causal claim. Example: linking a policy event with the sanction that accompanied it."@en,
+        "지정학 이벤트와 정책(제재·수출통제·무역조치)의 문서화된 연관. 무방향(대칭). 인과 불포함(인과 추정은 별도 분석의 몫). 예: 정책 이벤트와 그에 수반된 제재의 연결."@ko ;
+    rdfs:domain _:n0001 ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range _:n0001 .
+
+core:canonicalId a owl:DatatypeProperty ;
+    rdfs:label "canonicalId"@en,
+        "정규식별자"@ko ;
+    rdfs:comment "Canonical identifier of an entity (the generic slot for the canonical-identifier scheme)."@en,
+        "엔티티 정규 식별자(접점 명세 canonical_id 규칙의 일반 슬롯)."@ko ;
+    rdfs:domain core:Entity ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:collectedDate a owl:DatatypeProperty ;
+    rdfs:label "collectedDate"@en,
+        "수집일"@ko ;
+    rdfs:comment "Date the record was collected; reproducibility and lineage tag."@en,
+        "데이터 수집일. 재현성·계보 태그."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:date ;
+    rdfs:subPropertyOf prov:generatedAtTime .
+
+core:confidence a owl:DatatypeProperty ;
+    rdfs:label "confidence"@en,
+        "신뢰도"@ko ;
+    rdfs:comment "Confidence of the record or triple (0 to 1); values below 0.7 are dropped by convention."@en,
+        "추출 트리플 confidence(0~1). 0.7 미만 제거 기준."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:decimal .
+
+core:coverageEnd a owl:DatatypeProperty ;
+    rdfs:label "coverageEnd"@en,
+        "커버리지종료"@ko ;
+    rdfs:comment "End year of the source's intended collection window."@en,
+        "이 소스의 수집 대상 기간 종료 연도(2025)."@ko ;
+    rdfs:domain core:SourceCoverage ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:gYear .
+
+core:coverageStart a owl:DatatypeProperty ;
+    rdfs:label "coverageStart"@en,
+        "커버리지시작"@ko ;
+    rdfs:comment "Start year of the source's intended collection window, aligned with the study period design (2008 onwards)."@en,
+        "이 소스의 수집 대상 기간 시작 연도. 연구 기간 설계(2008~)와 정합."@ko ;
+    rdfs:domain core:SourceCoverage ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:gYear .
+
+core:declaresCoverage a owl:ObjectProperty ;
+    rdfs:label "declaresCoverage"@en,
+        "커버리지선언"@ko ;
+    rdfs:comment "Links a dataset or module to its per-source coverage declaration."@en,
+        "데이터셋/모듈이 소스별 커버리지 선언을 갖는다."@ko ;
+    rdfs:domain core:Entity ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range core:SourceCoverage .
+
+core:eccn a owl:DatatypeProperty ;
+    rdfs:label "eccn"@en,
+        "ECCN"@ko ;
+    rdfs:comment "Export Control Classification Number (ECCN); control-side fallback identifier for HS."@en,
+        "수출통제 분류번호(ECCN). HS의 통제 측 fallback 식별자."@ko ;
+    rdfs:domain core:Product ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:endYear a owl:DatatypeProperty ;
+    rdfs:label "endYear"@en,
+        "종료연도"@ko ;
+    rdfs:comment "End year of the relation."@en,
+        "관계 종료 연도."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:gYear .
+
+core:evidenceType a owl:DatatypeProperty ;
+    rdfs:label "evidenceType"@en,
+        "근거유형"@ko ;
+    rdfs:comment "Distinguishes observed from inferred evidence; uncertainty tag."@en,
+        "관측(observed) vs 추론(inferred) 구분, 불확실성 태그."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:hasTemporalScope a owl:ObjectProperty ;
+    rdfs:label "hasTemporalScope"@en,
+        "시간범위가짐"@ko ;
+    rdfs:comment "Links an entity or relation to its validity interval."@en,
+        "엔티티/관계의 유효 시간범위 연결."@ko ;
+    rdfs:domain core:Entity ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range core:TemporalScope .
+
+core:hsCode a owl:DatatypeProperty,
+        owl:FunctionalProperty,
+        owl:InverseFunctionalProperty ;
+    rdfs:label "hsCode"@en,
+        "HS코드"@ko ;
+    rdfs:comment "WCO HS code; canonical product identifier (six digits, HS10 where finer)."@en,
+        "WCO HS code. 품목 canonical_id(6자리), 정밀은 HS10."@ko ;
+    rdfs:domain core:Product ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:identifierStatus a owl:DatatypeProperty ;
+    rdfs:label "identifierStatus"@en,
+        "식별자상태"@ko ;
+    rdfs:comment "Warrant of the canonical identifier: authoritative for a standard register (LEI, ISO, HS), provisional for a curation key where no standard identifier exists."@en,
+        "정준 식별자의 근거. authoritative=표준 등록부(LEI·ISO·HS), provisional=큐레이션 키(표준 식별자 미보유)."@ko ;
+    rdfs:domain core:Entity ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:isoAlpha3 a owl:DatatypeProperty,
+        owl:FunctionalProperty,
+        owl:InverseFunctionalProperty ;
+    rdfs:label "isoAlpha3"@en,
+        "ISO3166-1 alpha-3"@ko ;
+    rdfs:comment "ISO 3166-1 alpha-3 country code (KOR, USA, CHN, JPN, NLD); canonical identifier."@en,
+        "국가 ISO 3166-1 alpha-3 코드(KOR·USA·CHN·JPN·NLD). canonical_id."@ko ;
+    rdfs:domain core:Country ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:label a owl:DatatypeProperty ;
+    rdfs:label "name"@en,
+        "명칭"@ko ;
+    rdfs:comment "Display name of the entity (including the source surface form)."@en,
+        "엔티티 표기명(추출 원문 표면형 포함)."@ko ;
+    rdfs:domain core:Entity ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:lei a owl:DatatypeProperty,
+        owl:FunctionalProperty,
+        owl:InverseFunctionalProperty ;
+    rdfs:label "lei"@en,
+        "LEI"@ko ;
+    rdfs:comment "GLEIF Legal Entity Identifier (ISO 17442, 20 characters); canonical firm identifier."@en,
+        "GLEIF Legal Entity Identifier (ISO 17442, 20자). 기업 canonical_id."@ko ;
+    rdfs:domain core:Organization ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:observedCount a owl:DatatypeProperty ;
+    rdfs:label "observedCount"@en,
+        "관측수"@ko ;
+    rdfs:comment "Number of records actually observed in the coverage window. Zero or few still means observed absence, not missingness."@en,
+        "커버리지 기간에 실제 관측된 레코드 수. 0 또는 소수여도 결측이 아닌 관측된 부재."@ko ;
+    rdfs:domain core:SourceCoverage ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:integer .
+
+core:source a owl:DatatypeProperty ;
+    rdfs:label "source"@en,
+        "출처"@ko ;
+    rdfs:comment "Data source name; provenance tag."@en,
+        "데이터 출처(소스명). provenance 태그."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf dcterms:source .
+
+core:startYear a owl:DatatypeProperty ;
+    rdfs:label "startYear"@en,
+        "시작연도"@ko ;
+    rdfs:comment "Start year of the relation (temporal vocabulary for supply, contracts and similar)."@en,
+        "관계 시작 연도(공급·계약 등 시간 어휘)."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:gYear .
+
+core:tier a owl:DatatypeProperty ;
+    rdfs:label "tier"@en,
+        "공식성등급"@ko ;
+    rdfs:comment "Officiality tier of the source (T1 to T4)."@en,
+        "공식성 4-Tier(T1~T4)."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:validFrom a owl:DatatypeProperty ;
+    rdfs:label "validFrom"@en,
+        "유효시작"@ko ;
+    rdfs:comment "Start of valid time; used for temporal alignment of all nodes and edges."@en,
+        "valid_time 시작일. 모든 노드/엣지 시점 정합에 사용."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:date .
+
+core:validTo a owl:DatatypeProperty ;
+    rdfs:label "validTo"@en,
+        "유효종료"@ko ;
+    rdfs:comment "End of valid time."@en,
+        "valid_time 종료일."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:date .
+
+core:wikidataQID a owl:DatatypeProperty ;
+    rdfs:label "wikidataQID"@en,
+        "Wikidata QID"@ko ;
+    rdfs:comment "Wikidata QID; fallback identifier for organisations without an LEI, and canonical identifier for spatial nodes."@en,
+        "Wikidata QID. LEI 미매칭 시 기업 fallback 식별자."@ko ;
+    rdfs:domain core:Entity ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+gvc:Input a owl:Class ;
+    rdfs:label "Input"@en,
+        "투입재"@ko ;
+    rdfs:comment "Process input in the sense of the ETO Supply Chain Explorer (materials and process inputs)."@en,
+        "ETO Supply Chain Explorer 의 input(소재·공정 투입)."@ko ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:subClassOf core:Product .
+
+gvc:customer a owl:ObjectProperty ;
+    rdfs:label "customer"@en,
+        "수요자"@ko ;
+    rdfs:comment "Customer side of a supply relation."@en,
+        "공급관계의 수요 측 기업."@ko ;
+    rdfs:domain gvc:SupplyEdge ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range gvc:Company .
+
+gvc:dependentActor a owl:ObjectProperty ;
+    rdfs:label "dependentActor"@en,
+        "의존주체"@ko ;
+    rdfs:comment "Actor that depends (firm or country)."@en,
+        "의존하는 주체(기업·국가)."@ko ;
+    rdfs:domain gvc:Dependency ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range core:Entity .
+
+gvc:dependsOnProduct a owl:ObjectProperty ;
+    rdfs:label "dependsOnProduct"@en,
+        "의존품목"@ko ;
+    rdfs:comment "Product depended upon."@en,
+        "의존 대상 품목."@ko ;
+    rdfs:domain gvc:Dependency ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range core:Product .
+
+gvc:dependsOnSupplier a owl:ObjectProperty ;
+    rdfs:label "dependsOnSupplier"@en,
+        "의존공급원"@ko ;
+    rdfs:comment "Supplier firm depended upon."@en,
+        "의존 대상 공급원 기업."@ko ;
+    rdfs:domain gvc:Dependency ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range gvc:Company .
+
+gvc:directlySupplies a owl:ObjectProperty ;
+    rdfs:label "directlySupplies"@en,
+        "직접공급"@ko ;
+    rdfs:comment "Direct supply (first-tier trade)."@en,
+        "직접 공급(1차 거래)."@ko ;
+    rdfs:domain gvc:Company ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range gvc:Company ;
+    rdfs:subPropertyOf gvc:supplies .
+
+gvc:disclosureResolution a owl:DatatypeProperty ;
+    rdfs:label "disclosureResolution"@en,
+        "공시해상도"@ko ;
+    rdfs:comment "Disclosure resolution metadata (asymmetric by country: dense for Korea, sparse elsewhere)."@en,
+        "공시 해상도 메타(국가비대칭: 한국 조밀·해외 희박)."@ko ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range xsd:string .
+
+gvc:flowDestination a owl:ObjectProperty ;
+    rdfs:label "flowDestination"@en,
+        "수입국"@ko ;
+    rdfs:comment "Importing (destination) country of the trade flow."@en,
+        "무역흐름의 수입(도착)국."@ko ;
+    rdfs:domain gvc:TradeFlow ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range core:Country .
+
+gvc:flowOrigin a owl:ObjectProperty ;
+    rdfs:label "flowOrigin"@en,
+        "수출국"@ko ;
+    rdfs:comment "Exporting (origin) country of the trade flow."@en,
+        "무역흐름의 수출(원산)국."@ko ;
+    rdfs:domain gvc:TradeFlow ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range core:Country .
+
+gvc:flowProduct a owl:ObjectProperty ;
+    rdfs:label "flowProduct"@en,
+        "무역품목"@ko ;
+    rdfs:comment "Product (HS) of the trade flow."@en,
+        "무역흐름의 대상 품목(HS)."@ko ;
+    rdfs:domain gvc:TradeFlow ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range core:Product .
+
+gvc:hhi a owl:DatatypeProperty ;
+    rdfs:label "hhi"@en,
+        "HHI"@ko ;
+    rdfs:comment "Herfindahl-Hirschman index (0 to 1; sum of squared shares). Concentration of dependency or risk."@en,
+        "허핀달-허쉬만 집중지수(0~1, 점유율 제곱합). 의존·위험 집중도."@ko ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range xsd:decimal .
+
+gvc:indexValue a owl:DatatypeProperty ;
+    rdfs:label "indexValue"@en,
+        "지수값"@ko ;
+    rdfs:comment "Value of the price index."@en,
+        "가격지수 값."@ko ;
+    rdfs:domain gvc:PriceIndex ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range xsd:decimal .
+
+gvc:indirectlySupplies a owl:ObjectProperty ;
+    rdfs:label "indirectlySupplies"@en,
+        "간접공급"@ko ;
+    rdfs:comment "Indirect supply (second tier or beyond, or via intermediaries)."@en,
+        "간접 공급(2차+ 또는 경유)."@ko ;
+    rdfs:domain gvc:Company ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range gvc:Company ;
+    rdfs:subPropertyOf gvc:supplies .
+
+gvc:marketShare a owl:DatatypeProperty ;
+    rdfs:label "marketShare"@en,
+        "시장점유율"@ko ;
+    rdfs:comment "Market share in percent (0 to 100), for example ETO share_provided."@en,
+        "독점도 지표 시장점유율(%). ETO share_provided 등. 0~100."@ko ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range xsd:decimal .
+
+gvc:oemSupplies a owl:ObjectProperty ;
+    rdfs:label "oemSupplies"@en,
+        "OEM공급"@ko ;
+    rdfs:comment "OEM supply (original equipment manufacturing)."@en,
+        "OEM 공급(주문자상표부착)."@ko ;
+    rdfs:domain gvc:Company ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range gvc:Company ;
+    rdfs:subPropertyOf gvc:supplies .
+
+gvc:priceOf a owl:ObjectProperty ;
+    rdfs:label "priceOf"@en,
+        "가격대상"@ko ;
+    rdfs:comment "Product the price index refers to."@en,
+        "가격지수가 가리키는 품목."@ko ;
+    rdfs:domain gvc:PriceIndex ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range core:Product .
+
+gvc:producesProduct a owl:ObjectProperty ;
+    rdfs:label "producesProduct"@en,
+        "생산품목"@ko ;
+    rdfs:comment "Product the firm produces."@en,
+        "기업이 생산하는 품목."@ko ;
+    rdfs:domain gvc:Company ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range core:Product .
+
+gvc:providesInput a owl:ObjectProperty ;
+    rdfs:label "providesInput"@en,
+        "투입공급"@ko ;
+    rdfs:comment "The firm provides a specific input or equipment (ETO PROVIDES, with a share percentage)."@en,
+        "기업이 특정 투입재·장비를 공급함(ETO PROVIDES, share% 동반)."@ko ;
+    rdfs:domain gvc:Company ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range core:Product .
+
+gvc:reroutedSupplies a owl:ObjectProperty ;
+    rdfs:label "reroutedSupplies"@en,
+        "우회공급"@ko ;
+    rdfs:comment "Rerouted supply (via third countries or intermediaries); a circumvention screening signal."@en,
+        "우회 공급(제3국·경유 우회). 우회 스크리닝 신호."@ko ;
+    rdfs:domain gvc:Company ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range gvc:Company ;
+    rdfs:subPropertyOf gvc:supplies .
+
+gvc:supplier a owl:ObjectProperty ;
+    rdfs:label "supplier"@en,
+        "공급자"@ko ;
+    rdfs:comment "Supplier side of a supply relation."@en,
+        "공급관계의 공급 측 기업."@ko ;
+    rdfs:domain gvc:SupplyEdge ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range gvc:Company .
+
+gvc:suppliesProduct a owl:ObjectProperty ;
+    rdfs:label "suppliesProduct"@en,
+        "공급품목"@ko ;
+    rdfs:comment "Product of the supply relation."@en,
+        "공급관계의 대상 품목."@ko ;
+    rdfs:domain gvc:SupplyEdge ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range core:Product .
+
+gvc:tradeQuantity a owl:DatatypeProperty ;
+    rdfs:label "tradeQuantity"@en,
+        "무역수량"@ko ;
+    rdfs:comment "Quantity of the trade flow."@en,
+        "무역흐름 수량."@ko ;
+    rdfs:domain gvc:TradeFlow ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range xsd:decimal .
+
+gvc:tradeValueUSD a owl:DatatypeProperty ;
+    rdfs:label "tradeValueUSD"@en,
+        "무역액USD"@ko ;
+    rdfs:comment "Value of the trade flow in USD."@en,
+        "무역흐름 금액(USD)."@ko ;
+    rdfs:domain gvc:TradeFlow ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range xsd:decimal .
+
+intl:acquired a owl:ObjectProperty ;
+    rdfs:label "acquired"@en,
+        "인수합병"@ko ;
+    rdfs:comment "Acquisition or merger between firms."@en,
+        "인수·합병(기업: 인수합병)."@ko ;
+    rdfs:domain core:Organization ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range core:Organization .
+
+intl:bansTechTransferTo a owl:ObjectProperty ;
+    rdfs:label "bansTechTransferTo"@en,
+        "기술이전금지대상"@ko ;
+    rdfs:comment "Organisation to which a technology transfer ban applies."@en,
+        "기술이전금지가 적용되는 조직."@ko ;
+    rdfs:domain intl:TechTransferBan ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range core:Organization .
+
+intl:controlScope a owl:DatatypeProperty ;
+    rdfs:label "controlScope"@en,
+        "통제범위"@ko ;
+    rdfs:comment "Scope of an export control (product families, countries and similar)."@en,
+        "수출통제 범위(품목군·국가 등)."@ko ;
+    rdfs:domain intl:ExportControl ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range xsd:string .
+
+intl:enactedBy a owl:ObjectProperty ;
+    rdfs:label "enactedBy"@en,
+        "제정주체"@ko ;
+    rdfs:comment "Country that enacted the policy."@en,
+        "정책을 제정한 국가."@ko ;
+    rdfs:domain core:Policy ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range core:Country .
+
+intl:eventDate a owl:DatatypeProperty ;
+    rdfs:label "eventDate"@en,
+        "사건일"@ko ;
+    rdfs:comment "Date of the geopolitical event."@en,
+        "지정학 사건 발생일."@ko ;
+    rdfs:domain intl:GeopoliticalEvent ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range xsd:date .
+
+intl:exportControlledBy a owl:ObjectProperty ;
+    rdfs:label "exportControlledBy"@en,
+        "수출통제대상"@ko ;
+    rdfs:comment "The product is subject to an export control measure."@en,
+        "품목이 수출통제 조치의 대상임."@ko ;
+    rdfs:domain core:Product ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range intl:ExportControl .
+
+intl:financiallySanctions a owl:ObjectProperty ;
+    rdfs:label "financiallySanctions"@en,
+        "금융제재함"@ko ;
+    rdfs:comment "A financial sanction targets the organisation."@en,
+        "금융제재가 조직을 대상으로 함."@ko ;
+    rdfs:domain intl:FinancialSanction ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range core:Organization .
+
+intl:hasProductionFacility a owl:ObjectProperty ;
+    rdfs:label "hasProductionFacility"@en,
+        "생산시설"@ko ;
+    rdfs:comment "Location of the organisation's production facility."@en,
+        "조직의 생산시설 위치(지리: 생산시설)."@ko ;
+    rdfs:domain core:Organization ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range core:Location .
+
+intl:headquarteredIn a owl:ObjectProperty ;
+    rdfs:label "headquarteredIn"@en,
+        "본사위치"@ko ;
+    rdfs:comment "Country where the organisation is headquartered."@en,
+        "조직의 본사 소재 국가(지리: 본사위치)."@ko ;
+    rdfs:domain core:Organization ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range core:Country .
+
+intl:imposes a owl:ObjectProperty ;
+    rdfs:label "imposes"@en,
+        "조치부과"@ko ;
+    rdfs:comment "The country imposes a trade measure."@en,
+        "국가가 무역조치를 부과함."@ko ;
+    rdfs:domain core:Country ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range intl:TradeMeasure .
+
+intl:incorporatedIn a owl:ObjectProperty ;
+    rdfs:label "incorporatedIn"@en,
+        "법인설립국"@ko ;
+    rdfs:comment "Country of incorporation of the organisation."@en,
+        "조직의 법인 설립국(지리: 법인설립국)."@ko ;
+    rdfs:domain core:Organization ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range core:Country .
+
+intl:jointVentureWith a owl:ObjectProperty,
+        owl:SymmetricProperty ;
+    rdfs:label "jointVentureWith"@en,
+        "합작법인"@ko ;
+    rdfs:comment "Joint venture relation between firms."@en,
+        "합작법인 관계(기업: 합작법인)."@ko ;
+    rdfs:domain core:Organization ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range core:Organization .
+
+intl:listAuthority a owl:ObjectProperty ;
+    rdfs:label "listAuthority"@en,
+        "발령기관"@ko ;
+    rdfs:comment "The authority that issued the listing, or the jurisdiction of the register."@en,
+        "등재를 발령한 기관 또는 목록 관할."@ko ;
+    rdfs:domain intl:SanctionListing ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range core:Organization .
+
+intl:listedOrganization a owl:ObjectProperty ;
+    rdfs:label "listedOrganization"@en,
+        "등재조직"@ko ;
+    rdfs:comment "The organisation the listing refers to."@en,
+        "등재 사실이 가리키는 조직."@ko ;
+    rdfs:domain intl:SanctionListing ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range core:Organization .
+
+intl:listsEntity a owl:ObjectProperty ;
+    rdfs:label "listsEntity"@en,
+        "제재등재"@ko ;
+    rdfs:comment "The sanction measure lists the sanctioned entity."@en,
+        "제재 조치가 제재대상을 등재함."@ko ;
+    rdfs:domain intl:Sanction ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range intl:SanctionedEntity .
+
+intl:ownedOrganization a owl:ObjectProperty ;
+    rdfs:label "ownedOrganization"@en,
+        "피소유조직"@ko ;
+    rdfs:comment "The organisation whose equity is held."@en,
+        "지분이 보유된 조직."@ko ;
+    rdfs:domain intl:OwnershipAssertion ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range core:Organization .
+
+intl:owner a owl:ObjectProperty ;
+    rdfs:label "owner"@en,
+        "소유자"@ko ;
+    rdfs:comment "The organisation holding the equity share."@en,
+        "지분을 보유한 조직."@ko ;
+    rdfs:domain intl:OwnershipAssertion ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range core:Organization .
+
+intl:ownershipPct a owl:DatatypeProperty ;
+    rdfs:label "ownershipPct"@en,
+        "지분율"@ko ;
+    rdfs:comment "Ownership share in percent. An attribute of the ownership assertion individual, not of an organisation."@en,
+        "소유 지분율(%). 소유관계진술 개체의 속성이며 조직의 속성이 아니다."@ko ;
+    rdfs:domain intl:OwnershipAssertion ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range xsd:decimal .
+
+intl:owns a owl:IrreflexiveProperty,
+        owl:ObjectProperty ;
+    rdfs:label "owns"@en,
+        "소유"@ko ;
+    rdfs:comment "Equity ownership. The base edge on which ownership paths, and hence circumvention, are traced. Irreflexive: a legal person does not own itself."@en,
+        "지분 소유(OWNS). 소유경로(circumvents)의 기반 엣지. 비반사적: 법인은 자기 자신을 소유하지 않는다."@ko ;
+    rdfs:domain core:Organization ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range core:Organization ;
+    owl:inverseOf intl:ownedBy .
+
+intl:pathEnd a owl:ObjectProperty ;
+    rdfs:label "pathEnd"@en,
+        "경로끝"@ko ;
+    rdfs:comment "End of the ownership path (the non-sanctioned legal person)."@en,
+        "소유경로의 끝(비제재 법인)."@ko ;
+    rdfs:domain intl:OwnershipPath ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range core:Organization .
+
+intl:pathStart a owl:ObjectProperty ;
+    rdfs:label "pathStart"@en,
+        "경로시작"@ko ;
+    rdfs:comment "Start of the ownership path (the sanctioned entity)."@en,
+        "소유경로의 시작(제재대상)."@ko ;
+    rdfs:domain intl:OwnershipPath ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range intl:SanctionedEntity .
+
+intl:restrictsInvestmentIn a owl:ObjectProperty ;
+    rdfs:label "restrictsInvestmentIn"@en,
+        "투자제한대상"@ko ;
+    rdfs:comment "Organisation to which an investment restriction applies."@en,
+        "투자제한이 적용되는 조직."@ko ;
+    rdfs:domain intl:InvestmentRestriction ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range core:Organization .
+
+intl:sanctionDate a owl:DatatypeProperty ;
+    rdfs:label "sanctionDate"@en,
+        "제재일"@ko ;
+    rdfs:comment "Effective date of the sanction (approximation basis for valid time)."@en,
+        "제재 발효일(valid_time 근사 기준)."@ko ;
+    rdfs:domain intl:Sanction ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range xsd:date .
+
+intl:strategicAllianceWith a owl:ObjectProperty,
+        owl:SymmetricProperty ;
+    rdfs:label "strategicAllianceWith"@en,
+        "전략적제휴"@ko ;
+    rdfs:comment "Strategic alliance between firms."@en,
+        "전략적 제휴(기업: 전략적제휴)."@ko ;
+    rdfs:domain core:Organization ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range core:Organization .
+
+intl:subsidiaryOf a owl:IrreflexiveProperty,
+        owl:ObjectProperty,
+        owl:TransitiveProperty ;
+    rdfs:label "subsidiaryOf"@en,
+        "자회사"@ko ;
+    rdfs:comment "Subsidiary relation, from GLEIF Level-2 and ICIJ ownership structures. Transitive, but the transitivity is that of control and not of equity share: aggregate shareholding is computed separately from the share carried on the ownership assertion. Irreflexive: a legal person is not its own subsidiary."@en,
+        "자회사 관계(기업: 자회사). GLEIF L2·ICIJ 소유구조. 이행적이되 이는 지배 관계의 이행성이며 지분율의 이행성이 아니다. 합산 지분 판정은 소유관계진술의 지분율로 별도 계산한다. 비반사적: 법인은 자기 자신의 자회사가 아니다."@ko ;
+    rdfs:domain core:Organization ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range core:Organization .
+
+intl:underSanction a owl:ObjectProperty ;
+    rdfs:label "underSanction"@en,
+        "근거조치"@ko ;
+    rdfs:comment "The sanction measure on which the listing rests."@en,
+        "등재의 근거가 되는 제재 조치."@ko ;
+    rdfs:domain intl:SanctionListing ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range intl:Sanction .
+
+core:Location a owl:Class ;
+    rdfs:label "Location"@en,
+        "지점"@ko ;
+    rdfs:comment "Geographic location (facility, port, coordinates); basis for GIS spatial joins."@en,
+        "지리적 위치(시설·항만·좌표). GIS 공간조인 기반."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf core:Entity ;
+    owl:disjointWith core:Country,
+        core:Event,
+        core:Organization,
+        core:Policy,
+        core:Product .
+
+core:TemporalScope a owl:Class ;
+    rdfs:label "TemporalScope"@en,
+        "시간범위"@ko ;
+    rdfs:comment "Reification node expressing a validity interval (valid-time start and end)."@en,
+        "valid_time(시작·종료) 등 시간 유효구간을 표현하는 reification 노드."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf time:TemporalEntity,
+        core:Entity .
+
+gvc:RiskNode a owl:Class ;
+    rdfs:label "RiskNode"@en,
+        "위험노드"@ko ;
+    rdfs:comment "Exposure target where geopolitical and concentration risk combine (firm, product, route or region). Object of exposes."@en,
+        "지정학·집중 위험이 결합되는 노출 대상(기업·품목·경로·지역). exposes 의 대상."@ko ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:subClassOf core:Entity .
+
+intl:FinancialSanction a owl:Class ;
+    rdfs:label "FinancialSanction"@en,
+        "금융제재"@ko ;
+    rdfs:comment "Financial sanction such as an asset or transaction freeze."@en,
+        "자금·거래 동결 등 금융제재."@ko ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:subClassOf intl:Sanction .
+
+intl:InvestmentRestriction a owl:Class ;
+    rdfs:label "InvestmentRestriction"@en,
+        "투자제한"@ko ;
+    rdfs:comment "Restriction on equity investment or acquisition."@en,
+        "지분투자·인수 제한."@ko ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:subClassOf intl:Sanction .
+
+intl:TechTransferBan a owl:Class ;
+    rdfs:label "TechTransferBan"@en,
+        "기술이전금지"@ko ;
+    rdfs:comment "Prohibition on transferring technology or know-how."@en,
+        "기술·지식 이전 금지."@ko ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:subClassOf intl:Sanction .
+
+intl:TradeMeasure a owl:Class ;
+    rdfs:label "TradeMeasure"@en,
+        "무역조치"@ko ;
+    rdfs:comment "Trade policy intervention (GTA records, WTO anti-dumping, countervailing duties, non-tariff measures)."@en,
+        "무역정책 개입(GTA·WTO 반덤핑·상계관세·NTM)."@ko ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:subClassOf core:Policy .
+
+intl:ownedBy a owl:ObjectProperty ;
+    rdfs:label "ownedBy"@en,
+        "피소유"@ko ;
+    rdfs:comment "Inverse of the ownership relation."@en,
+        "소유의 역관계."@ko ;
+    rdfs:domain core:Organization ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:range core:Organization .
+
+gvc:PriceIndex a owl:Class ;
+    rdfs:label "PriceIndex"@en,
+        "가격지수"@ko ;
+    rdfs:comment "Price index time series for memory products (for example the ECOS DRAM export price index)."@en,
+        "메모리 가격 시계열 지수(ECOS D램 수출물가지수 등)."@ko ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:subClassOf core:Entity .
+
+intl:GeopoliticalEvent a owl:Class ;
+    rdfs:label "GeopoliticalEvent"@en,
+        "지정학사건"@ko ;
+    rdfs:comment "Geopolitical occurrence such as a conflict, tariff or policy shift. Subject of disrupts."@en,
+        "분쟁·관세·정책 변화 등 지정학적 사건. disrupts 의 주체."@ko ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:subClassOf core:Event .
+
+intl:ExportControl a owl:Class ;
+    rdfs:label "ExportControl"@en,
+        "수출통제"@ko ;
+    rdfs:comment "Export control measure (BIS rules, China dual-use rules, the 2019 Japanese export controls). Subject of restricts."@en,
+        "수출통제 조치(BIS·중국 양용물품·일본 수출규제). restricts 의 주체."@ko ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:subClassOf core:Policy .
+
+intl:OwnershipAssertion a owl:Class ;
+    rdfs:label "OwnershipAssertion"@en,
+        "소유관계진술"@ko ;
+    rdfs:comment "Reified equity ownership relation between two organisations. The share, the period of validity and the source are asserted on this individual."@en,
+        "두 조직 사이의 지분 소유 관계를 개체로 재화한 것. 지분율·유효기간·출처를 이 개체에 부여한다."@ko ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:subClassOf core:Entity .
+
+intl:OwnershipPath a owl:Class ;
+    rdfs:label "OwnershipPath"@en,
+        "소유경로"@ko ;
+    rdfs:comment "Ownership chain from a sanctioned entity through one to three ownership hops to a non-sanctioned legal person. Subject of circumvents (reification of a suspected circumvention path)."@en,
+        "제재대상→(OWNS*1-3)→비제재 법인으로 이어지는 소유 연쇄. circumvents 의 주체(우회 의심 경로 reification)."@ko ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:subClassOf core:Entity .
+
+intl:SanctionListing a owl:Class ;
+    rdfs:label "SanctionListing"@en,
+        "제재등재사실"@ko ;
+    rdfs:comment "The fact of being listed on a given sanctions register for a given period, carrying the listed organisation, the underlying measure, the issuing authority, the period of effect and the source."@en,
+        "특정 제재 목록에 특정 기간 등재된 사실. 등재 조직·근거 조치·발령 기관·효력기간·출처를 함께 담는다."@ko ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:subClassOf core:Entity .
+
+intl:SanctionedEntity a owl:Class ;
+    rdfs:label "SanctionedEntity"@en,
+        "제재대상"@ko ;
+    rdfs:comment "Organisation listed on a sanctions or control register (OFAC SDN, BIS Entity List, China UEL and similar). Subclass of core:Organization, merged with supply chain actors on the same LEI node. Listing is a revocable status, so this class is a derived classification for querying current listings; the listing fact itself is carried by intl:SanctionListing."@en,
+        "제재·통제 리스트에 등재된 조직(OFAC SDN·BIS Entity·중국 UEL 등). core:Organization 의 하위, 같은 LEI 노드로 GVC 행위자와 통합. 등재는 해제 가능한 상태이므로 이 분류는 현행 등재 조회용 파생 분류이며, 등재 사실 자체는 intl:SanctionListing 이 담는다."@ko ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:subClassOf core:Organization .
+
+core:Event a owl:Class ;
+    rdfs:label "Event"@en,
+        "사건"@ko ;
+    rdfs:comment "Occurrence with a time point or interval; specialised by the international relations module as GeopoliticalEvent."@en,
+        "시점·기간을 갖는 사건. 국제관계 모듈이 GeopoliticalEvent로 세분."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf core:Entity ;
+    owl:disjointWith core:Country,
+        core:Organization,
+        core:Product .
+
+core:SourceCoverage a owl:Class ;
+    rdfs:label "SourceCoverage"@en,
+        "소스커버리지"@ko ;
+    rdfs:comment "Reification node declaring a source's intended collection window and observation density. Sparsity inside the window means observed absence, not missingness."@en,
+        "한 데이터 소스의 수집 대상 기간과 관측 밀도를 선언하는 reification 노드. 수집 윈도 내 희박은 결측이 아니라 관측된 부재를 뜻한다."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf core:Entity .
+
+gvc:Dependency a owl:Class ;
+    rdfs:label "Dependency"@en,
+        "의존관계"@ko ;
+    rdfs:comment "Reified dependency of an actor on a product or supplier (single-sourcing, high concentration), carrying an HHI value. Subject of exposes."@en,
+        "특정 품목·공급원에 대한 의존(단일의존·고집중) reification. HHI 보유. exposes 의 주체."@ko ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:subClassOf core:Entity .
+
+gvc:SupplyEdge a owl:Class ;
+    rdfs:label "SupplyEdge"@en,
+        "공급관계"@ko ;
+    rdfs:comment "Reified firm-to-firm supply relation carrying direction, time and confidence. Transaction values are not assigned for lack of disclosure; only direction and existence. Object of affects."@en,
+        "기업→기업 공급관계의 reification 노드(방향성·시점·신뢰도 보유). 거래액은 공시 부재로 미부여(방향성·존재성만). affects 의 대상."@ko ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:subClassOf core:Entity .
+
+gvc:supplies a owl:ObjectProperty ;
+    rdfs:label "supplies"@en,
+        "공급"@ko ;
+    rdfs:comment "Firm-to-firm supply (the superproperty of the supply family); named counterparties from DART business reports."@en,
+        "기업→기업 공급(상위 공급 관계). DART 사업의 내용 실명 거래처."@ko ;
+    rdfs:domain gvc:Company ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range gvc:Company .
+
+bridge:bridgeRelation a owl:ObjectProperty ;
+    rdfs:label "bridgeRelation"@en,
+        "교차관계"@ko ;
+    rdfs:comment "Common superproperty of the cross-domain relations between the international relations and supply chain domains."@en,
+        "국제관계↔GVC 교차도메인 관계의 공통 상위 속성."@ko ;
+    rdfs:isDefinedBy ssk:bridge .
+
+core:Policy a owl:Class ;
+    rdfs:label "Policy"@en,
+        "정책"@ko ;
+    rdfs:comment "Statute or measure of a government or international body; specialised by the international relations module."@en,
+        "정부·국제기구의 법령·조치. 국제관계 모듈이 세분."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf core:Entity ;
+    owl:disjointWith core:Country,
+        core:Event,
+        core:Organization,
+        core:Product .
+
+gvc:TradeFlow a owl:Class ;
+    rdfs:label "TradeFlow"@en,
+        "무역흐름"@ko ;
+    rdfs:comment "Reified country-to-country trade flow per product (HS code, value, quantity), built from UN Comtrade and BACI. Object of disrupts."@en,
+        "국가→국가 품목별 무역 흐름(HS·금액·수량) reification 노드. Comtrade·BACI 기반. disrupts 의 대상."@ko ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:subClassOf core:Entity .
+
+intl:Sanction a owl:Class ;
+    rdfs:label "Sanction"@en,
+        "제재"@ko ;
+    rdfs:comment "Sanction measure (financial, investment, technology transfer). Object of circumvents."@en,
+        "제재 조치(금융·투자·기술이전). circumvents 의 대상."@ko ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:subClassOf core:Policy .
+
+core:Country a owl:Class ;
+    rdfs:label "Country"@en,
+        "국가"@ko ;
+    rdfs:comment "Sovereign state. Canonical identifier: ISO 3166-1 alpha-3."@en,
+        "주권국가. canonical_id = ISO 3166-1 alpha-3."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf core:Entity ;
+    owl:disjointWith core:Product .
+
+ssk:bridge a owl:Ontology ;
+    dcterms:title "SSK 온톨로지: bridge 모듈 (교차도메인 5관계)"@ko ;
+    rdfs:comment "The sole junction between the international relations domain and the supply chain domain: five cross-domain relations (affects, disrupts, restricts, circumvents, exposes), each with a constrained domain and range, and no named classes of its own."@en,
+        "국제관계 도메인과 공급사슬 도메인을 잇는 유일한 통로. 다섯 교차관계(affects·disrupts·restricts·circumvents·exposes)가 각각 제약된 정의역·치역을 가지며, 이 모듈은 명명 클래스를 두지 않는다."@ko ;
+    owl:imports ssk:gvc,
+        ssk:intl ;
+    owl:versionInfo "0.1.5" .
+
+gvc:Company a owl:Class ;
+    rdfs:label "Company"@en,
+        "기업"@ko ;
+    rdfs:comment "Firm as a supply chain actor (Samsung, SK hynix, TSMC, ASML and similar). Subclass of core:Organization; merged with intl:SanctionedEntity through the shared LEI."@en,
+        "공급사슬 행위자로서의 기업(삼성·SK하이닉스·TSMC·ASML 등). core:Organization 의 하위, 같은 LEI 로 intl:SanctionedEntity 와 통합."@ko ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:subClassOf core:Organization .
+
+core:Product a owl:Class ;
+    rdfs:label "Product"@en,
+        "품목"@ko ;
+    rdfs:comment "Product subject to trade or control. Canonical identifier: HS code (six digits), ECCN as fallback."@en,
+        "교역·통제 대상 품목. canonical_id = HS code(6자리), fallback ECCN."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf core:Entity .
+
+core:Entity a owl:Class ;
+    rdfs:label "Entity"@en,
+        "엔티티"@ko ;
+    rdfs:comment "Top-level class of every first-class individual in the knowledge graph."@en,
+        "KG의 모든 1급 개체의 최상위 클래스."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf owl:Thing,
+        prov:Entity .
+
+core:Organization a owl:Class ;
+    rdfs:label "Organization"@en,
+        "조직"@ko ;
+    rdfs:comment "Legal person, firm or institution. The canonical identifier is the LEI (GLEIF, ISO 17442) where one exists; otherwise the pair of jurisdiction and registration number; failing both, a curation key marked as provisional through core:identifierStatus. A name is not an identity criterion."@en,
+        "법인·기업·기관. 정준 식별자는 LEI(GLEIF, ISO 17442)를 우선한다. LEI 미보유 법인은 관할과 등록번호의 결합을 쓰며, 둘 다 없으면 큐레이션 키를 잠정 식별자로 둔다(core:identifierStatus 로 표시). 이름은 동일성 기준이 아니다."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf org:Organization,
+        core:Entity ;
+    owl:disjointWith core:Country,
+        core:Product .
+
+ssk:gvc a owl:Ontology ;
+    dcterms:title "SSK 온톨로지: gvc 모듈 (반도체 소부장 GVC)"@ko ;
+    owl:imports ssk:core ;
+    owl:versionInfo "0.1.5" .
+
+ssk:core a owl:Ontology ;
+    dcterms:created "2026-08-01"^^xsd:date ;
+    dcterms:title "SSK 온톨로지: core 모듈 (공유 상위·LEI·시공간)"@ko ;
+    owl:versionInfo "0.1.5" .
+
+ssk:intl a owl:Ontology ;
+    dcterms:title "SSK 온톨로지: intl 모듈 (국제관계)"@ko ;
+    owl:imports ssk:core ;
+    owl:versionInfo "0.1.5" .
+
+_:n0002 rdf:first core:Event ;
+    rdf:rest ( core:Policy ) .
+
+_:n0001 a owl:Class ;
+    owl:unionOf _:n0002 .
+

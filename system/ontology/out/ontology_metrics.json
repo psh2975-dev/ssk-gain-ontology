@@ -1,0 +1,15 @@
+{
+ "source": "ontology.ttl",
+ "named_classes": 31,
+ "object_properties": 49,
+ "datatype_properties": 38,
+ "subClassOf_axioms": 34,
+ "disjointWith_axioms": 15,
+ "domain_declarations": 67,
+ "range_declarations": 86,
+ "label_coverage": 1.0,
+ "attribute_richness": 2.806,
+ "inheritance_depth_max": 4,
+ "relationship_richness": 0.59,
+ "axiomatization_note": "Domain and range declarations exceed the property count because a union range contributes several declarations. The formal domain and range constraints are checked by SHACL (validate.py)."
+}

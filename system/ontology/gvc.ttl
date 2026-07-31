@@ -1,0 +1,277 @@
+@prefix core: <https://w3id.org/ssk-gain/ontology/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix gvc: <https://w3id.org/ssk-gain/ontology/gvc#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ssk: <https://w3id.org/ssk-gain/ontology/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+gvc:Input a owl:Class ;
+    rdfs:label "Input"@en,
+        "투입재"@ko ;
+    rdfs:comment "Process input in the sense of the ETO Supply Chain Explorer (materials and process inputs)."@en,
+        "ETO Supply Chain Explorer 의 input(소재·공정 투입)."@ko ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:subClassOf core:Product .
+
+gvc:RiskNode a owl:Class ;
+    rdfs:label "RiskNode"@en,
+        "위험노드"@ko ;
+    rdfs:comment "Exposure target where geopolitical and concentration risk combine (firm, product, route or region). Object of exposes."@en,
+        "지정학·집중 위험이 결합되는 노출 대상(기업·품목·경로·지역). exposes 의 대상."@ko ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:subClassOf core:Entity .
+
+gvc:customer a owl:ObjectProperty ;
+    rdfs:label "customer"@en,
+        "수요자"@ko ;
+    rdfs:comment "Customer side of a supply relation."@en,
+        "공급관계의 수요 측 기업."@ko ;
+    rdfs:domain gvc:SupplyEdge ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range gvc:Company .
+
+gvc:dependentActor a owl:ObjectProperty ;
+    rdfs:label "dependentActor"@en,
+        "의존주체"@ko ;
+    rdfs:comment "Actor that depends (firm or country)."@en,
+        "의존하는 주체(기업·국가)."@ko ;
+    rdfs:domain gvc:Dependency ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range core:Entity .
+
+gvc:dependsOnProduct a owl:ObjectProperty ;
+    rdfs:label "dependsOnProduct"@en,
+        "의존품목"@ko ;
+    rdfs:comment "Product depended upon."@en,
+        "의존 대상 품목."@ko ;
+    rdfs:domain gvc:Dependency ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range core:Product .
+
+gvc:dependsOnSupplier a owl:ObjectProperty ;
+    rdfs:label "dependsOnSupplier"@en,
+        "의존공급원"@ko ;
+    rdfs:comment "Supplier firm depended upon."@en,
+        "의존 대상 공급원 기업."@ko ;
+    rdfs:domain gvc:Dependency ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range gvc:Company .
+
+gvc:directlySupplies a owl:ObjectProperty ;
+    rdfs:label "directlySupplies"@en,
+        "직접공급"@ko ;
+    rdfs:comment "Direct supply (first-tier trade)."@en,
+        "직접 공급(1차 거래)."@ko ;
+    rdfs:domain gvc:Company ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range gvc:Company ;
+    rdfs:subPropertyOf gvc:supplies .
+
+gvc:disclosureResolution a owl:DatatypeProperty ;
+    rdfs:label "disclosureResolution"@en,
+        "공시해상도"@ko ;
+    rdfs:comment "Disclosure resolution metadata (asymmetric by country: dense for Korea, sparse elsewhere)."@en,
+        "공시 해상도 메타(국가비대칭: 한국 조밀·해외 희박)."@ko ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range xsd:string .
+
+gvc:flowDestination a owl:ObjectProperty ;
+    rdfs:label "flowDestination"@en,
+        "수입국"@ko ;
+    rdfs:comment "Importing (destination) country of the trade flow."@en,
+        "무역흐름의 수입(도착)국."@ko ;
+    rdfs:domain gvc:TradeFlow ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range core:Country .
+
+gvc:flowOrigin a owl:ObjectProperty ;
+    rdfs:label "flowOrigin"@en,
+        "수출국"@ko ;
+    rdfs:comment "Exporting (origin) country of the trade flow."@en,
+        "무역흐름의 수출(원산)국."@ko ;
+    rdfs:domain gvc:TradeFlow ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range core:Country .
+
+gvc:flowProduct a owl:ObjectProperty ;
+    rdfs:label "flowProduct"@en,
+        "무역품목"@ko ;
+    rdfs:comment "Product (HS) of the trade flow."@en,
+        "무역흐름의 대상 품목(HS)."@ko ;
+    rdfs:domain gvc:TradeFlow ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range core:Product .
+
+gvc:hhi a owl:DatatypeProperty ;
+    rdfs:label "hhi"@en,
+        "HHI"@ko ;
+    rdfs:comment "Herfindahl-Hirschman index (0 to 1; sum of squared shares). Concentration of dependency or risk."@en,
+        "허핀달-허쉬만 집중지수(0~1, 점유율 제곱합). 의존·위험 집중도."@ko ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range xsd:decimal .
+
+gvc:indexValue a owl:DatatypeProperty ;
+    rdfs:label "indexValue"@en,
+        "지수값"@ko ;
+    rdfs:comment "Value of the price index."@en,
+        "가격지수 값."@ko ;
+    rdfs:domain gvc:PriceIndex ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range xsd:decimal .
+
+gvc:indirectlySupplies a owl:ObjectProperty ;
+    rdfs:label "indirectlySupplies"@en,
+        "간접공급"@ko ;
+    rdfs:comment "Indirect supply (second tier or beyond, or via intermediaries)."@en,
+        "간접 공급(2차+ 또는 경유)."@ko ;
+    rdfs:domain gvc:Company ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range gvc:Company ;
+    rdfs:subPropertyOf gvc:supplies .
+
+gvc:marketShare a owl:DatatypeProperty ;
+    rdfs:label "marketShare"@en,
+        "시장점유율"@ko ;
+    rdfs:comment "Market share in percent (0 to 100), for example ETO share_provided."@en,
+        "독점도 지표 시장점유율(%). ETO share_provided 등. 0~100."@ko ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range xsd:decimal .
+
+gvc:oemSupplies a owl:ObjectProperty ;
+    rdfs:label "oemSupplies"@en,
+        "OEM공급"@ko ;
+    rdfs:comment "OEM supply (original equipment manufacturing)."@en,
+        "OEM 공급(주문자상표부착)."@ko ;
+    rdfs:domain gvc:Company ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range gvc:Company ;
+    rdfs:subPropertyOf gvc:supplies .
+
+gvc:priceOf a owl:ObjectProperty ;
+    rdfs:label "priceOf"@en,
+        "가격대상"@ko ;
+    rdfs:comment "Product the price index refers to."@en,
+        "가격지수가 가리키는 품목."@ko ;
+    rdfs:domain gvc:PriceIndex ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range core:Product .
+
+gvc:producesProduct a owl:ObjectProperty ;
+    rdfs:label "producesProduct"@en,
+        "생산품목"@ko ;
+    rdfs:comment "Product the firm produces."@en,
+        "기업이 생산하는 품목."@ko ;
+    rdfs:domain gvc:Company ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range core:Product .
+
+gvc:providesInput a owl:ObjectProperty ;
+    rdfs:label "providesInput"@en,
+        "투입공급"@ko ;
+    rdfs:comment "The firm provides a specific input or equipment (ETO PROVIDES, with a share percentage)."@en,
+        "기업이 특정 투입재·장비를 공급함(ETO PROVIDES, share% 동반)."@ko ;
+    rdfs:domain gvc:Company ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range core:Product .
+
+gvc:reroutedSupplies a owl:ObjectProperty ;
+    rdfs:label "reroutedSupplies"@en,
+        "우회공급"@ko ;
+    rdfs:comment "Rerouted supply (via third countries or intermediaries); a circumvention screening signal."@en,
+        "우회 공급(제3국·경유 우회). 우회 스크리닝 신호."@ko ;
+    rdfs:domain gvc:Company ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range gvc:Company ;
+    rdfs:subPropertyOf gvc:supplies .
+
+gvc:supplier a owl:ObjectProperty ;
+    rdfs:label "supplier"@en,
+        "공급자"@ko ;
+    rdfs:comment "Supplier side of a supply relation."@en,
+        "공급관계의 공급 측 기업."@ko ;
+    rdfs:domain gvc:SupplyEdge ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range gvc:Company .
+
+gvc:suppliesProduct a owl:ObjectProperty ;
+    rdfs:label "suppliesProduct"@en,
+        "공급품목"@ko ;
+    rdfs:comment "Product of the supply relation."@en,
+        "공급관계의 대상 품목."@ko ;
+    rdfs:domain gvc:SupplyEdge ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range core:Product .
+
+gvc:tradeQuantity a owl:DatatypeProperty ;
+    rdfs:label "tradeQuantity"@en,
+        "무역수량"@ko ;
+    rdfs:comment "Quantity of the trade flow."@en,
+        "무역흐름 수량."@ko ;
+    rdfs:domain gvc:TradeFlow ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range xsd:decimal .
+
+gvc:tradeValueUSD a owl:DatatypeProperty ;
+    rdfs:label "tradeValueUSD"@en,
+        "무역액USD"@ko ;
+    rdfs:comment "Value of the trade flow in USD."@en,
+        "무역흐름 금액(USD)."@ko ;
+    rdfs:domain gvc:TradeFlow ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range xsd:decimal .
+
+gvc:PriceIndex a owl:Class ;
+    rdfs:label "PriceIndex"@en,
+        "가격지수"@ko ;
+    rdfs:comment "Price index time series for memory products (for example the ECOS DRAM export price index)."@en,
+        "메모리 가격 시계열 지수(ECOS D램 수출물가지수 등)."@ko ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:subClassOf core:Entity .
+
+gvc:Dependency a owl:Class ;
+    rdfs:label "Dependency"@en,
+        "의존관계"@ko ;
+    rdfs:comment "Reified dependency of an actor on a product or supplier (single-sourcing, high concentration), carrying an HHI value. Subject of exposes."@en,
+        "특정 품목·공급원에 대한 의존(단일의존·고집중) reification. HHI 보유. exposes 의 주체."@ko ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:subClassOf core:Entity .
+
+gvc:SupplyEdge a owl:Class ;
+    rdfs:label "SupplyEdge"@en,
+        "공급관계"@ko ;
+    rdfs:comment "Reified firm-to-firm supply relation carrying direction, time and confidence. Transaction values are not assigned for lack of disclosure; only direction and existence. Object of affects."@en,
+        "기업→기업 공급관계의 reification 노드(방향성·시점·신뢰도 보유). 거래액은 공시 부재로 미부여(방향성·존재성만). affects 의 대상."@ko ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:subClassOf core:Entity .
+
+gvc:supplies a owl:ObjectProperty ;
+    rdfs:label "supplies"@en,
+        "공급"@ko ;
+    rdfs:comment "Firm-to-firm supply (the superproperty of the supply family); named counterparties from DART business reports."@en,
+        "기업→기업 공급(상위 공급 관계). DART 사업의 내용 실명 거래처."@ko ;
+    rdfs:domain gvc:Company ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:range gvc:Company .
+
+gvc:TradeFlow a owl:Class ;
+    rdfs:label "TradeFlow"@en,
+        "무역흐름"@ko ;
+    rdfs:comment "Reified country-to-country trade flow per product (HS code, value, quantity), built from UN Comtrade and BACI. Object of disrupts."@en,
+        "국가→국가 품목별 무역 흐름(HS·금액·수량) reification 노드. Comtrade·BACI 기반. disrupts 의 대상."@ko ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:subClassOf core:Entity .
+
+gvc:Company a owl:Class ;
+    rdfs:label "Company"@en,
+        "기업"@ko ;
+    rdfs:comment "Firm as a supply chain actor (Samsung, SK hynix, TSMC, ASML and similar). Subclass of core:Organization; merged with intl:SanctionedEntity through the shared LEI."@en,
+        "공급사슬 행위자로서의 기업(삼성·SK하이닉스·TSMC·ASML 등). core:Organization 의 하위, 같은 LEI 로 intl:SanctionedEntity 와 통합."@ko ;
+    rdfs:isDefinedBy ssk:gvc ;
+    rdfs:subClassOf core:Organization .
+
+ssk:gvc a owl:Ontology ;
+    dcterms:title "SSK 온톨로지: gvc 모듈 (반도체 소부장 GVC)"@ko ;
+    owl:imports ssk:core ;
+    owl:versionInfo "0.1.5" .
+
