@@ -506,6 +506,8 @@ def add_case_smic(g: Graph, report: dict) -> dict:
     af = d["affects_edge"]
     g.add((by_cid[af["subject_canonicalId"]], BR.affects, se))
 
+    # 등재 사실 총계는 그래프 실물과 같은 의미여야 한다. 사례 등재도 등재다.
+    report["sanction_listings"] = report.get("sanction_listings", 0) + 1
     report["case_smic"] = {
         "identity_links": len(d["identity_links"]),
         "listing": 1, "export_control": 1, "supply_edge": 1, "affects": 1,
@@ -768,7 +770,7 @@ if __name__ == "__main__":
 원자료(UN Comtrade·ETO 포함 큐레이션 JSON)가 없다. README 의 재현 절 안내대로
 원자료를 확보하면 두 그래프가 재구축된다. 산출 결과물은 out/ 에 동봉되어 있다.""")
         raise SystemExit(2)
-    report = {"date": "2026-07-09", "graphs": {}}
+    report = {"date": RELEASE_DATE, "graphs": {}}
     demo_files = [DATA / "worked_example_japan2019_2026-07-07.json",
                   DATA / "worked_example_cq7_hhi_2026-07-08.json"]
     rep_d = {}

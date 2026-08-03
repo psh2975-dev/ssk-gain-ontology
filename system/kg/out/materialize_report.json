@@ -1,5 +1,5 @@
 {
- "date": "2026-07-09",
+ "date": "2026-08-01",
  "graphs": {
   "demo": {
    "sanction_listings": 0,
@@ -21,7 +21,7 @@
    "triples": 10422
   },
   "deposit": {
-   "sanction_listings": 554,
+   "sanction_listings": 555,
    "dropped_fields": [],
    "dropped_field_count": 0,
    "skipped_unresolved_countries": [
