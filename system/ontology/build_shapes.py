@@ -67,7 +67,9 @@ def new_graph() -> Graph:
     decl = URIRef(BASE + "shapes#prefixes")
     g.add((decl, RDF.type, OWL.Ontology))
     for pfx, ns in (("core", CORE), ("intl", INTL)):
-        b = BNode()
+        # 생 BNode() 는 실행마다 임의 식별자라 선언 블록의 직렬화 순서가
+        # 뒤바뀐다(7차 스크린이 90초 간격 두 산출물의 해시 불일치로 적발).
+        b = bnode()
         g.add((decl, SH.declare, b))
         g.add((b, SH.prefix, Literal(pfx)))
         g.add((b, SH.namespace, Literal(str(ns), datatype=XSD.anyURI)))

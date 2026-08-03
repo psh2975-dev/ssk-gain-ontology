@@ -25,6 +25,14 @@ DEP = ROOT / "system" / "kg" / "out" / "pilot_kg_deposit.ttl"
 SUPP = HERE.parent / "draft" / "PAP01_supplementary_EN.md"
 
 NS = "https://w3id.org/ssk-gain/ontology/"
+
+# 출하 태그가 수집 메모(한국어)를 담은 경우 영문 병기로 표시한다.
+# 태그 문자열 자체는 데이터의 일부라 바꾸지 않는다.
+DISPLAY = {
+    "BACI (CEPII 공개 배포, HS6, 반도체 필터 2026-07-03 수집)":
+        "BACI (CEPII public distribution, HS6, semiconductor filter, "
+        "collected 2026-07-03; tag preserved verbatim in the data)",
+}
 PROV = "http://www.w3.org/ns/prov#"
 
 
@@ -100,7 +108,8 @@ def main() -> int:
         "",
         "| Source | Catalogue nodes | Record individuals |",
         "|------|---:|---:|",
-        *[f"| {k} | {src_nodes.get(k, 0):,} | {src_records.get(k, 0):,} |"
+        *[f"| {DISPLAY.get(k, k)} | {src_nodes.get(k, 0):,} | "
+          f"{src_records.get(k, 0):,} |"
           for k in sorted(set(src_nodes) | set(src_records),
                           key=lambda x: (-src_nodes.get(x, 0)
                                          - src_records.get(x, 0), x))],

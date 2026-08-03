@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: If you use this resource, please cite it as below.
-title: "SSK-GAIN: A Cross-Domain Ontology and Entity Catalogue for Semiconductor Supply Chain Geopolitics"
+title: "SSK-GAIN: A Cross-Domain Ontology and Entity Catalogue for Semiconductor Global Supply Chain Geopolitics"
 abstract: >-
   An OWL 2 ontology in four modules (core, international relations, supply
   chain, cross-domain bridge) with SHACL shapes, an instantiated and
