@@ -48,10 +48,10 @@ TIME = Namespace("http://www.w3.org/2006/time#")   # OWL-Time 재사용
 PROV = Namespace("http://www.w3.org/ns/prov#")     # PROV-O 재사용
 ORG = Namespace("http://www.w3.org/ns/org#")       # W3C Org 재사용
 
-VERSION = "0.1.5"   # 2026-07-31: 모듈 문서 분리 배포, 재사용 시연 실동작화, 라이선스 IRI
+VERSION = "0.1.6"   # 2026-08-03: 식별자 재화(DL 적합), PROV 대상 분리, GLEIF L2 대응
 # 릴리스 날짜는 고정한다. 실행일을 쓰면 재생성물이 날마다 달라져
 # 체크섬으로 기탁물을 검증할 수 없다.
-TODAY = "2026-08-01"
+TODAY = "2026-08-03"
 
 # 모듈 온톨로지 IRI (owl:imports 대상)
 ONT = URIRef(BASE.rstrip("/"))                     # 통합 온톨로지
@@ -199,8 +199,8 @@ def build_core(g: Graph):
     # --- 시공간 / 식별 보조 클래스 ---
     cls(g, CORE.TemporalScope, "시간범위", "TemporalScope", Entity,
         "valid_time(시작·종료) 등 시간 유효구간을 표현하는 reification 노드.", d)
-    cls(g, CORE.Identifier, "식별자", "Identifier", Entity,
-        "LEI·ISO·HS 등 표준 식별자 값 객체.", d)
+    # Identifier 는 아래 「식별자 재화」 블록에서 정의한다(v0.1.5 의 값 객체 선언을
+    # 동일성 축 설명이 있는 정의로 통합, 중복 선언 제거).
 
     # --- 공유 1급 엔티티 (도메인 모듈이 세분) ---
     Org = cls(g, CORE.Organization, "조직", "Organization", Entity,
@@ -246,15 +246,18 @@ def build_core(g: Graph):
         g.add((CORE.Location, OWL.disjointWith, b))
 
     # --- 식별 데이터 속성 (canonical_id) ---
+    # 편의 조회용 데이터 속성. 함수적이기만 하다. 동일성을 결정하는 역함수성은
+    # 아래 core:hasIdentifier 가 진다. 데이터 속성에 역함수성을 붙이면 OWL 2 DL
+    # 밖으로 나가기 때문이다(구문 명세 9.3절에 그런 공리가 없다).
     data_prop(g, CORE.lei, "LEI", "lei", Org, XSD.string,
               "GLEIF Legal Entity Identifier (ISO 17442, 20자). 기업 canonical_id.",
-              defined_by=d, functional=True, inverse_functional=True)
+              defined_by=d, functional=True)
     data_prop(g, CORE.isoAlpha3, "ISO3166-1 alpha-3", "isoAlpha3", Country, XSD.string,
               "국가 ISO 3166-1 alpha-3 코드(KOR·USA·CHN·JPN·NLD). canonical_id.",
-              defined_by=d, functional=True, inverse_functional=True)
+              defined_by=d, functional=True)
     data_prop(g, CORE.hsCode, "HS코드", "hsCode", Product, XSD.string,
               "WCO HS code. 품목 canonical_id(6자리), 정밀은 HS10.",
-              defined_by=d, functional=True, inverse_functional=True)
+              defined_by=d, functional=True)
     data_prop(g, CORE.eccn, "ECCN", "eccn", Product, XSD.string,
               "수출통제 분류번호(ECCN). HS의 통제 측 fallback 식별자.", defined_by=d)
     data_prop(g, CORE.wikidataQID, "Wikidata QID", "wikidataQID", Entity, XSD.string,
@@ -271,6 +274,42 @@ def build_core(g: Graph):
     data_prop(g, CORE.identifierStatus, "식별자상태", "identifierStatus",
               CORE.Entity, XSD.string,
               "정준 식별자의 근거. authoritative=표준 등록부(LEI·ISO·HS), provisional=큐레이션 키(표준 식별자 미보유).", defined_by=d)
+
+    # --- 식별자 재화 (동일성 추론의 DL 적합 경로) ---
+    # 표준 등록부의 식별자를 개체로 세운다. 한 식별자 개체는 최대 하나의 엔티티에
+    # 속하므로(역함수적), 두 출처가 같은 식별자를 가리키면 같은 엔티티라는 추론이
+    # OWL 2 DL 안에서 성립한다. 식별자 개체는 (체계, 값)에서 결정론적으로 주조해야
+    # 서로 다른 출처가 같은 개체에 닿는다. 주조 규칙은 적재기에 있다.
+    Identifier = cls(g, CORE.Identifier, "식별자", "Identifier", Entity,
+                     "표준 등록부가 발급한 식별자. 값이 아니라 개체로 세워, 동일성 "
+                     "추론이 데이터 속성이 아닌 객체 속성 위에서 이루어지게 한다.",
+                     defined_by=d)
+    obj_prop(g, CORE.hasIdentifier, "식별자보유", "hasIdentifier", Entity, Identifier,
+             "엔티티가 보유한 표준 식별자. 역함수적이므로 같은 식별자 개체를 가리키는 "
+             "두 엔티티는 동일하다. 이 축이 교차 도메인 결합의 논리적 근거다.",
+             defined_by=d, characteristics=[OWL.InverseFunctionalProperty])
+    data_prop(g, CORE.identifierScheme, "식별체계", "identifierScheme",
+              Identifier, XSD.string,
+              "식별자를 발급한 등록 체계(LEI·ISO3166-1-alpha-3·HS·Wikidata).",
+              defined_by=d, functional=True)
+    data_prop(g, CORE.identifierValue, "식별자값", "identifierValue",
+              Identifier, XSD.string,
+              "식별자의 문자열 값. 체계와 값의 쌍이 식별자 개체를 결정한다.",
+              defined_by=d, functional=True)
+    data_prop(g, CORE.registrationStatus, "등록상태", "registrationStatus",
+              Identifier, XSD.string,
+              "발급 등록부가 보고하는 등록 상태(ISSUED·LAPSED·RETIRED 등). 제재 대상 "
+              "기업에서 실효 등록이 흔하므로, 식별자의 현재성을 값과 분리해 기록한다.",
+              defined_by=d)
+
+    # --- 데이터 레코드 계층 (출처는 대상이 아니라 레코드에 붙는다) ---
+    # 국가나 기업 자체가 데이터셋에서 생성되지는 않는다. 생성된 것은 그 대상에
+    # 관한 레코드다. PROV-O 어휘는 이 레코드에 부착한다.
+    Record = cls(g, CORE.Record, "자료레코드", "Record", Entity,
+                 "어떤 도메인 대상에 관해 한 출처가 남긴 자료 레코드. 수집일·출처·"
+                 "등급·라이선스와 PROV 계보가 여기에 붙는다.", defined_by=d)
+    obj_prop(g, CORE.recordOf, "레코드대상", "recordOf", Record, Entity,
+             "이 레코드가 진술하는 도메인 대상.", defined_by=d)
 
     # --- 시공간 데이터 속성 (valid_time) ---
     data_prop(g, CORE.validFrom, "유효시작", "validFrom", None, XSD.date,
@@ -409,9 +448,12 @@ def build_intl(g: Graph):
     obj_prop(g, INTL.listedOrganization, "등재조직", "listedOrganization",
              INTL.SanctionListing, CORE.Organization,
              "등재 사실이 가리키는 조직.", defined_by=d)
+    # 치역을 Sanction 으로 한정하면 수출통제 등재(BIS Entity List 의 SMIC 등재가
+    # 실사례)가 표현되지 않는다. 등재의 근거는 금융제재이거나 수출통제다. 공통
+    # 상위클래스 신설은 용어 검증이 필요하므로 v0.2.0 으로 미루고 합집합으로 둔다.
     obj_prop(g, INTL.underSanction, "근거조치", "underSanction",
-             INTL.SanctionListing, INTL.Sanction,
-             "등재의 근거가 되는 제재 조치.", defined_by=d)
+             INTL.SanctionListing, union_of(g, [INTL.Sanction, INTL.ExportControl]),
+             "등재의 근거가 되는 조치(금융제재 또는 수출통제).", defined_by=d)
     obj_prop(g, INTL.listAuthority, "발령기관", "listAuthority",
              INTL.SanctionListing, CORE.Organization,
              "등재를 발령한 기관 또는 목록 관할.", defined_by=d)
@@ -755,7 +797,9 @@ def align_external(g: Graph):
     """표준 온톨로지 재사용(JWS 재사용 가치): 자체 상위·출처·시간 어휘를
     PROV-O·OWL-Time·Dublin Core·W3C Org에 정렬 공리로 연결한다. 제재·수출통제·
     bridge 등 도메인 특화 어휘는 대응 표준이 부재하여 신규 정의한다."""
-    g.add((CORE.Entity, RDFS.subClassOf, PROV.Entity))
+    # 도메인 대상이 아니라 레코드가 prov:Entity 다. 대상을 prov:Entity 로 두면
+    # 국가와 기업이 데이터셋에서 파생된 것으로 읽힌다.
+    g.add((CORE.Record, RDFS.subClassOf, PROV.Entity))
     g.add((CORE.TemporalScope, RDFS.subClassOf, TIME.TemporalEntity))
     g.add((CORE.Organization, RDFS.subClassOf, ORG.Organization))
     g.add((CORE.source, RDFS.subPropertyOf, DCTERMS.source))
@@ -835,11 +879,22 @@ def write_module_documents(g: Graph, out_dir: Path) -> dict:
         for term in set(g.subjects(RDFS.isDefinedBy, mod)):
             for p, o in g.predicate_objects(term):
                 mg.add((term, p, o))
-            # 무명 노드(제약·합집합 등)를 값으로 갖는 경우 그 내용까지 동반
-            for _, _, o in g.triples((term, None, None)):
-                if isinstance(o, BNode):
-                    for p2, o2 in g.predicate_objects(o):
-                        mg.add((o, p2, o2))
+            # 무명 노드(제약·합집합 등)의 내용을 **끝까지** 동반한다. 한 겹만 따라가면
+            # owl:unionOf 가 가리키는 RDF 컬렉션의 rdf:first·rdf:rest 가 빠져, 모듈
+            # 문서에서 그 합집합이 빈 클래스가 된다. 실측(v0.1.5 bridge.ttl):
+            # bridge:affects 의 치역이 빈 합집합, 곧 owl:Nothing 이 되어 그 관계를
+            # 재사용하는 소비자는 어떤 인스턴스도 적합하게 만들 수 없었다.
+            seen, stack = set(), [o for o in g.objects(term, None)
+                                  if isinstance(o, BNode)]
+            while stack:
+                b = stack.pop()
+                if b in seen:
+                    continue
+                seen.add(b)
+                for p2, o2 in g.predicate_objects(b):
+                    mg.add((b, p2, o2))
+                    if isinstance(o2, BNode):
+                        stack.append(o2)
         path = out_dir / f"{name}.ttl"
         mg.serialize(destination=str(path), format="turtle")
         written[name] = (path, len(mg))

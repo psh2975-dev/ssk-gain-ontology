@@ -1,11 +1,11 @@
 {
  "counts": {
-  "named_classes": 31,
-  "rigid": 26,
+  "named_classes": 32,
+  "rigid": 27,
   "anti_rigid": 4,
   "category": 1,
-  "own_identity": 17,
-  "dependent": 10,
+  "own_identity": 18,
+  "dependent": 11,
   "subsumption_violations": 0
  },
  "violations": [],
@@ -75,6 +75,12 @@
    "own_identity": true,
    "dependent": false,
    "identity_criterion": "HS code"
+  },
+  "core:Record": {
+   "rigidity": "rigid",
+   "own_identity": true,
+   "dependent": true,
+   "identity_criterion": "source dataset and stated object"
   },
   "core:SourceCoverage": {
    "rigidity": "rigid",

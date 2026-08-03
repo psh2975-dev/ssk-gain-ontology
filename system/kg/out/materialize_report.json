@@ -8,15 +8,17 @@
    "skipped_unresolved_countries": [],
    "skipped_tradeflows": 0,
    "skipped_edges": 0,
+   "identifier_individuals": 150,
+   "identifier_links": 150,
    "identifier_authoritative": 156,
    "identifier_provisional": 402,
-   "prov_linked_nodes": 560,
+   "prov_records": 560,
    "prov_datasets": 5,
    "prov_agents": 5,
    "prov_unmapped_sources": [],
    "conforms": true,
    "violations": 0,
-   "triples": 7696
+   "triples": 10422
   },
   "deposit": {
    "sanction_listings": 554,
@@ -35,15 +37,25 @@
    "baci_dependencies": 22,
    "restricts_edges": 3,
    "coverage_records": 4,
-   "identifier_authoritative": 1274,
+   "case_smic": {
+    "identity_links": 2,
+    "listing": 1,
+    "export_control": 1,
+    "supply_edge": 1,
+    "affects": 1
+   },
+   "exposes_edges_derived": 2,
+   "identifier_individuals": 102,
+   "identifier_links": 104,
+   "identifier_authoritative": 1278,
    "identifier_provisional": 20,
-   "prov_linked_nodes": 1326,
-   "prov_datasets": 14,
-   "prov_agents": 11,
+   "prov_records": 1331,
+   "prov_datasets": 16,
+   "prov_agents": 12,
    "prov_unmapped_sources": [],
    "conforms": true,
    "violations": 0,
-   "triples": 16761
+   "triples": 21561
   }
  }
 }

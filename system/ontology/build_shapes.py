@@ -292,9 +292,10 @@ def build_shapes(g: Graph):
     prop_shape(g, listing, INTL.listedOrganization, name="등재조직",
                cls=CORE.Organization, min_count=1, max_count=1,
                message="등재 사실은 등재조직 정확히 1개.")
-    prop_shape(g, listing, INTL.underSanction, name="근거조치",
-               cls=INTL.Sanction, min_count=1,
-               message="등재 사실은 근거 제재 조치 1개 이상.")
+    ps_us = prop_shape(g, listing, INTL.underSanction, name="근거조치",
+               min_count=1,
+               message="등재 사실은 근거 조치(제재 또는 수출통제) 1개 이상.")
+    or_classes(g, ps_us, [INTL.Sanction, INTL.ExportControl])
     prop_shape(g, listing, INTL.listAuthority, name="발령기관",
                cls=CORE.Organization, max_count=1,
                message="발령기관은 Organization, 최대 1개.")

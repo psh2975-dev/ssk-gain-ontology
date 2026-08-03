@@ -1,0 +1,686 @@
+{
+  "source": "curated_intl_2026-07-04_conformant.json",
+  "sanctioned_total": 579,
+  "organization_like": 124,
+  "person_or_other": 455,
+  "probed": 124,
+  "matched": 18,
+  "match_rate": 0.1452,
+  "lapsed_among_matched": 8,
+  "rows": [
+    {
+      "label": "Nanda Optoelectronic Semiconductor Materials Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "Shanghai Kaishitong Semiconductor Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "Shanghai Lingang Kaishitong Semiconductor Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "SHENZHEN HUASHUO SEMICONDUCTOR CO LTD",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "Beijing E-Town Semiconductor Technology Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "SJ Semiconductor",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "Semiconductor Manufacturing International Corporation (SMIC)",
+      "status": "MATCH",
+      "lei": "300300522KCU7YI25841",
+      "gleif_name": "Semiconductor Manufacturing International Corporation",
+      "registration": "LAPSED",
+      "entity": "ACTIVE"
+    },
+    {
+      "label": "GMC Semiconductor Technology (Wuxi) Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 10
+    },
+    {
+      "label": "Shanghai Xinsheng Semiconductor Technology Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "Hong Kong Haiheng Electronics Co. Ltd.",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "Eastech Electronics Limited",
+      "status": "MATCH",
+      "lei": "98450085EB6DD9Q87B36",
+      "gleif_name": "EASTECH ELECTRONICS (HK) LIMITED",
+      "registration": "ISSUED",
+      "entity": "ACTIVE"
+    },
+    {
+      "label": "EKT Electronics",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "EKT Electronics",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "NEL Electronics",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "Chitron Electronics Company Ltd",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "TYT Electronics Co. Ltd.",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "Chengdu Beizhan Electronics Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "STK Electronics (HK) Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 10
+    },
+    {
+      "label": "Shenzhen Dongpengshang Electronics Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "Yangtze Memory Technologies Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "Yangtze Memory Technologies (Japan) Inc.",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "Yangtze Memory Technologies (Japan) Inc.",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "ARMORY ALLIANCE LLC",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "MAJORY LLP",
+      "status": "MATCH",
+      "lei": "2549006DWUYKB9T49602",
+      "gleif_name": "Majory LLP",
+      "registration": "RETIRED",
+      "entity": "INACTIVE"
+    },
+    {
+      "label": "Majory LLP",
+      "status": "MATCH",
+      "lei": "2549006DWUYKB9T49602",
+      "gleif_name": "Majory LLP",
+      "registration": "RETIRED",
+      "entity": "INACTIVE"
+    },
+    {
+      "label": "CHIP EXPERT LIMITED LIABILITY COMPANY",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "CETC Chip Technology Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "Qingxin Technology Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "Yildiz Cip Teknoloji Elektronik Elektrik Bilg. Malz. Tic. San. Ltd. Sti",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "Shanghai Aisinochip Electronics Technology Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "LIMITED LIABILITY COMPANY N CHIP MSK",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "Lion Chip Electronics Ltd",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "LIMITED LIABILITY COMPANY ROSKAPSTROY CLEAN WATER",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "COAL TAR REFINING COMPANY",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "Ruili Microelectronics Equipment (Shanghai) Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 10
+    },
+    {
+      "label": "Chengdu NetForward Microelectronics Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "Changzhou Netforward Microelectronics Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "Shanghai Fudan Microelectronics (HK) Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 10
+    },
+    {
+      "label": "Ulanqab Nanda Microelectronics Materials Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "Beijing Naura Microelectronics Equipment Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "Hefei Naura Microelectronics Equipment Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "ANGLO-CARIBBEAN CO., LTD.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "CECOEX, S.A.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "CIMEX, S.A.",
+      "status": "MATCH",
+      "lei": "984500AE0CE9C6138019",
+      "gleif_name": "A-CIMEX GmbH",
+      "registration": "ISSUED",
+      "entity": "ACTIVE"
+    },
+    {
+      "label": "COMERCIAL IBEROAMERICANA, S.A.",
+      "status": "MATCH",
+      "lei": "959800ABZ1VRX5NLT134",
+      "gleif_name": "INMOBILARIA COMERCIAL IBEROAMERICANA SA",
+      "registration": "LAPSED",
+      "entity": "ACTIVE"
+    },
+    {
+      "label": "COMERCIAL CIMEX, S.A.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "COMERCIAL DE RODAJES Y MAQUINARIA, S.A.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "CORPORACION CIMEX, S.A.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "CRYMSA - ARGENTINA, S.A.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "CUMEXINT, S.A.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "DELVEST HOLDING, S.A.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "EDYJU, S.A.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "ETCO INTERNATIONAL COMMODITIES LTD.",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "ETCO INTERNATIONAL COMPANY, LIMITED",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "GALAX TRADING CO., LTD.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "HAVIN BANK LIMITED",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "KAVE, S.A.",
+      "status": "MATCH",
+      "lei": "875500TUI154A3GEAW78",
+      "gleif_name": "KAVE BAR Beteti Tarsasag",
+      "registration": "ISSUED",
+      "entity": "ACTIVE"
+    },
+    {
+      "label": "LEVERAGE, S.A.",
+      "status": "MATCH",
+      "lei": "984500N4HB5B55B5DC50",
+      "gleif_name": "OPPS XII European Leverage S.à r.l.",
+      "registration": "ISSUED",
+      "entity": "ACTIVE"
+    },
+    {
+      "label": "NORDSTRAND LTD.",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "NORDSTRAND MARITIME AND TRADING COMPANY",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "PANAMERICAN IMPORT AND EXPORT COMMERCIAL CORPORATION",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "PESCABRAVA, S.A.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "PRENSA LATINA CANADA LTD.",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "SERVINAVES, S.A.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "TROBER, S.A.",
+      "status": "MATCH",
+      "lei": "529900ENQ1NVFLKR7B04",
+      "gleif_name": "Next Trober Europe GmbH & Co. Kommanditgesellschaft",
+      "registration": "ISSUED",
+      "entity": "ACTIVE"
+    },
+    {
+      "label": "TROPIC TOURS GMBH",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "VIAJES GUAMA, S.A.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "COBALT REFINERY CO. INC.",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "INTERNATIONAL COBALT CO. INC.",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "MOA NICKEL SA",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "BANK MARKAZI JOMHOURI ISLAMI IRAN",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "BANK MASKAN",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "BANK REFAH KARGARAN",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "BANK KESHAVARZI IRAN",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "BANK SADERAT PLC",
+      "status": "MATCH",
+      "lei": "2138008KTNTDICZU8L25",
+      "gleif_name": "BANK SADERAT PLC",
+      "registration": "LAPSED",
+      "entity": "ACTIVE"
+    },
+    {
+      "label": "ABU SAYYAF GROUP",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "ARMED ISLAMIC GROUP",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "DESARROLLOS COMERCIALES E INDUSTRIALES HENAO GONZALEZ Y CIA. S.C.S.",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "INDUSTRIA DE PESCA SOBRE EL PACIFICO S.A",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "GALAPAGOS S.A",
+      "status": "MATCH",
+      "lei": "222100UITCZXSYW95W26",
+      "gleif_name": "GALAPAGOS HOLDING S.A.",
+      "registration": "LAPSED",
+      "entity": "ACTIVE"
+    },
+    {
+      "label": "SALAFIST GROUP FOR CALL AND COMBAT",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "LIBYAN ISLAMIC FIGHTING GROUP",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "MAMOUN DARKAZANLI IMPORT-EXPORT COMPANY",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "AL-SHARIF, Sa'd Abdullah Hussein",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "AL-AQSA ISLAMIC BANK",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "BEIT EL-MAL HOLDINGS",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "FIRST OF OCTOBER ANTIFASCIST RESISTANCE GROUP",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "ACCESOS ELECTRONICOS S.A.DE C.V.",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "ADMINISTRADORA DE INMUEBLES VIDA, S.A. DE C.V.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "COMPLEJO TURISTICO OASIS, S.A. DE C.V.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "DISTRIBUIDORA IMPERIAL DE BAJA CALIFORNIA, S.A. DE C.V.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "FARMACIA VIDA SUPREMA, S.A. DE C.V.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "OPERADORA VALPARK, S.A. DE C.V.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "VALPARK, S.A. DE C.V.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "TUNISIAN COMBAT GROUP",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "GLOBAL RELIEF FOUNDATION, INC.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "GLOBAL RELIEF FOUNDATION, INC.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "AGROPECUARIA MIRALINDO S.A.",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "ARIZONA S.A.",
+      "status": "MATCH",
+      "lei": "54930048LIO0PT2PPD03",
+      "gleif_name": "TRANSACCIONES E INVERSIONES ARIZONA LIMITADA",
+      "registration": "LAPSED",
+      "entity": "ACTIVE"
+    },
+    {
+      "label": "MOROCCAN ISLAMIC COMBATANT GROUP",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "BANANERA AGRICOLA S.A.",
+      "status": "MATCH",
+      "lei": "213800YX4M8AX2HDJR30",
+      "gleif_name": "AGRICOLA BANANERA ECUATORIANA - AGBE S.A.",
+      "registration": "LAPSED",
+      "entity": "ACTIVE"
+    },
+    {
+      "label": "CIA. MINERA DAPA S.A.",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "COMPANIA DE FOMENTO MERCANTIL S.A.",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "CONSTRUCCIONES PROGRESO DEL PUERTO S.A.",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "CREDISA S.A.",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "GRAN MUELLE S.A.",
+      "status": "NO_MATCH",
+      "returned": 2
+    },
+    {
+      "label": "UNIDAS S.A.",
+      "status": "MATCH",
+      "lei": "529900BJW9B0O6LI2R39",
+      "gleif_name": "Compañía Cervecerías Unidas S.A.",
+      "registration": "ISSUED",
+      "entity": "ACTIVE"
+    },
+    {
+      "label": "BIO CORPORATION",
+      "status": "MATCH",
+      "lei": "9845009FFQ5CG59EC004",
+      "gleif_name": "Haffkine Bio Pharma Corporation Limited (Procurement Cell)",
+      "registration": "ISSUED",
+      "entity": "ACTIVE"
+    },
+    {
+      "label": "MANCO OIL COMPANY",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "PUMA SECURITY COMPANY",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "Semiconductor Manufacturing International Corporation",
+      "status": "MATCH",
+      "lei": "300300522KCU7YI25841",
+      "gleif_name": "Semiconductor Manufacturing International Corporation",
+      "registration": "LAPSED",
+      "entity": "ACTIVE"
+    },
+    {
+      "label": "Nanda Optoelectronic Semiconductor Materials Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "Beijing E-Town Semiconductor Technology Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "Semiconductor Manufacturing International (Tianjin) Corporation",
+      "status": "MATCH",
+      "lei": "300300522KCU7YI25841",
+      "gleif_name": "Semiconductor Manufacturing International Corporation",
+      "registration": "LAPSED",
+      "entity": "ACTIVE"
+    },
+    {
+      "label": "C & I Semiconductor Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "Shanghai Kaishitong Semiconductor Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "Shanghai Lingang Kaishitong Semiconductor Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "Defense S&T Key Laboratory of High-Power Semiconductor Lasers at Changchun University of Science and Technology",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "ChangXin Memory Technologies Inc",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "Yangtze Memory Technologies Co., Ltd.",
+      "status": "NO_MATCH",
+      "returned": 5
+    },
+    {
+      "label": "Nasdaq, Inc.",
+      "status": "MATCH",
+      "lei": "549300I4E7ZB2JK1DQ12",
+      "gleif_name": "AVIP Nasdaq-100&reg; Index Portfolio",
+      "registration": "ISSUED",
+      "entity": "ACTIVE"
+    },
+    {
+      "label": "CHIP EXPERT LIMITED LIABILITY COMPANY",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "LIMITED LIABILITY COMPANY \"GREEN-CHIP\"",
+      "status": "NO_MATCH",
+      "returned": 0
+    },
+    {
+      "label": "Hong Kong Chip Line International Co Ltd",
+      "status": "NO_MATCH",
+      "returned": 0
+    }
+  ]
+}

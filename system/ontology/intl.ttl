@@ -2,6 +2,7 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix intl: <https://w3id.org/ssk-gain/ontology/intl#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix ssk: <https://w3id.org/ssk-gain/ontology/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
@@ -240,11 +241,11 @@ intl:subsidiaryOf a owl:IrreflexiveProperty,
 intl:underSanction a owl:ObjectProperty ;
     rdfs:label "underSanction"@en,
         "근거조치"@ko ;
-    rdfs:comment "The sanction measure on which the listing rests."@en,
-        "등재의 근거가 되는 제재 조치."@ko ;
+    rdfs:comment "등재의 근거가 되는 조치(금융제재 또는 수출통제)."@ko ;
     rdfs:domain intl:SanctionListing ;
     rdfs:isDefinedBy ssk:intl ;
-    rdfs:range intl:Sanction .
+    rdfs:range [ a owl:Class ;
+            owl:unionOf ( intl:Sanction intl:ExportControl ) ] .
 
 intl:FinancialSanction a owl:Class ;
     rdfs:label "FinancialSanction"@en,
@@ -295,14 +296,6 @@ intl:ownedBy a owl:ObjectProperty ;
     rdfs:isDefinedBy ssk:intl ;
     rdfs:range core:Organization .
 
-intl:ExportControl a owl:Class ;
-    rdfs:label "ExportControl"@en,
-        "수출통제"@ko ;
-    rdfs:comment "Export control measure (BIS rules, China dual-use rules, the 2019 Japanese export controls). Subject of restricts."@en,
-        "수출통제 조치(BIS·중국 양용물품·일본 수출규제). restricts 의 주체."@ko ;
-    rdfs:isDefinedBy ssk:intl ;
-    rdfs:subClassOf core:Policy .
-
 intl:OwnershipPath a owl:Class ;
     rdfs:label "OwnershipPath"@en,
         "소유경로"@ko ;
@@ -318,6 +311,14 @@ intl:SanctionedEntity a owl:Class ;
         "제재·통제 리스트에 등재된 조직(OFAC SDN·BIS Entity·중국 UEL 등). core:Organization 의 하위, 같은 LEI 노드로 GVC 행위자와 통합. 등재는 해제 가능한 상태이므로 이 분류는 현행 등재 조회용 파생 분류이며, 등재 사실 자체는 intl:SanctionListing 이 담는다."@ko ;
     rdfs:isDefinedBy ssk:intl ;
     rdfs:subClassOf core:Organization .
+
+intl:ExportControl a owl:Class ;
+    rdfs:label "ExportControl"@en,
+        "수출통제"@ko ;
+    rdfs:comment "Export control measure (BIS rules, China dual-use rules, the 2019 Japanese export controls). Subject of restricts."@en,
+        "수출통제 조치(BIS·중국 양용물품·일본 수출규제). restricts 의 주체."@ko ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:subClassOf core:Policy .
 
 intl:OwnershipAssertion a owl:Class ;
     rdfs:label "OwnershipAssertion"@en,
@@ -346,5 +347,5 @@ intl:Sanction a owl:Class ;
 ssk:intl a owl:Ontology ;
     dcterms:title "SSK 온톨로지: intl 모듈 (국제관계)"@ko ;
     owl:imports ssk:core ;
-    owl:versionInfo "0.1.5" .
+    owl:versionInfo "0.1.6" .
 

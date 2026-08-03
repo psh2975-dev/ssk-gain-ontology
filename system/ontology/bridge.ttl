@@ -4,6 +4,7 @@
 @prefix gvc: <https://w3id.org/ssk-gain/ontology/gvc#> .
 @prefix intl: <https://w3id.org/ssk-gain/ontology/intl#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix ssk: <https://w3id.org/ssk-gain/ontology/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
@@ -16,7 +17,7 @@ bridge:affects a owl:ObjectProperty ;
     rdfs:domain intl:SanctionedEntity ;
     rdfs:isDefinedBy ssk:bridge ;
     rdfs:range [ a owl:Class ;
-            owl:unionOf [ ] ] ;
+            owl:unionOf ( gvc:Company gvc:SupplyEdge ) ] ;
     rdfs:subPropertyOf bridge:bridgeRelation .
 
 bridge:circumvents a owl:ObjectProperty ;
@@ -128,5 +129,5 @@ ssk:bridge a owl:Ontology ;
         "국제관계 도메인과 공급사슬 도메인을 잇는 유일한 통로. 다섯 교차관계(affects·disrupts·restricts·circumvents·exposes)가 각각 제약된 정의역·치역을 가지며, 이 모듈은 명명 클래스를 두지 않는다."@ko ;
     owl:imports ssk:gvc,
         ssk:intl ;
-    owl:versionInfo "0.1.5" .
+    owl:versionInfo "0.1.6" .
 

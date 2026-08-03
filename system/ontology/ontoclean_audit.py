@@ -65,6 +65,7 @@ DECL = {
     # 의존 개체. 관계 재화와 값 객체. 다른 개체 없이 존재하지 못한다.
     "core:TemporalScope":       ("rigid", True,  True,  "start and end"),
     "core:Identifier":          ("rigid", True,  True,  "scheme and value"),
+    "core:Record":              ("rigid", True,  True,  "source dataset and stated object"),
     "core:SourceCoverage":      ("rigid", True,  True,  "source and collection window"),
     "intl:SanctionListing":     ("rigid", True,  True,  "issuing authority, programme and listed organisation"),
     "intl:OwnershipPath":       ("rigid", True,  True,  "start, end and path"),

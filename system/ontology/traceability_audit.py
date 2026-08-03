@@ -32,7 +32,21 @@ M = {
     "core:Event": ("CQ", "CQ2, CQ12, CQ16 (superclass)"),
     "core:Policy": ("CQ", "CQ1, CQ4, CQ14 (superclass)"),
     "core:Location": ("CQ", "CQ5 (spatial nodes and chokepoints)"),
-    "core:Identifier": ("REQ", "FAIR (canonical identifier as a value object)"),
+    "core:Identifier": ("REQ", "FAIR (canonical identifier reified as an individual; "
+                               "the identity join runs over it in OWL 2 DL, MD3)"),
+    "core:hasIdentifier": ("REQ", "FAIR (inverse functional object property; the axis "
+                                  "that licenses the cross-domain identity join)"),
+    "core:identifierScheme": ("REQ", "FAIR (registry scheme half of the pair that "
+                                     "determines an identifier individual)"),
+    "core:identifierValue": ("REQ", "FAIR (value half of the pair that determines an "
+                                    "identifier individual)"),
+    "core:registrationStatus": ("REQ", "FAIR (registry-reported currency of an "
+                                       "identifier; lapsed registrations observed among "
+                                       "sanctioned organisations)"),
+    "core:Record": ("REQ", "PROV (the record a source left about a domain object; "
+                           "PROV lineage attaches here, not to the object)"),
+    "core:recordOf": ("REQ", "PROV (links a record to the domain object it states "
+                             "something about)"),
     "core:SourceCoverage": ("CQ", "CQ15 (observed absence)"),
     "core:TemporalScope": ("CQ", "CQ14 (period of validity)"),
     # ---- intl classes (10) ----

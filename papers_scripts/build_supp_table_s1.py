@@ -42,7 +42,12 @@ DEFS = {
     "core:Event": "An occurrence with a time point or interval",
     "core:Policy": "Statutes and measures of governments and international organisations",
     "core:Location": "Geographic locations (facilities, ports, coordinates)",
-    "core:Identifier": "Value object for a standard identifier",
+    "core:Identifier": ("Identifier issued by a standard registry, raised to an "
+                        "individual so that identity inference runs over an object "
+                        "property and stays within OWL 2 DL"),
+    "core:Record": ("Data record a source left about a domain object; collection "
+                    "date, source, tier and the PROV lineage attach here rather "
+                    "than to the object itself"),
     "core:TemporalScope": "Reified node expressing a temporal validity interval",
     "core:SourceCoverage": "Reified node declaring the collection period and observation density of a source",
     "intl:SanctionListing": "The fact of an organisation being listed on a given sanctions register for a given period, with its issuing authority and source",

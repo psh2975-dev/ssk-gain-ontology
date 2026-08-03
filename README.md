@@ -38,7 +38,7 @@ system/ontology/*.py             generation, validation, metrics, traceability a
                                  OntoClean meta-property audit
 
 system/kg/*.py                   materialisation, competency-question queries, reuse demo
-system/kg/out/pilot_kg_deposit.ttl    deposited pilot graph (16,761 triples)
+system/kg/out/pilot_kg_deposit.ttl    deposited pilot graph (21,561 triples)
 system/kg/out/cq_query_results.json   competency question query results
 system/kg/out/materialize_report.json materialisation report (counts, SHACL verdict)
 system/kg/out/reuse_demo_report.json  third-party vocabulary reuse demonstration
@@ -56,10 +56,10 @@ docs/ADR-001_ontology_scope.md   scope decision record
 
 | Item | Value |
 |---|---:|
-| Named classes / object properties / datatype properties | 31 / 49 / 38 |
+| Named classes / object properties / datatype properties | 32 / 51 / 41 |
 | `owl:disjointWith` pairs (six upper types, pairwise) | 15 |
-| Deposited graph triples | 16,761 |
-| Competency questions answered by live query | 6 of 17 (3 full, 3 partial) |
+| Deposited graph triples | 21,561 |
+| Competency questions answered by live query | 8 of 17 (4 full, 4 partial) |
 | SHACL conformance (deposited graph) | conforms, 0 violations |
 
 ## Reproduce
@@ -85,7 +85,7 @@ Or run the steps individually. These run entirely from this deposit:
 cd system/ontology
 python build_ontology.py     # regenerate ontology.ttl deterministically
 python build_shapes.py       # regenerate shapes.ttl
-python validate.py           # the eight checks, in four pairs: OWL RL consistency and
+python validate.py           # the ten checks, in five pairs: OWL RL consistency and
                              # its non-vacuity by injected disjointness violation;
                              # the role-typing contract, catching a policy-organisation
                              # confusion while admitting a legitimate dual role;

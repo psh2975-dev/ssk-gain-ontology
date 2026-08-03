@@ -29,7 +29,7 @@
     "intl.ttl",
     "core.ttl"
    ],
-   "schema_triples": 610,
+   "schema_triples": 666,
    "intl_named_classes": [
     "ExportControl",
     "FinancialSanction",

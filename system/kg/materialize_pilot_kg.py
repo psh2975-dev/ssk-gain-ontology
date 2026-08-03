@@ -295,6 +295,10 @@ SOURCE_MAP = {
     "METI/literature": ("meti-notice", "meti"),
     "literature": ("literature", "authors"),
     "expert_curation_public_sources": ("curation", "authors"),
+    # SMIC 사례 파일 출처. 미등재면 그 레코드의 계보가 조용히 빠진다(보고서의
+    # prov_unmapped_sources 로 드러남).
+    "Federal_Register": ("federal-register", "bis"),
+    "GLEIF_API": ("gleif-api", "gleif"),
 }
 
 AGENTS = {
@@ -309,6 +313,7 @@ AGENTS = {
     "eto": "Emerging Technology Observatory",
     "meti": "Ministry of Economy, Trade and Industry, Japan",
     "authors": "The authors",
+    "bis": "Bureau of Industry and Security, U.S. Department of Commerce",
 }
 
 
@@ -346,17 +351,184 @@ def add_provenance(g: Graph, activity_slug: str, report: dict) -> dict:
             g.add((ag, RDF.type, PROV.Agent))
             g.add((ag, RDFS.label, Literal(AGENTS[ag_slug], lang="en")))
             agents.add(ag_slug)
-        g.add((s, RDF.type, PROV.Entity))
-        g.add((s, PROV.wasDerivedFrom, ds))
-        g.add((s, PROV.wasGeneratedBy, act))
+        # 계보는 대상이 아니라 대상에 관한 레코드에 붙인다. 대상을 prov:Entity 로
+        # 두면 국가와 기업이 데이터셋에서 생성된 것으로 읽힌다. core:source 는
+        # 「이 목록에서 이 대상을 알게 된 출처」라는 목록 차원의 표기이므로 남긴다.
+        rec = KG[quote("record:" + ds_slug + ":" + str(s).rsplit("/", 1)[-1], safe="")]
+        g.add((rec, RDF.type, CORE.Record))
+        g.add((rec, CORE.recordOf, s))
+        g.add((rec, CORE.canonicalId,
+               Literal("RECORD:" + ds_slug + ":" + str(s).rsplit("/", 1)[-1],
+                       datatype=XSD.string)))
+        g.add((rec, CORE.source, Literal(str(o), datatype=XSD.string)))
+        g.add((rec, PROV.wasDerivedFrom, ds))
+        g.add((rec, PROV.wasGeneratedBy, act))
         linked += 1
 
     unmapped = sorted({str(o) for _, o in g.subject_objects(CORE.source)
                        if str(o) not in SOURCE_MAP})
-    report["prov_linked_nodes"] = linked
+    report["prov_records"] = linked
     report["prov_datasets"] = len(datasets)
     report["prov_agents"] = len(agents)
     report["prov_unmapped_sources"] = unmapped
+    return report
+
+
+# 식별자 개체를 주조할 데이터 속성과 그 등록 체계. 값이 아니라 개체가 동일성을
+# 나르므로, 같은 (체계, 값)은 반드시 같은 URI 로 가야 한다.
+ID_SCHEMES = (
+    (CORE.lei, "LEI"),
+    (CORE.isoAlpha3, "ISO3166-1-alpha-3"),
+    (CORE.hsCode, "HS"),
+    (CORE.wikidataQID, "Wikidata"),
+)
+
+
+def reify_identifiers(g: Graph, report: dict) -> dict:
+    """표준 식별자를 개체로 세우고 core:hasIdentifier 로 잇는다.
+
+    hasIdentifier 가 역함수적이므로, 두 출처의 노드가 같은 식별자 개체를 가리키면
+    OWL 2 DL 안에서 동일 개체로 추론된다. 종전에는 이 추론을 데이터 속성의
+    역함수성에 기댔는데, OWL 2 에는 그런 공리가 없어 DL 밖으로 나가 있었다.
+    """
+    n_id = n_link = 0
+    for prop, scheme in ID_SCHEMES:
+        for s, o in list(g.subject_objects(prop)):
+            v = str(o).strip()
+            if not v:
+                continue
+            u = KG[quote(f"id:{scheme}:{v}", safe="")]
+            if (u, RDF.type, CORE.Identifier) not in g:
+                g.add((u, RDF.type, CORE.Identifier))
+                g.add((u, CORE.identifierScheme, Literal(scheme, datatype=XSD.string)))
+                g.add((u, CORE.identifierValue, Literal(v, datatype=XSD.string)))
+                g.add((u, CORE.canonicalId, Literal(f"{scheme}:{v}", datatype=XSD.string)))
+                g.add((u, CORE.label, Literal(f"{scheme} {v}", datatype=XSD.string)))
+                g.add((u, CORE.identifierStatus, Literal("authoritative")))
+                n_id += 1
+            if (s, CORE.hasIdentifier, u) not in g:
+                g.add((s, CORE.hasIdentifier, u))
+                n_link += 1
+    report["identifier_individuals"] = n_id
+    report["identifier_links"] = n_link
+    return report
+
+
+def add_case_smic(g: Graph, report: dict) -> dict:
+    """SMIC 종단간 사례: 등재(T1) -> LEI 동일성(실조회) -> 공급간선(공시) -> affects.
+
+    모든 사실이 basis 에 공적 출처를 지닌다. 동일성은 파이프라인 병합이 아니라
+    두 노드가 같은 식별자 개체를 가리키는 것으로 표현한다. 역함수 공리가 동일성을
+    허가하고, 하네스 [1d] 가 그 추론을 증명한다.
+    """
+    d = json.loads((DATA / "curated_case_smic_2026-08-03.json").read_text(encoding="utf-8"))
+    by_cid = {str(o): s for s, o in g.subject_objects(CORE.canonicalId)}
+    by_lei = {str(o): s for s, o in g.subject_objects(CORE.lei)}
+    # 제품 노드는 canonicalId 없이 hsCode 만 가진다(BACI 적재 관례).
+    by_hs = {str(o): s for s, o in g.subject_objects(CORE.hsCode)}
+
+    # 라이선스·basis 는 KG 트리플이 아니라 큐레이션 JSON 에 남긴다(players 관례).
+    # 어휘에 없는 술어를 데이터에 쓰지 않는다.
+    def stamp(u, e, keys=("source", "tier", "evidenceType",
+                          "collectedDate", "confidence")):
+        F = {"source": (CORE.source, lambda v: Literal(str(v))),
+             "tier": (CORE.tier, lambda v: Literal(str(v))),
+             "evidenceType": (CORE.evidenceType, lambda v: Literal(str(v))),
+             "collectedDate": (CORE.collectedDate, lit_date),
+             "confidence": (CORE.confidence, lambda v: Literal(f"{float(v)}", datatype=XSD.decimal))}
+        for k in keys:
+            if k in e and k in dict(F):
+                pred, conv = F[k]
+                g.add((u, pred, conv(e[k])))
+
+    # 1) LEI 부착 + 식별자 개체(등록 상태 포함). reify 가 같은 URI 를 쓰므로 중복 없음.
+    lr = d["lei_record"]
+    v = lr["lei"]
+    for link in d["identity_links"]:
+        g.add((by_cid[link["canonicalId"]], CORE.lei, Literal(v)))
+    ident = KG[quote(f"id:LEI:{v}", safe="")]
+    g.add((ident, RDF.type, CORE.Identifier))
+    g.add((ident, CORE.identifierScheme, Literal("LEI", datatype=XSD.string)))
+    g.add((ident, CORE.identifierValue, Literal(v, datatype=XSD.string)))
+    g.add((ident, CORE.canonicalId, Literal(f"LEI:{v}", datatype=XSD.string)))
+    g.add((ident, CORE.label, Literal(f"LEI {v}", datatype=XSD.string)))
+    g.add((ident, CORE.identifierStatus, Literal("authoritative")))
+    g.add((ident, CORE.registrationStatus, Literal(lr["registration_status"])))
+    stamp(ident, lr)
+
+    # 2) 발령기관 + 수출통제 + 등재사실
+    a = d["authority"]
+    au = KG[quote(a["canonicalId"], safe="")]
+    g.add((au, RDF.type, CORE.Organization))
+    g.add((au, CORE.canonicalId, Literal(a["canonicalId"])))
+    g.add((au, CORE.label, Literal(a["label"], datatype=XSD.string)))
+    stamp(au, a)
+
+    ec_d = d["export_control"]
+    ec = KG[quote(ec_d["canonicalId"], safe="")]
+    g.add((ec, RDF.type, INTL.ExportControl))
+    g.add((ec, CORE.canonicalId, Literal(ec_d["canonicalId"])))
+    g.add((ec, CORE.label, Literal(ec_d["label"], datatype=XSD.string)))
+    g.add((ec, CORE.validFrom, lit_date(ec_d["validFrom"])))
+    g.add((ec, INTL.controlScope, Literal(ec_d["controlScope"], datatype=XSD.string)))
+    stamp(ec, ec_d)
+    for hs in ec_d["restricts_hs"]:
+        g.add((ec, BR.restricts, by_hs[hs]))
+
+    li_d = d["listing"]
+    li = KG[quote(li_d["canonicalId"], safe="")]
+    g.add((li, RDF.type, INTL.SanctionListing))
+    g.add((li, CORE.canonicalId, Literal(li_d["canonicalId"])))
+    g.add((li, CORE.label, Literal(li_d["label"], datatype=XSD.string)))
+    g.add((li, INTL.listedOrganization,
+           by_cid[d["affects_edge"]["subject_canonicalId"]]))
+    g.add((li, INTL.underSanction, ec))
+    g.add((li, INTL.listAuthority, au))
+    stamp(li, li_d)
+
+    # 3) 재화 공급간선 + affects
+    se_d = d["supply_edge"]
+    se = KG[quote(se_d["canonicalId"], safe="")]
+    supplier = by_lei[se_d["supplier_lei"]]
+    customer = by_cid[se_d["customer_canonicalId"]]
+    g.add((se, RDF.type, GVC.SupplyEdge))
+    g.add((se, CORE.canonicalId, Literal(se_d["canonicalId"])))
+    g.add((se, CORE.label, Literal(se_d["label"], datatype=XSD.string)))
+    g.add((se, GVC.supplier, supplier))
+    g.add((se, GVC.customer, customer))
+    g.add((se, GVC.suppliesProduct, by_hs[se_d["product_hs"]]))
+    # 공급 측이 병합 노드라 gvc:Company 형이 빠져 있을 수 있다. 같은 players
+    # 레코드(role: equipment)가 회사임을 입증하므로 형 부여는 그 기록에 근거한다.
+    g.add((supplier, RDF.type, GVC.Company))
+    g.add((customer, RDF.type, GVC.Company))
+    stamp(se, se_d)
+
+    af = d["affects_edge"]
+    g.add((by_cid[af["subject_canonicalId"]], BR.affects, se))
+
+    report["case_smic"] = {
+        "identity_links": len(d["identity_links"]),
+        "listing": 1, "export_control": 1, "supply_edge": 1, "affects": 1,
+    }
+    return report
+
+
+def derive_exposes(g: Graph, report: dict) -> dict:
+    """exposes 파생: 문서화된 수출통제가 제한하는 품목에 대한 의존관계.
+
+    새 사실을 만들지 않는다. 관측 자료 둘(BACI 의존관계, 문서화된 통제)에
+    bridge:exposes 에 선언된 규칙(집중 의존 + 지정학 위험 = 노출)을 그대로
+    적용한다. 문턱을 발명하지 않는다: 의존관계 개체는 이미 집중 기준으로
+    큐레이션되어 있고, 위험은 실측이 아니라 문서화된 통제의 존재다.
+    """
+    n = 0
+    for dep in set(g.subjects(RDF.type, GVC.Dependency)):
+        for prod in g.objects(dep, GVC.dependsOnProduct):
+            if (None, BR.restricts, prod) in g:
+                g.add((prod, RDF.type, GVC.RiskNode))
+                g.add((dep, BR.exposes, prod))
+                n += 1
+    report["exposes_edges_derived"] = n
     return report
 
 
@@ -371,10 +543,13 @@ def tag_identifier_status(g: Graph, report: dict) -> dict:
     ISO3_RE2 = _re.compile(r"^[A-Z]{3}$")
     auth = prov = 0
     for s, o in list(g.subject_objects(CORE.canonicalId)):
+        if (s, RDF.type, CORE.Identifier) in g:
+            continue
         v = str(o)
         standard = bool(LEI_RE.match(v) or ISO3_RE2.match(v) or v.isdigit()
                         or v.startswith(("OFAC:", "OWN:", "COVERAGE:", "AUTHORITY:",
-                                         "spatial:", "EC:", "EV:", "DEP:", "GDELT:")))
+                                         "spatial:", "EC:", "EV:", "DEP:", "GDELT:",
+                                         "SE:", "LISTING:", "LEI:")))
         g.add((s, CORE.identifierStatus,
                Literal("authoritative" if standard else "provisional")))
         auth, prov = (auth + 1, prov) if standard else (auth, prov + 1)
@@ -585,7 +760,10 @@ def shacl(g: Graph, label: str) -> dict:
     return {"conforms": bool(conforms), "violations": n_viol}
 
 if __name__ == "__main__":
-    if not DATA.exists():
+    # 디렉터리 존재가 아니라 필수 입력 파일로 판정한다. 기탁에는 사례 파일
+    # (재배포 적격)만 동봉되므로 디렉터리는 있되 원자료는 없다.
+    _need = sorted(DATA.glob("curated_intl_*_deposit.json"))
+    if not _need:
         print("""원자료(system/data/curated/) 없음: 이 배포본에는 라이선스상 제외된
 원자료(UN Comtrade·ETO 포함 큐레이션 JSON)가 없다. README 의 재현 절 안내대로
 원자료를 확보하면 두 그래프가 재구축된다. 산출 결과물은 out/ 에 동봉되어 있다.""")
@@ -595,6 +773,7 @@ if __name__ == "__main__":
                   DATA / "worked_example_cq7_hhi_2026-07-08.json"]
     rep_d = {}
     g_demo = build_graph(demo_files, rep_d)
+    reify_identifiers(g_demo, rep_d)
     tag_identifier_status(g_demo, rep_d)
     add_provenance(g_demo, "demo", rep_d)
     g_demo.serialize(str(OUT / "pilot_kg_demo.ttl"), format="turtle")
@@ -606,6 +785,9 @@ if __name__ == "__main__":
     g_dep = build_graph([DATA / "curated_intl_2026-07-04_deposit.json"], rep_p)
     rep_p["gleif_ownership_edges"] = add_gleif_ownership(g_dep)
     rep_p.update(add_deposit_extras(g_dep))
+    add_case_smic(g_dep, rep_p)
+    derive_exposes(g_dep, rep_p)
+    reify_identifiers(g_dep, rep_p)
     tag_identifier_status(g_dep, rep_p)
     add_provenance(g_dep, "deposit", rep_p)
     g_dep.serialize(str(OUT / "pilot_kg_deposit.ttl"), format="turtle")

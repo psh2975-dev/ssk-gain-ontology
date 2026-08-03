@@ -265,6 +265,20 @@ COMMENTS_EN = {
    "End of valid time.",
  "Wikidata QID. LEI 미매칭 시 기업 fallback 식별자.":
    "Wikidata QID; fallback identifier for organisations without an LEI, and canonical identifier for spatial nodes.",
+    '표준 등록부가 발급한 식별자. 값이 아니라 개체로 세워, 동일성 추론이 데이터 속성이 아닌 객체 속성 위에서 이루어지게 한다.':
+        'An identifier issued by a standard registry. It is raised to an individual rather than left as a value, so that identity inference runs over an object property rather than a data property and stays within OWL 2 DL.',
+    '엔티티가 보유한 표준 식별자. 역함수적이므로 같은 식별자 개체를 가리키는 두 엔티티는 동일하다. 이 축이 교차 도메인 결합의 논리적 근거다.':
+        'The standard identifier an entity bears. The property is inverse functional, so two entities pointing at the same identifier individual are the same entity. This axis is the logical warrant for the cross-domain join.',
+    '식별자를 발급한 등록 체계(LEI·ISO3166-1-alpha-3·HS·Wikidata).':
+        'The registry scheme that issued the identifier (LEI, ISO 3166-1 alpha-3, HS, Wikidata).',
+    '식별자의 문자열 값. 체계와 값의 쌍이 식별자 개체를 결정한다.':
+        'The string value of the identifier. The pair of scheme and value determines the identifier individual.',
+    '발급 등록부가 보고하는 등록 상태(ISSUED·LAPSED·RETIRED 등). 제재 대상 기업에서 실효 등록이 흔하므로, 식별자의 현재성을 값과 분리해 기록한다.':
+        'The registration status reported by the issuing registry (ISSUED, LAPSED, RETIRED and the like). Lapsed registrations are common among sanctioned organisations, so currency is recorded separately from the value.',
+    '어떤 도메인 대상에 관해 한 출처가 남긴 자료 레코드. 수집일·출처·등급·라이선스와 PROV 계보가 여기에 붙는다.':
+        'A data record left by one source about some domain object. Collection date, source, tier, licence and the PROV lineage attach here rather than to the object itself.',
+    '이 레코드가 진술하는 도메인 대상.':
+        'The domain object this record states something about.',
 }
 
 MESSAGES_EN = {

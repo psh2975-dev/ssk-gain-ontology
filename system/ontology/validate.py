@@ -49,6 +49,9 @@ from rdflib import URIRef as _URIRef
 OWLRL_ERROR_PRED = _URIRef("http://www.daml.org/2002/03/agents/agent-ont#error")
 
 
+from rdflib import BNode as _BNode
+
+
 def check_consistency(onto: Graph) -> tuple[bool, list[str]]:
     """owlrl OWL RL 추론으로 모순을 탐지한다.
 
@@ -132,7 +135,12 @@ def check_identity_axiom(onto: Graph) -> tuple[bool, bool]:
         for s, p_, o in onto:
             g.add((s, p_, o))
         for u, v in ((EX.IdA, lei_a), (EX.IdB, lei_b)):
+            ident = _URIRef("http://example.org/ssk#id-LEI-" + v)
+            g.add((ident, RDF.type, CORE.Identifier))
+            g.add((ident, CORE.identifierScheme, Literal("LEI", datatype=XSD.string)))
+            g.add((ident, CORE.identifierValue, Literal(v, datatype=XSD.string)))
             g.add((u, RDF.type, CORE.Organization))
+            g.add((u, CORE.hasIdentifier, ident))
             g.add((u, CORE.lei, Literal(v)))
         owlrl.DeductiveClosure(owlrl.OWLRL_Semantics).expand(g)
         return ((EX.IdA, OWL.sameAs, EX.IdB) in g
@@ -141,6 +149,45 @@ def check_identity_axiom(onto: Graph) -> tuple[bool, bool]:
     same = infer("549300KB6NK5SBD14S87", "549300KB6NK5SBD14S87")
     diff = infer("549300KB6NK5SBD14S87", "724500Y6DUVH1DUCME49")
     return same, diff
+
+
+def check_module_documents() -> tuple[bool, list[str]]:
+    """모듈 문서를 따로 읽어, 그 문서만으로 어휘가 온전한지 본다.
+
+    원고는 소비자가 모듈 하나만 스키마 계약으로 가져갈 수 있다고 말한다. 그렇다면
+    검사도 그 소비자처럼 모듈 문서만 읽어야 한다. 통합본만 보면 분리 과정에서
+    생긴 손상이 보이지 않는다. 실측(v0.1.5): bridge.ttl 에서 owl:unionOf 가 빈
+    컬렉션을 가리켜 bridge:affects 의 치역이 owl:Nothing 이 되어 있었다.
+    """
+    from rdflib.namespace import OWL as _OWL
+    problems = []
+    for name in ("core", "intl", "gvc", "bridge"):
+        path = HERE / f"{name}.ttl"
+        if not path.exists():
+            problems.append(f"{name}.ttl absent")
+            continue
+        mg = Graph()
+        mg.parse(str(path), format="turtle")
+        for coll in (_OWL.unionOf, _OWL.intersectionOf, _OWL.oneOf):
+            for o in mg.objects(None, coll):
+                if not list(mg.items(o)):
+                    problems.append(f"{name}.ttl: empty {coll.split('#')[-1]} collection")
+        for prop, val in list(mg.subject_objects(RDFS.range)):
+            if isinstance(val, _BNode) and not list(mg.predicate_objects(val)):
+                problems.append(f"{name}.ttl: dangling range node on {prop.split('#')[-1]}")
+    return not problems, problems
+
+
+def check_module_documents_detect_damage() -> bool:
+    """[1e] 의 비공허성. 빈 컬렉션을 주입하면 반드시 잡혀야 한다."""
+    from rdflib.namespace import OWL as _OWL
+    mg = Graph()
+    mg.parse(str(HERE / "bridge.ttl"), format="turtle")
+    broken = _BNode("brokenunion")
+    holder = _BNode("brokenholder")
+    mg.add((holder, RDF.type, _OWL.Class))
+    mg.add((holder, _OWL.unionOf, broken))
+    return not list(mg.items(broken))
 
 
 def merge_conflict_samples() -> tuple[Graph, Graph]:
@@ -456,7 +503,7 @@ def main():
     shapes_path = HERE / "shapes.ttl"
 
     print("=" * 70)
-    print("SSK ontology validation harness (6 checks)")
+    print("SSK ontology validation harness (10 checks in 5 pairs)")
     print("=" * 70)
 
     # --- 1) 일관성 ---
@@ -498,6 +545,25 @@ def main():
     else:
         print(f"    FAIL  same-LEI inference {id_same} (must be True), "
               f"different-LEI inference {id_diff} (must be False)")
+    # --- 1e) 모듈 문서 무결성 (소비자가 실제로 읽는 파일을 본다) ---
+    print(chr(10) + "[1e] Module documents: each module read alone must be intact")
+    ok_mod, mod_problems = check_module_documents()
+    if ok_mod:
+        print("    PASS  no empty owl collection and no dangling range node in "
+              "core.ttl, intl.ttl, gvc.ttl, bridge.ttl")
+    else:
+        print("    FAIL  the module documents are damaged:")
+        for m in mod_problems:
+            print("      -", m)
+
+    # --- 1f) 그 검사의 비공허성 ---
+    print(chr(10) + "[1f] Non-vacuity of [1e]: an injected empty collection must be detected")
+    ok_mod_probe = check_module_documents_detect_damage()
+    if ok_mod_probe:
+        print("    PASS  the injected empty union was detected (the check does fire)")
+    else:
+        print("    FAIL  injection went undetected, so check [1e] is vacuous")
+
     # --- 2a) 적합 샘플 ---
     print("\n[2a] SHACL on a conforming sample")
     conf_data = conforming_instances()
@@ -559,7 +625,7 @@ def main():
     gate = (ok_cons and ok_probe and ok_role and id_same and (not id_diff) and c1
             and (not c2 and n_viol > 0) and range_ok and merge_ok)
     if gate:
-        print("GATE: PASS — consistency (non-vacuous) + role-typing contract + identity axiom "
+        print("GATE: PASS — consistency (non-vacuous) + role-typing contract + identity axiom + module documents "
               "+ conforming sample + violation detection + per-relation range probes "
               "+ merge-conflict detection")
     else:

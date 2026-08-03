@@ -14,7 +14,7 @@
 
 <https://w3id.org/ssk-gain/ontology> a owl:Ontology ;
     dcterms:contributor "이강배 (Lee Kangbae), 동아대학교 경영정보학과 (교신저자)" ;
-    dcterms:created "2026-08-01"^^xsd:date ;
+    dcterms:created "2026-08-03"^^xsd:date ;
     dcterms:creator "박성호 (Park Sungho), 동아대학교 경영정보학과 (주저자)" ;
     dcterms:identifier "NRF-2024S1A3A2A07046144" ;
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
@@ -31,7 +31,7 @@
         ssk:core,
         ssk:gvc,
         ssk:intl ;
-    owl:versionInfo "0.1.5" .
+    owl:versionInfo "0.1.6" .
 
 bridge:affects a owl:ObjectProperty ;
     rdfs:label "affects"@en,
@@ -156,14 +156,6 @@ core:Equipment a owl:Class ;
     rdfs:isDefinedBy ssk:core ;
     rdfs:subClassOf core:Product .
 
-core:Identifier a owl:Class ;
-    rdfs:label "Identifier"@en,
-        "식별자"@ko ;
-    rdfs:comment "Value object for standard identifiers such as LEI, ISO codes and HS codes."@en,
-        "LEI·ISO·HS 등 표준 식별자 값 객체."@ko ;
-    rdfs:isDefinedBy ssk:core ;
-    rdfs:subClassOf core:Entity .
-
 core:Material a owl:Class ;
     rdfs:label "Material"@en,
         "소재"@ko ;
@@ -269,6 +261,16 @@ core:evidenceType a owl:DatatypeProperty ;
     rdfs:isDefinedBy ssk:core ;
     rdfs:range xsd:string .
 
+core:hasIdentifier a owl:InverseFunctionalProperty,
+        owl:ObjectProperty ;
+    rdfs:label "hasIdentifier"@en,
+        "식별자보유"@ko ;
+    rdfs:comment "The standard identifier an entity bears. The property is inverse functional, so two entities pointing at the same identifier individual are the same entity. This axis is the logical warrant for the cross-domain join."@en,
+        "엔티티가 보유한 표준 식별자. 역함수적이므로 같은 식별자 개체를 가리키는 두 엔티티는 동일하다. 이 축이 교차 도메인 결합의 논리적 근거다."@ko ;
+    rdfs:domain core:Entity ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range core:Identifier .
+
 core:hasTemporalScope a owl:ObjectProperty ;
     rdfs:label "hasTemporalScope"@en,
         "시간범위가짐"@ko ;
@@ -279,13 +281,22 @@ core:hasTemporalScope a owl:ObjectProperty ;
     rdfs:range core:TemporalScope .
 
 core:hsCode a owl:DatatypeProperty,
-        owl:FunctionalProperty,
-        owl:InverseFunctionalProperty ;
+        owl:FunctionalProperty ;
     rdfs:label "hsCode"@en,
         "HS코드"@ko ;
     rdfs:comment "WCO HS code; canonical product identifier (six digits, HS10 where finer)."@en,
         "WCO HS code. 품목 canonical_id(6자리), 정밀은 HS10."@ko ;
     rdfs:domain core:Product ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
+core:identifierScheme a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "identifierScheme"@en,
+        "식별체계"@ko ;
+    rdfs:comment "The registry scheme that issued the identifier (LEI, ISO 3166-1 alpha-3, HS, Wikidata)."@en,
+        "식별자를 발급한 등록 체계(LEI·ISO3166-1-alpha-3·HS·Wikidata)."@ko ;
+    rdfs:domain core:Identifier ;
     rdfs:isDefinedBy ssk:core ;
     rdfs:range xsd:string .
 
@@ -298,9 +309,18 @@ core:identifierStatus a owl:DatatypeProperty ;
     rdfs:isDefinedBy ssk:core ;
     rdfs:range xsd:string .
 
+core:identifierValue a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "identifierValue"@en,
+        "식별자값"@ko ;
+    rdfs:comment "The string value of the identifier. The pair of scheme and value determines the identifier individual."@en,
+        "식별자의 문자열 값. 체계와 값의 쌍이 식별자 개체를 결정한다."@ko ;
+    rdfs:domain core:Identifier ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
+
 core:isoAlpha3 a owl:DatatypeProperty,
-        owl:FunctionalProperty,
-        owl:InverseFunctionalProperty ;
+        owl:FunctionalProperty ;
     rdfs:label "isoAlpha3"@en,
         "ISO3166-1 alpha-3"@ko ;
     rdfs:comment "ISO 3166-1 alpha-3 country code (KOR, USA, CHN, JPN, NLD); canonical identifier."@en,
@@ -319,8 +339,7 @@ core:label a owl:DatatypeProperty ;
     rdfs:range xsd:string .
 
 core:lei a owl:DatatypeProperty,
-        owl:FunctionalProperty,
-        owl:InverseFunctionalProperty ;
+        owl:FunctionalProperty ;
     rdfs:label "lei"@en,
         "LEI"@ko ;
     rdfs:comment "GLEIF Legal Entity Identifier (ISO 17442, 20 characters); canonical firm identifier."@en,
@@ -337,6 +356,24 @@ core:observedCount a owl:DatatypeProperty ;
     rdfs:domain core:SourceCoverage ;
     rdfs:isDefinedBy ssk:core ;
     rdfs:range xsd:integer .
+
+core:recordOf a owl:ObjectProperty ;
+    rdfs:label "recordOf"@en,
+        "레코드대상"@ko ;
+    rdfs:comment "The domain object this record states something about."@en,
+        "이 레코드가 진술하는 도메인 대상."@ko ;
+    rdfs:domain core:Record ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range core:Entity .
+
+core:registrationStatus a owl:DatatypeProperty ;
+    rdfs:label "registrationStatus"@en,
+        "등록상태"@ko ;
+    rdfs:comment "The registration status reported by the issuing registry (ISSUED, LAPSED, RETIRED and the like). Lapsed registrations are common among sanctioned organisations, so currency is recorded separately from the value."@en,
+        "발급 등록부가 보고하는 등록 상태(ISSUED·LAPSED·RETIRED 등). 제재 대상 기업에서 실효 등록이 흔하므로, 식별자의 현재성을 값과 분리해 기록한다."@ko ;
+    rdfs:domain core:Identifier ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:range xsd:string .
 
 core:source a owl:DatatypeProperty ;
     rdfs:label "source"@en,
@@ -829,11 +866,11 @@ intl:subsidiaryOf a owl:IrreflexiveProperty,
 intl:underSanction a owl:ObjectProperty ;
     rdfs:label "underSanction"@en,
         "근거조치"@ko ;
-    rdfs:comment "The sanction measure on which the listing rests."@en,
-        "등재의 근거가 되는 제재 조치."@ko ;
+    rdfs:comment "등재의 근거가 되는 조치(금융제재 또는 수출통제)."@ko ;
     rdfs:domain intl:SanctionListing ;
     rdfs:isDefinedBy ssk:intl ;
-    rdfs:range intl:Sanction .
+    rdfs:range [ a owl:Class ;
+            owl:unionOf ( intl:Sanction intl:ExportControl ) ] .
 
 core:Location a owl:Class ;
     rdfs:label "Location"@en,
@@ -847,6 +884,15 @@ core:Location a owl:Class ;
         core:Organization,
         core:Policy,
         core:Product .
+
+core:Record a owl:Class ;
+    rdfs:label "Record"@en,
+        "자료레코드"@ko ;
+    rdfs:comment "A data record left by one source about some domain object. Collection date, source, tier, licence and the PROV lineage attach here rather than to the object itself."@en,
+        "어떤 도메인 대상에 관해 한 출처가 남긴 자료 레코드. 수집일·출처·등급·라이선스와 PROV 계보가 여기에 붙는다."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf prov:Entity,
+        core:Entity .
 
 core:TemporalScope a owl:Class ;
     rdfs:label "TemporalScope"@en,
@@ -922,14 +968,6 @@ intl:GeopoliticalEvent a owl:Class ;
     rdfs:isDefinedBy ssk:intl ;
     rdfs:subClassOf core:Event .
 
-intl:ExportControl a owl:Class ;
-    rdfs:label "ExportControl"@en,
-        "수출통제"@ko ;
-    rdfs:comment "Export control measure (BIS rules, China dual-use rules, the 2019 Japanese export controls). Subject of restricts."@en,
-        "수출통제 조치(BIS·중국 양용물품·일본 수출규제). restricts 의 주체."@ko ;
-    rdfs:isDefinedBy ssk:intl ;
-    rdfs:subClassOf core:Policy .
-
 intl:OwnershipAssertion a owl:Class ;
     rdfs:label "OwnershipAssertion"@en,
         "소유관계진술"@ko ;
@@ -973,6 +1011,14 @@ core:Event a owl:Class ;
         core:Organization,
         core:Product .
 
+core:Identifier a owl:Class ;
+    rdfs:label "Identifier"@en,
+        "식별자"@ko ;
+    rdfs:comment "An identifier issued by a standard registry. It is raised to an individual rather than left as a value, so that identity inference runs over an object property rather than a data property and stays within OWL 2 DL."@en,
+        "표준 등록부가 발급한 식별자. 값이 아니라 개체로 세워, 동일성 추론이 데이터 속성이 아닌 객체 속성 위에서 이루어지게 한다."@ko ;
+    rdfs:isDefinedBy ssk:core ;
+    rdfs:subClassOf core:Entity .
+
 core:SourceCoverage a owl:Class ;
     rdfs:label "SourceCoverage"@en,
         "소스커버리지"@ko ;
@@ -1005,6 +1051,14 @@ gvc:supplies a owl:ObjectProperty ;
     rdfs:domain gvc:Company ;
     rdfs:isDefinedBy ssk:gvc ;
     rdfs:range gvc:Company .
+
+intl:ExportControl a owl:Class ;
+    rdfs:label "ExportControl"@en,
+        "수출통제"@ko ;
+    rdfs:comment "Export control measure (BIS rules, China dual-use rules, the 2019 Japanese export controls). Subject of restricts."@en,
+        "수출통제 조치(BIS·중국 양용물품·일본 수출규제). restricts 의 주체."@ko ;
+    rdfs:isDefinedBy ssk:intl ;
+    rdfs:subClassOf core:Policy .
 
 bridge:bridgeRelation a owl:ObjectProperty ;
     rdfs:label "bridgeRelation"@en,
@@ -1056,7 +1110,7 @@ ssk:bridge a owl:Ontology ;
         "국제관계 도메인과 공급사슬 도메인을 잇는 유일한 통로. 다섯 교차관계(affects·disrupts·restricts·circumvents·exposes)가 각각 제약된 정의역·치역을 가지며, 이 모듈은 명명 클래스를 두지 않는다."@ko ;
     owl:imports ssk:gvc,
         ssk:intl ;
-    owl:versionInfo "0.1.5" .
+    owl:versionInfo "0.1.6" .
 
 gvc:Company a owl:Class ;
     rdfs:label "Company"@en,
@@ -1080,8 +1134,7 @@ core:Entity a owl:Class ;
     rdfs:comment "Top-level class of every first-class individual in the knowledge graph."@en,
         "KG의 모든 1급 개체의 최상위 클래스."@ko ;
     rdfs:isDefinedBy ssk:core ;
-    rdfs:subClassOf owl:Thing,
-        prov:Entity .
+    rdfs:subClassOf owl:Thing .
 
 core:Organization a owl:Class ;
     rdfs:label "Organization"@en,
@@ -1097,17 +1150,17 @@ core:Organization a owl:Class ;
 ssk:gvc a owl:Ontology ;
     dcterms:title "SSK 온톨로지: gvc 모듈 (반도체 소부장 GVC)"@ko ;
     owl:imports ssk:core ;
-    owl:versionInfo "0.1.5" .
-
-ssk:core a owl:Ontology ;
-    dcterms:created "2026-08-01"^^xsd:date ;
-    dcterms:title "SSK 온톨로지: core 모듈 (공유 상위·LEI·시공간)"@ko ;
-    owl:versionInfo "0.1.5" .
+    owl:versionInfo "0.1.6" .
 
 ssk:intl a owl:Ontology ;
     dcterms:title "SSK 온톨로지: intl 모듈 (국제관계)"@ko ;
     owl:imports ssk:core ;
-    owl:versionInfo "0.1.5" .
+    owl:versionInfo "0.1.6" .
+
+ssk:core a owl:Ontology ;
+    dcterms:created "2026-08-03"^^xsd:date ;
+    dcterms:title "SSK 온톨로지: core 모듈 (공유 상위·LEI·시공간)"@ko ;
+    owl:versionInfo "0.1.6" .
 
 _:n0002 rdf:first core:Event ;
     rdf:rest ( core:Policy ) .

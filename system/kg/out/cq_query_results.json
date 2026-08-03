@@ -1,6 +1,6 @@
 {
  "graph": "pilot_kg_demo.ttl",
- "triples": 7696,
+ "triples": 10422,
  "queries": {
   "CQ4_restricts": {
    "sparql": "ExportControl -restricts-> Product",
@@ -283,6 +283,43 @@
    ],
    "n": 5,
    "ownership_edges": 27,
+   "pass": true
+  },
+  "CQ6_cross_domain_identity": {
+   "graph": "pilot_kg_deposit.ttl",
+   "sparql": "SanctionListing -listedOrganization-> org -hasIdentifier-> Identifier <-hasIdentifier- org -customer- SupplyEdge -supplier-> org, with bridge:affects marking the edge",
+   "note": "End-to-end worked case (SMIC): the Entity List designation joins the supply chain layer through a shared reified LEI identifier whose registration the registry reports as lapsed. Identity is licensed by the inverse functional axiom on core:hasIdentifier, not by the pipeline. Sources: 85 FR 83416; GLEIF API 2026-08-03; ASML press release March 2021 (curated_case_smic_2026-08-03.json).",
+   "rows": [
+    {
+     "listing": "Entity List listing of SMIC (effective 2020-12-18)",
+     "sanctioned": "Semiconductor Manufacturing International Corporation (SMIC)",
+     "supply_edge": "ASML supplies DUV lithography systems to SMIC (volume purchase agreement)",
+     "supplier": "ASML",
+     "identifier_registration": "LAPSED"
+    }
+   ],
+   "n": 1,
+   "pass": true
+  },
+  "CQ5_concentration_exposure": {
+   "graph": "pilot_kg_deposit.ttl",
+   "sparql": "Dependency -exposes-> RiskNode (typed on the product) joined to the ExportControl that restricts it",
+   "note": "Partial: single-source concentration is exercised through derived exposes edges (rule stated on bridge:exposes applied to observed dependencies and documented controls; no threshold invented). The chokepoint spatial dimension is not yet joined, so the answer covers one of the two concentration senses of CQ5.",
+   "rows": [
+    {
+     "dependency": "KOR import dependency HS 370790 (BACI 2018)",
+     "hhi": 0.7683,
+     "risk_node": "Photoresist",
+     "restricting_control": "Japan export control on 3 semiconductor materials (2019-07)"
+    },
+    {
+     "dependency": "KOR import dependency HS 848620 (BACI 2018)",
+     "hhi": 0.2724,
+     "risk_node": "HS 848620",
+     "restricting_control": "Addition of SMIC to the BIS Entity List (85 FR 83416)"
+    }
+   ],
+   "n": 2,
    "pass": true
   }
  },

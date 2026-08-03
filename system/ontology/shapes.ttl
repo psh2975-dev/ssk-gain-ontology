@@ -344,10 +344,10 @@ shapes:SanctionListingShape a sh:NodeShape ;
             sh:name "등재조직"@ko ;
             sh:path intl:listedOrganization ;
             sh:severity sh:Violation ],
-        [ sh:class intl:Sanction ;
-            sh:message "등재 사실은 근거 제재 조치 1개 이상."@ko ;
+        [ sh:message "등재 사실은 근거 조치(제재 또는 수출통제) 1개 이상."@ko ;
             sh:minCount 1 ;
             sh:name "근거조치"@ko ;
+            sh:or ( [ sh:class intl:Sanction ] [ sh:class intl:ExportControl ] ) ;
             sh:path intl:underSanction ;
             sh:severity sh:Violation ],
         [ sh:class core:Organization ;
@@ -519,8 +519,8 @@ shapes:TradeFlowShape a sh:NodeShape ;
     sh:targetClass gvc:TradeFlow .
 
 shapes:prefixes a owl:Ontology ;
-    sh:declare [ sh:namespace "https://w3id.org/ssk-gain/ontology/intl#"^^xsd:anyURI ;
-            sh:prefix "intl" ],
-        [ sh:namespace "https://w3id.org/ssk-gain/ontology/core#"^^xsd:anyURI ;
-            sh:prefix "core" ] .
+    sh:declare [ sh:namespace "https://w3id.org/ssk-gain/ontology/core#"^^xsd:anyURI ;
+            sh:prefix "core" ],
+        [ sh:namespace "https://w3id.org/ssk-gain/ontology/intl#"^^xsd:anyURI ;
+            sh:prefix "intl" ] .
 

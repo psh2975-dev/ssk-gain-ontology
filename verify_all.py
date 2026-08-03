@@ -35,7 +35,7 @@ CHILD_ENV = {**os.environ, "PYTHONUTF8": "1", "PYTHONIOENCODING": "utf-8"}
 STEPS = [
     ("Regenerate ontology      build_ontology",    "system/ontology", "build_ontology.py",     False),
     ("Regenerate shapes        build_shapes",      "system/ontology", "build_shapes.py",       False),
-    ("Validation, 8 checks     validate",          "system/ontology", "validate.py",           False),
+    ("Validation, 10 checks     validate",          "system/ontology", "validate.py",           False),
     ("Structural metrics       ontology_metrics",  "system/ontology", "ontology_metrics.py",   False),
     ("Vocabulary traceability  traceability_audit","system/ontology", "traceability_audit.py", False),
     ("OntoClean meta-property  ontoclean_audit", "system/ontology", "ontoclean_audit.py", False),

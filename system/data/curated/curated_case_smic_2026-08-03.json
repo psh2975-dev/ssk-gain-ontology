@@ -1,0 +1,76 @@
+{
+  "curated_date": "2026-08-03",
+  "module": "case_smic",
+  "is_mock": false,
+  "note": "End-to-end worked case: BIS Entity List designation of SMIC joined to the supply chain layer by a reified LEI identifier. Every fact carries its public source in basis; nothing is from memory.",
+  "lei_record": {
+    "lei": "300300522KCU7YI25841",
+    "registration_status": "LAPSED",
+    "source": "GLEIF_API",
+    "license": "CC0-1.0",
+    "collectedDate": "2026-08-03",
+    "basis": "GLEIF API lei-records/300300522KCU7YI25841, retrieved 2026-08-03. legalName is the Chinese-language registration; the English name is an ALTERNATIVE_LANGUAGE_LEGAL_NAME. registration.status LAPSED (last update 2022-03-01)."
+  },
+  "identity_links": [
+    {
+      "canonicalId": "OFAC:EL-f25ce386ffdf11f0f460392c91b96ee78141109820d76d71fd64f982",
+      "why": "CSL Entity List record of SMIC (regulatory domain node)"
+    },
+    {
+      "canonicalId": "player:SMIC",
+      "why": "curated supply chain record of SMIC (economic domain node)"
+    }
+  ],
+  "authority": {
+    "canonicalId": "AUTHORITY:BIS",
+    "label": "Bureau of Industry and Security, U.S. Department of Commerce",
+    "source": "Federal_Register",
+    "tier": "T1",
+    "license": "public_domain"
+  },
+  "export_control": {
+    "canonicalId": "EC:US-BIS:2020-12-18",
+    "label": "Addition of SMIC to the BIS Entity List (85 FR 83416)",
+    "validFrom": "2020-12-18",
+    "controlScope": "licence requirement for items subject to the EAR; presumption of denial for items uniquely required for production at technology nodes of 10 nanometers or below",
+    "restricts_hs": [
+      "848620"
+    ],
+    "source": "Federal_Register",
+    "tier": "T1",
+    "license": "public_domain",
+    "evidenceType": "documented",
+    "collectedDate": "2026-08-03",
+    "basis": "Federal Register 85 FR 83416 (published 2020-12-22, effective 2020-12-18), 'Addition of Entities to the Entity List...', document 2020-28031. HS 848620 stands for the machine layer named in the presumption-of-denial scope (semiconductor manufacturing machines); the designation itself is entity-directed."
+  },
+  "listing": {
+    "canonicalId": "LISTING:BIS-EL:SMIC:2020-12-18",
+    "label": "Entity List listing of SMIC (effective 2020-12-18)",
+    "source": "Federal_Register",
+    "tier": "T1",
+    "license": "public_domain",
+    "evidenceType": "documented",
+    "collectedDate": "2026-08-03"
+  },
+  "supply_edge": {
+    "canonicalId": "SE:ASML-SMIC-DUV",
+    "label": "ASML supplies DUV lithography systems to SMIC (volume purchase agreement)",
+    "supplier_lei": "724500Y6DUVHQD6OXN27",
+    "customer_canonicalId": "player:SMIC",
+    "product_hs": "848620",
+    "source": "expert_curation_public_sources",
+    "tier": "T3",
+    "license": "CC-BY-4.0",
+    "evidenceType": "curated",
+    "confidence": 0.9,
+    "collectedDate": "2026-08-03",
+    "basis": "ASML press release 'Clarification on SMIC volume purchasing agreement' (March 2021): volume purchase agreement for DUV lithography entered 2018-01-01, extended 2021-02-01 to run through December 2021; purchase orders of USD 1.2 billion in aggregate over 2020-03-16 to 2021-03-02. EUV systems are not covered; the press release concerns DUV only."
+  },
+  "affects_edge": {
+    "subject_canonicalId": "OFAC:EL-f25ce386ffdf11f0f460392c91b96ee78141109820d76d71fd64f982",
+    "object_canonicalId": "SE:ASML-SMIC-DUV",
+    "basis": "Rule stated on bridge:affects: a sanctioned entity at an endpoint of a supply relation marks that relation at risk. The listed organisation is the customer endpoint; the designation subjects exports to SMIC to licence requirements (85 FR 83416).",
+    "evidenceType": "derived",
+    "collectedDate": "2026-08-03"
+  }
+}

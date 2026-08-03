@@ -161,6 +161,77 @@ results["queries"]["CQ3_ownership_traversal"] = {
     "rows": rows9, "n": len(rows9), "ownership_edges": n9_edges,
     "pass": len(rows9) > 0}
 
+# CQ6(교차 추적성): 같은 개체가 제재 목록과 공급망 역할 양쪽에서 추적되는가.
+# 등재(T1) -> 제재 조직 -> 공유 식별자 개체 -> 공급망 조직 -> 공급간선 -> affects.
+# 두 도메인의 노드가 서로 다른 URI 로 남은 채 같은 식별자 개체를 가리키고,
+# 그 동일성은 core:hasIdentifier 의 역함수 공리가 허가한다(validate.py [1d] 증명).
+# 질의는 추론기 없이도 공유 식별자 경로로 같은 결합을 드러낸다.
+q6 = PREF + """
+SELECT ?listingLabel ?sancLabel ?edgeLabel ?supplierLabel ?regStatus WHERE {
+  ?listing a intl:SanctionListing ;
+           intl:listedOrganization ?sanc ;
+           core:label ?listingLabel .
+  ?sanc core:hasIdentifier ?id ; core:label ?sancLabel .
+  ?id core:registrationStatus ?regStatus .
+  ?peer core:hasIdentifier ?id .
+  FILTER(?sanc != ?peer)
+  ?edge a gvc:SupplyEdge ; gvc:customer ?peer ;
+        gvc:supplier ?sup ; core:label ?edgeLabel .
+  ?sup core:label ?supplierLabel .
+  ?sanc bridge:affects ?edge .
+}"""
+rows6 = [{"listing": str(r.listingLabel), "sanctioned": str(r.sancLabel),
+          "supply_edge": str(r.edgeLabel),
+          "supplier": str(r.supplierLabel),
+          "identifier_registration": str(r.regStatus)}
+         for r in g_dep.query(q6)]
+# 병합 노드는 라벨이 둘일 수 있어 행이 곱해진다. 간선 기준으로 접는다.
+seen6, folded6 = set(), []
+for x in rows6:
+    if x["supply_edge"] not in seen6:
+        seen6.add(x["supply_edge"])
+        folded6.append(x)
+results["queries"]["CQ6_cross_domain_identity"] = {
+    "graph": "pilot_kg_deposit.ttl",
+    "sparql": "SanctionListing -listedOrganization-> org -hasIdentifier-> Identifier "
+              "<-hasIdentifier- org -customer- SupplyEdge -supplier-> org, "
+              "with bridge:affects marking the edge",
+    "note": "End-to-end worked case (SMIC): the Entity List designation joins the "
+            "supply chain layer through a shared reified LEI identifier whose "
+            "registration the registry reports as lapsed. Identity is licensed by "
+            "the inverse functional axiom on core:hasIdentifier, not by the "
+            "pipeline. Sources: 85 FR 83416; GLEIF API 2026-08-03; ASML press "
+            "release March 2021 (curated_case_smic_2026-08-03.json).",
+    "rows": folded6, "n": len(folded6), "pass": len(folded6) > 0}
+
+# CQ5(집중 노출, 부분): 어떤 의존이 위험노드를 노출하는가. 파생 규칙(문서화된
+# 통제가 제한하는 품목에 대한 관측 의존관계)의 결과를 질의한다. 초크포인트
+# 공간 차원은 미결합이므로 부분 답변으로 보고한다.
+# 제품 라벨은 일부만 존재한다(BACI 적재는 hsCode 만 필수). 라벨을 지어 넣지
+# 않고 hsCode 로 대체한다.
+q5 = PREF + """
+SELECT ?depLabel ?hhi ?prodLabel ?ecLabel WHERE {
+  ?dep a gvc:Dependency ; rdfs:label ?depLabel ; gvc:hhi ?hhi ;
+       gvc:dependsOnProduct ?prod ; bridge:exposes ?prod .
+  ?prod a gvc:RiskNode ; core:hsCode ?hs .
+  OPTIONAL { ?prod core:label ?pl }
+  BIND(COALESCE(?pl, CONCAT("HS ", ?hs)) AS ?prodLabel)
+  ?ec bridge:restricts ?prod ; core:label ?ecLabel .
+} ORDER BY ?depLabel"""
+rows5 = [{"dependency": str(r.depLabel), "hhi": float(r.hhi),
+          "risk_node": str(r.prodLabel), "restricting_control": str(r.ecLabel)}
+         for r in g_dep.query(q5)]
+results["queries"]["CQ5_concentration_exposure"] = {
+    "graph": "pilot_kg_deposit.ttl",
+    "sparql": "Dependency -exposes-> RiskNode (typed on the product) joined to the "
+              "ExportControl that restricts it",
+    "note": "Partial: single-source concentration is exercised through derived "
+            "exposes edges (rule stated on bridge:exposes applied to observed "
+            "dependencies and documented controls; no threshold invented). The "
+            "chokepoint spatial dimension is not yet joined, so the answer covers "
+            "one of the two concentration senses of CQ5.",
+    "rows": rows5, "n": len(rows5), "pass": len(rows5) > 0}
+
 ok = all(v["pass"] for v in results["queries"].values())
 results["all_pass"] = ok
 (OUT / "cq_query_results.json").write_text(json.dumps(results, ensure_ascii=False, indent=1), encoding="utf-8")
