@@ -48,7 +48,7 @@ TIME = Namespace("http://www.w3.org/2006/time#")   # OWL-Time 재사용
 PROV = Namespace("http://www.w3.org/ns/prov#")     # PROV-O 재사용
 ORG = Namespace("http://www.w3.org/ns/org#")       # W3C Org 재사용
 
-VERSION = "0.1.6"   # 2026-08-03: 식별자 재화(DL 적합), PROV 대상 분리, GLEIF L2 대응
+VERSION = "0.1.7"   # 2026-08-03: 재심사 대응 — 중복 식별자 검사, 사례 서지 공식화(공리 불변)
 # 릴리스 날짜는 고정한다. 실행일을 쓰면 재생성물이 날마다 달라져
 # 체크섬으로 기탁물을 검증할 수 없다.
 TODAY = "2026-08-03"

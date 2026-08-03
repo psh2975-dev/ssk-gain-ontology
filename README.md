@@ -85,7 +85,7 @@ Or run the steps individually. These run entirely from this deposit:
 cd system/ontology
 python build_ontology.py     # regenerate ontology.ttl deterministically
 python build_shapes.py       # regenerate shapes.ttl
-python validate.py           # the ten checks, in five pairs: OWL RL consistency and
+python validate.py           # the eleven checks: OWL RL consistency and
                              # its non-vacuity by injected disjointness violation;
                              # the role-typing contract, catching a policy-organisation
                              # confusion while admitting a legitimate dual role;

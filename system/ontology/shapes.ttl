@@ -14,7 +14,7 @@
 ssk:shapes a owl:Ontology ;
     dcterms:created "2026-08-01"^^xsd:date ;
     dcterms:title "SSK 온톨로지 SHACL 제약(shapes)"@ko ;
-    owl:versionInfo "0.1.6" .
+    owl:versionInfo "0.1.7" .
 
 shapes:AffectsShape a sh:NodeShape ;
     rdfs:label "affects 제약"@ko ;
@@ -519,8 +519,8 @@ shapes:TradeFlowShape a sh:NodeShape ;
     sh:targetClass gvc:TradeFlow .
 
 shapes:prefixes a owl:Ontology ;
-    sh:declare [ sh:namespace "https://w3id.org/ssk-gain/ontology/core#"^^xsd:anyURI ;
-            sh:prefix "core" ],
-        [ sh:namespace "https://w3id.org/ssk-gain/ontology/intl#"^^xsd:anyURI ;
-            sh:prefix "intl" ] .
+    sh:declare [ sh:namespace "https://w3id.org/ssk-gain/ontology/intl#"^^xsd:anyURI ;
+            sh:prefix "intl" ],
+        [ sh:namespace "https://w3id.org/ssk-gain/ontology/core#"^^xsd:anyURI ;
+            sh:prefix "core" ] .
 

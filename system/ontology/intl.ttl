@@ -347,5 +347,5 @@ intl:Sanction a owl:Class ;
 ssk:intl a owl:Ontology ;
     dcterms:title "SSK 온톨로지: intl 모듈 (국제관계)"@ko ;
     owl:imports ssk:core ;
-    owl:versionInfo "0.1.6" .
+    owl:versionInfo "0.1.7" .
 

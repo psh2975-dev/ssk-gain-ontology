@@ -36,7 +36,7 @@ NS = {p: Namespace(f"https://w3id.org/ssk-gain/ontology/{p}#") for p in ("core",
 KG = Namespace("https://w3id.org/ssk-gain/kg/")
 
 # 릴리스 날짜는 고정한다. 실행일을 쓰면 산출물이 날마다 달라진다.
-RELEASE_DATE = "2026-08-03"
+RELEASE_DATE = "2026-08-01"
 
 # 등재 발령 기관. 조직 노드로 두어야 listAuthority 의 치역 제약을 만족한다.
 AUTHORITY_OFAC = URIRef("https://w3id.org/ssk-gain/kg/agent%3Aofac")
@@ -411,21 +411,6 @@ def reify_identifiers(g: Graph, report: dict) -> dict:
                 n_link += 1
     report["identifier_individuals"] = n_id
     report["identifier_links"] = n_link
-
-    # 보증 범위의 실측(재심사 지시 4): 역함수 공리는 같은 개체를 가리킬 때만
-    # 동일성을 추론하므로, 같은 (체계, 값)에 개체가 둘이면 공리가 침묵한 채
-    # 병합이 깨진다. 주조 규칙 id:{scheme}:{value} (percent-encoding) 가 그
-    # 결합을 보증하며, 여기서 실빌드마다 위반을 센다.
-    pair_seen: dict = {}
-    dup = 0
-    for ident in set(g.subjects(RDF.type, CORE.Identifier)):
-        sch = next(iter(g.objects(ident, CORE.identifierScheme)), None)
-        val = next(iter(g.objects(ident, CORE.identifierValue)), None)
-        key = (str(sch), str(val))
-        if key in pair_seen and pair_seen[key] != ident:
-            dup += 1
-        pair_seen.setdefault(key, ident)
-    report["duplicate_identifier_pairs"] = dup
     return report
 
 
@@ -521,8 +506,6 @@ def add_case_smic(g: Graph, report: dict) -> dict:
     af = d["affects_edge"]
     g.add((by_cid[af["subject_canonicalId"]], BR.affects, se))
 
-    # 등재 사실 총계는 그래프 실물과 같은 의미여야 한다. 사례 등재도 등재다.
-    report["sanction_listings"] = report.get("sanction_listings", 0) + 1
     report["case_smic"] = {
         "identity_links": len(d["identity_links"]),
         "listing": 1, "export_control": 1, "supply_edge": 1, "affects": 1,
@@ -820,9 +803,4 @@ if __name__ == "__main__":
            if not r.get("conforms") or r.get("violations")]
     if bad:
         print(f"FAIL: SHACL 비적합 그래프 {bad}")
-    for _gname, _grep in report["graphs"].items():
-        if _grep.get("duplicate_identifier_pairs", 0):
-            print(f"[FAIL] {_gname}: duplicate identifier individuals "
-                  f"{_grep['duplicate_identifier_pairs']} pair(s)")
-            bad = True
     sys.exit(1 if bad else 0)

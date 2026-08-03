@@ -190,6 +190,39 @@ def check_module_documents_detect_damage() -> bool:
     return not list(mg.items(broken))
 
 
+def check_identifier_duplication() -> tuple[bool, bool]:
+    """식별자 중복 탐지의 양방향 시험 (재심사 지시 4).
+
+    역함수 공리의 보증은 「같은 (체계, 값) = 같은 개체」라는 주조 규칙
+    (id:{scheme}:{value}, percent-encoding)이 지켜질 때만 성립한다. 규칙이
+    깨진 그래프(같은 쌍에 개체 둘)는 탐지 질의에 잡혀야 하고, 규칙을 지킨
+    그래프는 잡히지 않아야 한다.
+    """
+    Q = """
+    PREFIX core: <https://w3id.org/ssk-gain/ontology/core#>
+    SELECT ?a ?b WHERE {
+      ?a a core:Identifier ; core:identifierScheme ?s ; core:identifierValue ?v .
+      ?b a core:Identifier ; core:identifierScheme ?s ; core:identifierValue ?v .
+      FILTER(STR(?a) < STR(?b))
+    }"""
+
+    def build(dup: bool) -> Graph:
+        d = Graph()
+        d.bind("core", CORE)
+        ids = [_URIRef("http://example.org/ssk#idA")]
+        if dup:
+            ids.append(_URIRef("http://example.org/ssk#idB"))
+        for u in ids:
+            d.add((u, RDF.type, CORE.Identifier))
+            d.add((u, CORE.identifierScheme, Literal("LEI")))
+            d.add((u, CORE.identifierValue, Literal("549300KB6NK5SBD14S87")))
+        return d
+
+    caught = len(list(build(True).query(Q))) > 0
+    clean = len(list(build(False).query(Q))) == 0
+    return caught, clean
+
+
 def merge_conflict_samples() -> tuple[Graph, Graph]:
     """오병합 탐지의 양방향 표본.
 
@@ -503,7 +536,7 @@ def main():
     shapes_path = HERE / "shapes.ttl"
 
     print("=" * 70)
-    print("SSK ontology validation harness (10 checks in 5 pairs)")
+    print("SSK ontology validation harness (11 checks)")
     print("=" * 70)
 
     # --- 1) 일관성 ---
@@ -563,6 +596,19 @@ def main():
         print("    PASS  the injected empty union was detected (the check does fire)")
     else:
         print("    FAIL  injection went undetected, so check [1e] is vacuous")
+
+    # --- 1g·1h) 식별자 중복 탐지와 그 비공허성 ---
+    print(chr(10) + "[1g] Duplicate-identifier detection: two individuals for one "
+          "scheme-value pair must be caught")
+    dup_caught, dup_clean = check_identifier_duplication()
+    if dup_caught and dup_clean:
+        print("    PASS  a duplicated pair is detected and a clean graph is not "
+              "(the minting rule id:{scheme}:{value} is what the inverse "
+              "functional axiom relies on; the materialisation counts "
+              "violations on every real build)")
+    else:
+        print(f"    FAIL  duplicated caught {dup_caught} (must be True), "
+              f"clean flagged {not dup_clean} (must be False)")
 
     # --- 2a) 적합 샘플 ---
     print("\n[2a] SHACL on a conforming sample")

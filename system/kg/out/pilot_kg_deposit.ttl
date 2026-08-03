@@ -24379,5 +24379,5 @@ kg:activity%3Adeposit a prov:Activity ;
         kg:dataset%3Aun-comtrade,
         kg:dataset%3Awco-hs,
         kg:dataset%3Awikidata ;
-    core:collectedDate "2026-08-01"^^xsd:date .
+    core:collectedDate "2026-08-03"^^xsd:date .
 

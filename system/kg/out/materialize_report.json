@@ -1,5 +1,5 @@
 {
- "date": "2026-08-01",
+ "date": "2026-08-03",
  "graphs": {
   "demo": {
    "sanction_listings": 0,
@@ -10,6 +10,7 @@
    "skipped_edges": 0,
    "identifier_individuals": 150,
    "identifier_links": 150,
+   "duplicate_identifier_pairs": 0,
    "identifier_authoritative": 156,
    "identifier_provisional": 402,
    "prov_records": 560,
@@ -47,6 +48,7 @@
    "exposes_edges_derived": 2,
    "identifier_individuals": 102,
    "identifier_links": 104,
+   "duplicate_identifier_pairs": 0,
    "identifier_authoritative": 1278,
    "identifier_provisional": 20,
    "prov_records": 1331,

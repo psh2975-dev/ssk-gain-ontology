@@ -7,7 +7,7 @@ abstract: >-
   machine-validated entity catalogue, and the validation toolkit that
   reproduces every reported check.
 type: dataset
-version: 0.1.6
+version: 0.1.7
 license: CC-BY-4.0
 doi: 10.5281/zenodo.21715914
 repository-code: https://github.com/psh2975-dev/ssk-gain-ontology
