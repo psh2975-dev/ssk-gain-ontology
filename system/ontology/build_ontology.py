@@ -48,7 +48,7 @@ TIME = Namespace("http://www.w3.org/2006/time#")   # OWL-Time 재사용
 PROV = Namespace("http://www.w3.org/ns/prov#")     # PROV-O 재사용
 ORG = Namespace("http://www.w3.org/ns/org#")       # W3C Org 재사용
 
-VERSION = "0.1.8"   # 2026-08-04: 고정 릴리스 — 결정론 형태 생성, SHA256SUMS 자가검증(공리 불변)
+VERSION = "0.1.9"   # 2026-08-04: 게재 전 정정 — README 실행 안내 수치, 재현 문면 동등화(공리 불변)
 # 릴리스 날짜는 고정한다. 실행일을 쓰면 재생성물이 날마다 달라져
 # 체크섬으로 기탁물을 검증할 수 없다.
 TODAY = "2026-08-04"

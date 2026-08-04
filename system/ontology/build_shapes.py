@@ -38,7 +38,7 @@ BR = Namespace(BASE + "bridge#")
 SH = Namespace("http://www.w3.org/ns/shacl#")
 SHAPES = Namespace(BASE + "shapes#")
 
-VERSION = "0.1.8"
+VERSION = "0.1.9"
 # 릴리스 날짜는 고정한다. 실행일을 쓰면 재생성물이 날마다 달라져
 # 체크섬으로 기탁물을 검증할 수 없다.
 TODAY = "2026-08-01"

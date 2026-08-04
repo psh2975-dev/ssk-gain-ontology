@@ -273,5 +273,5 @@ gvc:Company a owl:Class ;
 ssk:gvc a owl:Ontology ;
     dcterms:title "SSK 온톨로지: gvc 모듈 (반도체 소부장 GVC)"@ko ;
     owl:imports ssk:core ;
-    owl:versionInfo "0.1.8" .
+    owl:versionInfo "0.1.9" .
 

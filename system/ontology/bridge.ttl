@@ -129,5 +129,5 @@ ssk:bridge a owl:Ontology ;
         "국제관계 도메인과 공급사슬 도메인을 잇는 유일한 통로. 다섯 교차관계(affects·disrupts·restricts·circumvents·exposes)가 각각 제약된 정의역·치역을 가지며, 이 모듈은 명명 클래스를 두지 않는다."@ko ;
     owl:imports ssk:gvc,
         ssk:intl ;
-    owl:versionInfo "0.1.8" .
+    owl:versionInfo "0.1.9" .
 
