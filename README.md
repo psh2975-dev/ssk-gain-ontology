@@ -115,7 +115,7 @@ python system/data/repair_curated_types.py   # action-vs-target typing repair
 
 The two repair scripts document the deterministic repairs applied to the source
 catalogue; without the excluded source files they print a notice and exit.
-Obtain those sources under their own terms and the same pipeline rebuilds both
+Obtain those sources under their own terms, implement the documented collection stage, and the released stages rebuild both
 graphs. The results these scripts produced for the article are included as
 `system/kg/out/cq_query_results.json`, `materialize_report.json` and
 `shacl_deposit.txt`, so their reported values remain inspectable here.
@@ -125,8 +125,7 @@ graphs. The results these scripts produced for the article are included as
 Records from sources whose licences do not permit redistribution are excluded:
 the ETO Advanced Semiconductor dataset (CC-BY-NC-4.0) and UN Comtrade records
 (United Nations copyright; re-dissemination requires UNSD consent). The schema
-and the full construction procedure are published here, so users who obtain
-those sources themselves can reconstruct the complete catalogue with the same
+and the field mappings are published here together with the materialisation and validation stages, so users who obtain those sources themselves can rebuild the excluded records by implementing the documented collection stage against the released
 pipeline. Bilateral trade records in the deposit derive from BACI (CEPII) under
 the Etalab Open Licence 2.0.
 

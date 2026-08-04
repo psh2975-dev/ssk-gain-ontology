@@ -14,7 +14,7 @@
 
 <https://w3id.org/ssk-gain/ontology> a owl:Ontology ;
     dcterms:contributor "이강배 (Lee Kangbae), 동아대학교 경영정보학과 (교신저자)" ;
-    dcterms:created "2026-08-03"^^xsd:date ;
+    dcterms:created "2026-08-04"^^xsd:date ;
     dcterms:creator "박성호 (Park Sungho), 동아대학교 경영정보학과 (주저자)" ;
     dcterms:identifier "NRF-2024S1A3A2A07046144" ;
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
@@ -31,7 +31,7 @@
         ssk:core,
         ssk:gvc,
         ssk:intl ;
-    owl:versionInfo "0.1.7" .
+    owl:versionInfo "0.1.8" .
 
 bridge:affects a owl:ObjectProperty ;
     rdfs:label "affects"@en,
@@ -1110,7 +1110,7 @@ ssk:bridge a owl:Ontology ;
         "국제관계 도메인과 공급사슬 도메인을 잇는 유일한 통로. 다섯 교차관계(affects·disrupts·restricts·circumvents·exposes)가 각각 제약된 정의역·치역을 가지며, 이 모듈은 명명 클래스를 두지 않는다."@ko ;
     owl:imports ssk:gvc,
         ssk:intl ;
-    owl:versionInfo "0.1.7" .
+    owl:versionInfo "0.1.8" .
 
 gvc:Company a owl:Class ;
     rdfs:label "Company"@en,
@@ -1150,17 +1150,17 @@ core:Organization a owl:Class ;
 ssk:gvc a owl:Ontology ;
     dcterms:title "SSK 온톨로지: gvc 모듈 (반도체 소부장 GVC)"@ko ;
     owl:imports ssk:core ;
-    owl:versionInfo "0.1.7" .
+    owl:versionInfo "0.1.8" .
 
 ssk:intl a owl:Ontology ;
     dcterms:title "SSK 온톨로지: intl 모듈 (국제관계)"@ko ;
     owl:imports ssk:core ;
-    owl:versionInfo "0.1.7" .
+    owl:versionInfo "0.1.8" .
 
 ssk:core a owl:Ontology ;
-    dcterms:created "2026-08-03"^^xsd:date ;
+    dcterms:created "2026-08-04"^^xsd:date ;
     dcterms:title "SSK 온톨로지: core 모듈 (공유 상위·LEI·시공간)"@ko ;
-    owl:versionInfo "0.1.7" .
+    owl:versionInfo "0.1.8" .
 
 _:n0002 rdf:first core:Event ;
     rdf:rest ( core:Policy ) .

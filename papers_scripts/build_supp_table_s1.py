@@ -108,7 +108,7 @@ def main():
 
     lines = [
         "## Supplementary Table S1. Ontology class hierarchy and class definitions "
-        "(measured, ontology.ttl v0.1.7)",
+        "(measured, ontology.ttl v0.1.8)",
         "",
         f"The {len(classes)} named classes by module, with the definition of each. "
         "Superclass is the internal rdfs:subClassOf parent; alignment gives the "

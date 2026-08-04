@@ -42,6 +42,9 @@ STEPS = [
     ("Third-party reuse demo   reuse_demo",        "system/kg",       "reuse_demo.py",         False),
     ("Materialise graphs       materialize_pilot_kg", "system/kg",    "materialize_pilot_kg.py", True),
     ("Competency question runs run_cq_queries",    "system/kg",       "run_cq_queries.py",     True),
+    # 마지막에 둔다: 위의 재생성 단계들이 실제로 아카이브된 바이트를 재현했는지를
+    # 매니페스트 대조로 증명한다. 하나라도 다르면 결정론 주장이 성립하지 않는다.
+    ("Checksum manifest       make_checksums --check", ".",           "make_checksums.py --check", False),
 ]
 
 
@@ -51,7 +54,7 @@ def main() -> int:
     print("=" * 72)
     rows, failed, details = [], 0, []
     for name, cwd, script, needs_data in STEPS:
-        r = subprocess.run([PY, script], cwd=str(HERE / cwd),
+        r = subprocess.run([PY, *script.split()], cwd=str(HERE / cwd),
                            capture_output=True, text=True,
                            encoding="utf-8", errors="replace", env=CHILD_ENV)
         out = (r.stdout or "") + (r.stderr or "")

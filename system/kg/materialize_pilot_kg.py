@@ -36,7 +36,7 @@ NS = {p: Namespace(f"https://w3id.org/ssk-gain/ontology/{p}#") for p in ("core",
 KG = Namespace("https://w3id.org/ssk-gain/kg/")
 
 # 릴리스 날짜는 고정한다. 실행일을 쓰면 산출물이 날마다 달라진다.
-RELEASE_DATE = "2026-08-03"
+RELEASE_DATE = "2026-08-04"
 
 # 등재 발령 기관. 조직 노드로 두어야 listAuthority 의 치역 제약을 만족한다.
 AUTHORITY_OFAC = URIRef("https://w3id.org/ssk-gain/kg/agent%3Aofac")

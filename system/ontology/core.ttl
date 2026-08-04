@@ -401,9 +401,9 @@ core:Entity a owl:Class ;
     rdfs:subClassOf owl:Thing .
 
 ssk:core a owl:Ontology ;
-    dcterms:created "2026-08-03"^^xsd:date ;
+    dcterms:created "2026-08-04"^^xsd:date ;
     dcterms:title "SSK 온톨로지: core 모듈 (공유 상위·LEI·시공간)"@ko ;
-    owl:versionInfo "0.1.7" .
+    owl:versionInfo "0.1.8" .
 
 _:n0002 rdf:first core:Event ;
     rdf:rest ( core:Policy ) .

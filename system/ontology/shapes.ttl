@@ -14,7 +14,7 @@
 ssk:shapes a owl:Ontology ;
     dcterms:created "2026-08-01"^^xsd:date ;
     dcterms:title "SSK 온톨로지 SHACL 제약(shapes)"@ko ;
-    owl:versionInfo "0.1.7" .
+    owl:versionInfo "0.1.8" .
 
 shapes:AffectsShape a sh:NodeShape ;
     rdfs:label "affects 제약"@ko ;
